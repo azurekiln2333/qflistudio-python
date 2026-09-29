@@ -149,8 +149,9 @@ void main() {
       write('main.py', 'print(1)');
       final result = await runEntry('main.py');
       expect(result, isNotNull, reason: '运行后端没有接管本语言文件');
-      expect(result!.title, contains('缺少 Python 执行后端'));
-      expect(await result.stdout.toList(), isNotEmpty);
+      expect(result!.title, '运行 main.py');
+      expect(await result.stdout.toList(),
+          ['${_appPrefix}Python 运行组件不可用，请重新安装应用。']);
       expect(await result.exitCode, _notRun);
     });
 
@@ -327,7 +328,7 @@ void main() {
 
       final result = await runEntry('main.py');
 
-      expect(result!.title, contains('缺少 Python 执行后端'));
+      expect(result!.title, '运行 main.py');
       final lines = await result.stdout.toList();
       // ArkTS 侧给的原因要原样透出来——它比 Dart 侧猜的准。
       expect(
@@ -358,7 +359,7 @@ void main() {
       expect(lines.single, startsWith(_appPrefix));
       expect(lines.single, contains('MUSL-LDSO'));
       // 是「坏了」不是「没有」：标题不能退回「缺少执行后端」。
-      expect(result.title, isNot(contains('缺少')));
+      expect(result.title, '运行 main.py');
       expect(await result.exitCode, _notRun);
     });
 
@@ -399,7 +400,7 @@ void main() {
       );
       expect(result, isNotNull);
       expect(result!.hint, isNull, reason: '后端接管了就不该走兜底提示');
-      expect(result.title, contains('Python 执行后端'));
+      expect(result.title, '运行 main.py');
     });
   });
 }

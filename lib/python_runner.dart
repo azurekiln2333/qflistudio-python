@@ -202,31 +202,19 @@ class PythonProgramRunner implements ProgramRunner {
     }
   }
 
-  /// 原生后端不可用。
-  ///
-  /// 不做「假装能跑」的降级：说清楚缺什么、怎么补，比给一个跑不了的结果好。
+  /// 原生后端不可用时，给用户可执行的恢复建议。
   ProgramRunResult _notWired(String fileName, String detail) {
     final controller = StreamController<String>();
     scheduleMicrotask(() {
-      // 注意这里必须写 ${_appPrefix}：直接写 $_appPrefix 再接 ASCII 字母的话，
-      // Dart 会把 `_appPrefixPython` 当成一个变量名去找。
-      controller.add('${_appPrefix}Python 执行后端不可用。');
       if (detail.isNotEmpty) {
-        // ArkTS 侧给的原因比我们在这里猜的准，优先用它。
         controller.add('$_appPrefix$detail');
       } else {
-        controller.add('$_appPrefix这个构建里没有打进 libqfli_py.so'
-            '（内嵌 MicroPython）。');
+        controller.add('${_appPrefix}Python 运行组件不可用，请重新安装应用。');
       }
-      controller.add('$_appPrefix重新编译：'
-          'apps/qfli_python/native/build.ps1，'
-          '它会编译 .so 并拷到 ohos/entry/libs/arm64-v8a/。');
-      controller.add('$_appPrefix编辑器、语法高亮、项目模板、Python 入门教程不受影响；'
-          '内置 Python 解释器完成后即可在本 App 内运行这段代码。');
       controller.close();
     });
     return ProgramRunResult(
-      title: '运行 $fileName（缺少 Python 执行后端）',
+      title: '运行 $fileName',
       stdout: controller.stream,
       stderr: const Stream<String>.empty(),
       exitCode: Future<int>.value(notRunExitCode),
