@@ -6,7 +6,7 @@
  * 面比 C 大太多——手写子集解释器在「能跑」和「结果对」之间有巨大鸿沟，而错误
  * 的中间地带（看起来跑通了、结果和真 Python 不一样）对教学是最坏的情况。
  *
- * 契约很简单：给一段源码 + 一段标准输入，同步跑完，拿回输出和退出码。
+ * 契约：给源码、标准输入与项目路径，同步跑完并拿回输出和退出码。
  * 所有输出缓冲由本模块 malloc，调用方用 qfli_py_result_free() 释放。
  */
 #ifndef QFLI_PY_BRIDGE_H
@@ -46,10 +46,13 @@ typedef struct {
  *              传 NULL 表示空输入，此时 input() 抛 EOFError。
  * heap_kb    : MicroPython GC 堆的大小（KB）。传 0 用默认值（8MB）。
  *              申请不到时会自动逐级减半，直到 1MB。
+ * project_dir: 项目根目录，用于导入同项目的 .py 文件。
+ * entry_file : 入口文件的完整路径，用于 traceback、sys.argv 和入口目录。
  *
  * 返回值的 output 一定非 NULL；error 可能为 NULL。
  */
-QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb);
+QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
+                            const char *project_dir, const char *entry_file);
 
 /* 释放 qfli_py_run 返回的两个缓冲区。可以安全地对 NULL 调用。 */
 void qfli_py_result_free(QfliPyRunResult *result);

@@ -41,6 +41,7 @@ import {
   MethodResult,
 } from '@ohos/flutter_ohos';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import fs from '@ohos.file.fs';
 
 /** 与 native/src/qfli_py_napi.cpp 的返回结构一一对应。 */
 interface PyRunOutcome {
@@ -52,7 +53,8 @@ interface PyRunOutcome {
 
 /** 与 native/src/qfli_py_napi.cpp 导出的成员一一对应。 */
 interface QfliPyModule {
-  run(source: string, stdin: string, heapKb: number): PyRunOutcome;
+  run(source: string, stdin: string, heapKb: number,
+    projectPath: string, entryFile: string): PyRunOutcome;
   version(): string;
 }
 
@@ -70,6 +72,8 @@ interface PySelfCheckCase {
   exitCode: number;
   output: string;
   error: string | null;
+  projectPath?: string;
+  entryFile?: string;
 }
 
 /** Dart 侧 PythonProgramRunner 用的通道名。 */
@@ -125,6 +129,8 @@ function runNative(
   source: string,
   stdin: string,
   heapKb: number,
+  projectPath: string = '',
+  entryFile: string = '',
 ): PyRunOutcome {
   // 注意：这里必须把 run 取成一个局部函数再调。
   // ArkTS 的流分析不会用 nativeModule 的初始化结果去收窄它的类型，
@@ -136,7 +142,7 @@ function runNative(
   if (typeof run !== 'function') {
     return { exitCode: -1, error: MODULE_MISSING_DETAIL, output: '', truncated: false };
   }
-  return run(source, stdin, heapKb);
+  return run(source, stdin, heapKb, projectPath, entryFile);
 }
 
 /**
@@ -164,6 +170,22 @@ function selfCheck(): void {
     hilog.info(LOG_DOMAIN, LOG_TAG, 'libqfli_py.so 已加载，MicroPython %{public}s',
       nativeVersion());
 
+    const projectPath = '/data/storage/el2/base/cache/qfli_py_selfcheck';
+    const srcPath = `${projectPath}/src`;
+    const packagePath = `${srcPath}/samplepkg`;
+    fs.mkdirSync(packagePath, true);
+    const writeSource = (path: string, source: string): void => {
+      const file = fs.openSync(path, fs.OpenMode.CREATE | fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
+      try {
+        fs.writeSync(file.fd, source);
+      } finally {
+        fs.closeSync(file.fd);
+      }
+    };
+    writeSource(`${srcPath}/helper.py`, 'answer = 42\n');
+    writeSource(`${packagePath}/__init__.py`, 'from .value import answer\n');
+    writeSource(`${packagePath}/value.py`, 'answer = 84\n');
+
     const cases: PySelfCheckCase[] = [
       { name: 'compile-run', source: 'value = 42\nprint(value)', stdin: '',
         exitCode: 0, output: '42\n', error: null },
@@ -179,10 +201,22 @@ function selfCheck(): void {
         exitCode: 7, output: '', error: null },
       { name: 'upstream-module', source: 'import math\nprint(math.sqrt(81))', stdin: '',
         exitCode: 0, output: '9.0\n', error: null },
+      { name: 'project-paths',
+        source: 'import sys\nprint(sys.path[0], sys.path[1], sys.argv[0], __file__)',
+        stdin: '', exitCode: 0,
+        output: '/qfli/project/src /qfli/project /qfli/project/src/main.py /qfli/project/src/main.py\n',
+        error: null, projectPath: '/qfli/project', entryFile: '/qfli/project/src/main.py' },
+      { name: 'sibling-import', source: 'import helper\nprint(helper.answer)', stdin: '',
+        exitCode: 0, output: '42\n', error: null,
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'package-import', source: 'from samplepkg import answer\nprint(answer)', stdin: '',
+        exitCode: 0, output: '84\n', error: null,
+        projectPath, entryFile: `${srcPath}/main.py` },
     ];
     let passed = 0;
     for (const test of cases) {
-      const actual = runNative(test.source, test.stdin, 0);
+      const actual = runNative(test.source, test.stdin, 0,
+        test.projectPath ?? '', test.entryFile ?? '');
       const outputOk = test.output === '' ? actual.output === '' : actual.output.includes(test.output);
       const errorOk = test.error === null ? actual.error === null
         : actual.error !== null && actual.error.includes(test.error);
@@ -237,7 +271,9 @@ export function registerQfliPyNativeChannel(flutterEngine: FlutterEngine): void 
         const source = (call.argument('source') as string) ?? '';
         const stdin = (call.argument('stdin') as string) ?? '';
         const heapKb = (call.argument('heapKb') as number) ?? DEFAULT_HEAP_KB;
-        const outcome = runNative(source, stdin, heapKb);
+        const projectPath = (call.argument('projectPath') as string) ?? '';
+        const entryFile = (call.argument('entryFile') as string) ?? '';
+        const outcome = runNative(source, stdin, heapKb, projectPath, entryFile);
         result.success({
           'exitCode': outcome.exitCode,
           'output': outcome.output,

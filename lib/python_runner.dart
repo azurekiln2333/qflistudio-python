@@ -95,6 +95,8 @@ class PythonProgramRunner implements ProgramRunner {
       version: probe.version,
       source: source,
       stdin: _readStdin(projectPath),
+      projectPath: projectPath,
+      entryFile: entryFile,
     );
   }
 
@@ -104,6 +106,8 @@ class PythonProgramRunner implements ProgramRunner {
     required String version,
     required String source,
     required String stdin,
+    required String projectPath,
+    required String entryFile,
   }) async {
     final Object? raw;
     try {
@@ -111,6 +115,8 @@ class PythonProgramRunner implements ProgramRunner {
         'source': source,
         'stdin': stdin,
         'heapKb': heapKb,
+        'projectPath': projectPath,
+        'entryFile': entryFile,
       });
     } on MissingPluginException {
       // 设备上没打进 .so，通道根本不存在。

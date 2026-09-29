@@ -38,6 +38,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 /*
  * GC 堆的默认大小。
@@ -140,29 +141,23 @@ void nlr_jump_fail(void *val)
 }
 
 /* ------------------------------------------------------------------ *
- * 文件系统钩子：我们一个都不提供，但符号必须存在
+ * 文件系统钩子
  * ------------------------------------------------------------------ */
 
 /*
- * 源码是当字符串喂进来的，没有 VFS，也没有真实文件。
- * 任何路径都报「不存在」，于是 import 只会去找内置模块——正是想要的行为：
- * `import math` 成功，`import mymodule` 得到 ModuleNotFoundError。
+ * 交给上游 importer 判断包和模块；只负责把系统 stat 转成 MicroPython 状态。
  */
 mp_import_stat_t mp_import_stat(const char *path)
 {
-    (void)path;
+    struct stat info;
+    if (stat(path, &info) == 0)
+    {
+        if (S_ISDIR(info.st_mode))
+            return MP_IMPORT_STAT_DIR;
+        if (S_ISREG(info.st_mode))
+            return MP_IMPORT_STAT_FILE;
+    }
     return MP_IMPORT_STAT_NO_EXIST;
-}
-
-/*
- * py/lexer.c 只在 MICROPY_READER_VFS 或 MICROPY_READER_POSIX 打开时才定义它，
- * 我们两个都关了，所以要自己给一个。走到这里说明有人试图从文件编译——直接
- * 报 ENOENT 比给个空实现更诚实。
- */
-mp_lexer_t *mp_lexer_new_from_file(qstr filename)
-{
-    (void)filename;
-    mp_raise_OSError(MP_ENOENT);
 }
 
 /*
@@ -232,7 +227,8 @@ static void print_safely(mp_obj_t obj, int as_exception)
  * 编译并执行一段源码。返回 0 表示「跑完了，无论正常还是抛异常」，
  * *exit_code 带回退出码。返回非 0 表示环境级失败（目前只有 OOM）。
  */
-static int execute(const char *source, int *exit_code)
+static int execute(const char *source, const char *project_dir,
+                   const char *entry_file, int *exit_code)
 {
     nlr_buf_t nlr;
 
@@ -243,15 +239,30 @@ static int execute(const char *source, int *exit_code)
         mp_parse_tree_t parse_tree;
         mp_obj_t module_fun;
 
+        mp_sys_path = mp_obj_new_list(0, NULL);
+        if (entry_file != NULL && entry_file[0] != '\0')
+        {
+            const char *slash = strrchr(entry_file, '/');
+            if (slash != NULL && slash > entry_file)
+                mp_obj_list_append(mp_sys_path,
+                    mp_obj_new_str(entry_file, (size_t)(slash - entry_file)));
+            mp_obj_list_append(mp_sys_argv,
+                mp_obj_new_str(entry_file, strlen(entry_file)));
+            mp_obj_dict_store(MP_OBJ_FROM_PTR(mp_globals_get()),
+                MP_OBJ_NEW_QSTR(MP_QSTR___file__),
+                mp_obj_new_str(entry_file, strlen(entry_file)));
+        }
+        if (project_dir != NULL && project_dir[0] != '\0')
+            mp_obj_list_append(mp_sys_path,
+                mp_obj_new_str(project_dir, strlen(project_dir)));
+
         /*
-         * 源码名用 <stdin>。MicroPython 自己在 py/builtinevex.c 里也是这么
-         * 处理「不在文件里的源码」的，所以 traceback 里会显示 File "<stdin>"。
-         * 换成真实文件名会更好看，但那要求 qstr 里得先有这个字符串，而 qstr
-         * 是编译期固定下来的——为一个纯装饰性的名字不值得。
+         * qstr 可在运行时驻留字符串；用实际入口路径让 traceback 指向文件。
          */
+        source_name = (entry_file == NULL || entry_file[0] == '\0')
+            ? MP_QSTR__lt_stdin_gt_ : qstr_from_str(entry_file);
         lex = mp_lexer_new_from_str_len(
-            MP_QSTR__lt_stdin_gt_, source, strlen(source), 0);
-        source_name = lex->source_name;
+            source_name, source, strlen(source), 0);
 
         parse_tree = mp_parse(lex, MP_PARSE_FILE_INPUT);
         module_fun = mp_compile(&parse_tree, source_name, true);
@@ -335,7 +346,8 @@ static QfliPyRunResult make_result(int exit_code, const char *output, const char
     return result;
 }
 
-QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb)
+QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
+                            const char *project_dir, const char *entry_file)
 {
     QfliPyRunResult result;
     int exit_code = 0;
@@ -388,7 +400,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     qfli_py_hal_reset(stdin_text);
 
-    if (execute(source, &exit_code) != 0)
+    if (execute(source, project_dir, entry_file, &exit_code) != 0)
     {
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
         mp_deinit();

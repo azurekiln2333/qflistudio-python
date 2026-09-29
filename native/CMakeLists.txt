@@ -81,7 +81,8 @@ message(STATUS "qfli_py: 用 Python ${QFLI_PY_PYTHON} 生成 MicroPython 源码�
 
 set(_qfli_py_stale FALSE)
 
-if(NOT EXISTS ${QFLI_PY_EMBED_STAMP})
+if(NOT EXISTS ${QFLI_PY_EMBED_STAMP}
+   OR NOT EXISTS ${CMAKE_BINARY_DIR}/embed/genhdr/qstrdefs.generated.h)
     set(_qfli_py_stale TRUE)
 else()
     file(GLOB _qfli_py_config_files

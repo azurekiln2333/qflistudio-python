@@ -3,7 +3,7 @@
 - [x] Inspect current native, Dart, ArkTS, build, test, and device state.
 - [x] Build the existing arm64 library and signed HAP; install and launch on a device; record the real self-check result.
 - [x] Make each C VM invocation independent and run packaged on-device C VM checks for compile/run, errors, input, exit, and repeat runs (7/7).
-- [ ] Pass project and entry paths through Flutter, ArkTS, and NAPI; enable upstream file reading and project module import.
+- [x] Pass project and entry paths through Flutter, ArkTS, and NAPI; enable upstream file reading and project module import (on-device 10/10).
 - [ ] Add project-local file operations through the port and test read/write and path failures.
 - [ ] Add practical editor/runtime tools supported by the engine, then remove unfinished-work copy from normal app flows.
 - [ ] Run focused and full checks: native build/dependency scan, native smoke on device, Flutter test/analyze, HAP build/install/self-check.

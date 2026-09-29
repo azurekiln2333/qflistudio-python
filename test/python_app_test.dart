@@ -171,6 +171,8 @@ void main() {
         expect(call.method, 'run');
         final args = call.arguments as Map;
         expect(args['source'], contains('print("hi")'));
+        expect(args['projectPath'], project.path);
+        expect(args['entryFile'], p.join(project.path, 'main.py'));
         return _outcome(output: 'hi\n');
       });
 

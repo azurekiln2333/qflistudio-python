@@ -169,12 +169,13 @@ Flutter 插件拷 `libapp.so` 用的也是这个目录。
 App 启动时（`registerQfliPyNativeChannel` 里）会执行一组原生用例，写进 hilog：
 
 ```powershell
-hdc shell hilog -x | Select-String QfliPyNative
+hdc shell hilog -z 5000 -T QfliPyNative
 ```
 
 - 通了：能看到 `libqfli_py.so 已加载，MicroPython 1.24.1 (ecfdd5d)`，
-  以及 `原生自检通过 7/7`。这些用例在真机上经过 ArkTS/NAPI 调用 C VM，
-  覆盖编译执行、语法错误、运行异常、输入、退出码、内置模块与多次运行隔离。
+  以及 `原生自检通过 10/10`。这些用例在真机上经过 ArkTS/NAPI 调用 C VM，
+  覆盖编译执行、语法错误、运行异常、输入、退出码、内置模块、多次运行隔离、
+  入口路径，以及从应用沙箱中的真实 `.py` 文件导入同级模块和包。
 - 没通：会看到 `libqfli_py.so 未加载：...`，里面写了原因和下一步
 - 依赖又出问题：`hdc shell hilog -x | Select-String MUSL-LDSO`
 

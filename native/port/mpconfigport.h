@@ -37,21 +37,20 @@
  * 这个必须显式关掉，而且理由很硬：EXTRA 档默认把它打开，但
  * py/builtinevex.c 里有一句
  *     #error "MICROPY_PY_BUILTINS_EXECFILE requires MICROPY_HAS_FILE_READER"
- * 而文件读取器要 VFS 或 POSIX reader，我们两样都没有——本 App 的模型是
- * 「源码以字符串交给解释器」，根本不走文件。所以 execfile 关掉。
+ * 文件读取器虽然为模块导入启用了 POSIX reader，入口源码仍由编辑器以字符串
+ * 交给解释器，因此 execfile 保持关闭。
  * compile() 内置函数不受影响（它只要字符串）。
  */
 #define MICROPY_PY_BUILTINS_EXECFILE (0)
 
 /*
- * 文件系统：没有 VFS，没有真实文件 IO。
- * MICROPY_VFS 在 mpconfig.h 里默认就是 0，这里写出来是为了明确意图——
- * 一旦以后有人打开它，就会看到这段注释而不是去猜。
+ * 使用上游 POSIX reader 导入项目里的 .py 文件。open() 仍由 port 单独提供。
+ * 不启用 VFS，也不改宿主进程的工作目录。
  */
 #define MICROPY_VFS          (0)
 #define MICROPY_VFS_POSIX    (0)
 #define MICROPY_READER_VFS   (0)
-#define MICROPY_READER_POSIX (0)
+#define MICROPY_READER_POSIX (1)
 #define MICROPY_PY_IO_FILEIO (0)
 #define MICROPY_PY_OS        (0)
 

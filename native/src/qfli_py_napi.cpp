@@ -8,7 +8,7 @@
  * ArkTS 侧的用法：
  *
  *   import qfliPy from 'libqfli_py.so';
- *   const r = qfliPy.run('print("hi")', '', 0);
+ *   const r = qfliPy.run('print("hi")', '', 0, projectPath, entryFile);
  *   // r = { exitCode, output, error, truncated }
  *   const v = qfliPy.version();          // "1.24.1 (ecfdd5d)"
  *
@@ -39,12 +39,13 @@ bool GetStringArg(napi_env env, napi_value value, std::string *out)
     if (napi_get_value_string_utf8(env, value, nullptr, 0, &length) != napi_ok)
         return false;
 
-    std::string buffer(length, '\0');
+    std::string buffer(length + 1, '\0');
     if (length > 0)
     {
         if (napi_get_value_string_utf8(env, value, &buffer[0], length + 1, &length) != napi_ok)
             return false;
     }
+    buffer.resize(length);
     *out = buffer;
     return true;
 }
@@ -76,13 +77,14 @@ napi_value MakeString(napi_env env, const char *text)
 }
 
 /*
- * run(source: string, stdin: string, heapKb?: number)
+ * run(source: string, stdin: string, heapKb?: number,
+ *     projectPath?: string, entryFile?: string)
  *   -> { exitCode: number, output: string, error: string | null, truncated: boolean }
  */
 napi_value Run(napi_env env, napi_callback_info info)
 {
-    size_t argc = 3;
-    napi_value argv[3] = {nullptr, nullptr, nullptr};
+    size_t argc = 5;
+    napi_value argv[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     napi_value thisArg = nullptr;
 
     if (napi_get_cb_info(env, info, &argc, argv, &thisArg, nullptr) != napi_ok)
@@ -106,11 +108,19 @@ napi_value Run(napi_env env, napi_callback_info info)
     if (argc >= 3)
         GetIntArg(env, argv[2], &heapKb);
 
+    std::string projectPath;
+    if (argc >= 4)
+        GetStringArg(env, argv[3], &projectPath);
+
+    std::string entryFile;
+    if (argc >= 5)
+        GetStringArg(env, argv[4], &entryFile);
+
     // ---- 跑 ----
     QfliPyRunResult raw = qfli_py_run(
         source.c_str(),
         stdinText.empty() ? nullptr : stdinText.c_str(),
-        heapKb);
+        heapKb, projectPath.c_str(), entryFile.c_str());
 
     napi_value result = nullptr;
     napi_create_object(env, &result);
