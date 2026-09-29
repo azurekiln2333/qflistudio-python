@@ -113,8 +113,8 @@ linker namespace 里，照样 errno=2。所以「设备上有这个库」不能�
 | `src/qfli_py_hal.h` / `.c` | 输出捕获与标准输入（含 `sys.stdout` 走的 `mp_hal_*`） |
 | `src/qfli_py_napi.cpp` | NAPI 外壳，把 `run()` / `version()` 暴露给 ArkTS |
 | `ohos/QfliPyNative.ets` | ArkTS 接线模板（复制到 `ohos/entry/...` 才进构建） |
-| `third_party/micropython/` | MicroPython 源码（clone 进来，不提交） |
-| `micropython_embed/` | 生成物：自包含源码包（不提交） |
+| `third_party/micropython/` | 上游源码（首次运行 `build.ps1` 自动拉取并核对版本） |
+| `micropython_embed/` | 自包含源码包（由构建脚本再生成） |
 
 ## 构建 .so
 
@@ -122,7 +122,8 @@ linker namespace 里，照样 errno=2。所以「设备上有这个库」不能�
 powershell -ExecutionPolicy Bypass -File apps\qfli_python\native\build.ps1
 ```
 
-它会自动找 DevEco Studio / NDK / 宿主 Python（DevEco 自带的那个），然后：
+它会自动找 DevEco Studio / NDK / 宿主 Python（DevEco 自带的那个），
+在缺少上游源码时拉取固定的 MicroPython 1.24.1（`ecfdd5d`），然后：
 
 1. 配置 CMake 到 `native/build/cmake-arm64-v8a/`
 2. 编译 `libqfli_py.so`（第一次要编一百多个 MicroPython 源文件，约一两分钟）

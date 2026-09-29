@@ -12,7 +12,8 @@
     动态依赖——少一个 libc++_shared.so 这类问题，编译期完全看不出来，装到真机
     上才会以 "Cannot read property run of undefined" 的形式出现，非常难查。
 
-    脚本不碰构建目录以外的东西：不带 -Clean 时不会删任何文件。
+    首次构建会自动取得固定版本的上游 MicroPython 源码；之后只更新构建产物。
+    不带 -Clean 时不会删除已有源码。
 
     每一步的完整输出都落在 native/build/cmake-<abi>/ 下：
     configure.log / build.log / check_so_deps.log。失败时打印尾部，
@@ -39,11 +40,11 @@
     只编译，不往 ohos/entry/libs/ 拷。
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File apps\qfli_python\native\build.ps1
+    powershell -ExecutionPolicy Bypass -File native\build.ps1
 
 .EXAMPLE
     # 排查原生崩溃：带符号表编一份
-    powershell -ExecutionPolicy Bypass -File apps\qfli_python\native\build.ps1 -BuildType Debug
+    powershell -ExecutionPolicy Bypass -File native\build.ps1 -BuildType Debug
 #>
 [CmdletBinding()]
 param(
@@ -127,7 +128,7 @@ function Invoke-Tool {
     }
 }
 
-# 脚本自己所在目录 = apps/qfli_python/native
+# 脚本自己所在目录 = native
 $NativeDir = $PSScriptRoot
 $AppDir = Split-Path -Parent $NativeDir
 $OhosDir = Join-Path $AppDir 'ohos'
@@ -213,14 +214,27 @@ Write-Host "  Python : $Python"
 Write-Step "检查 MicroPython 源码"
 
 $MpDir = Join-Path $NativeDir 'third_party\micropython'
+$gitTool = Get-Command git -ErrorAction SilentlyContinue
+if (-not $gitTool) {
+    Fail '构建需要 Git 来获取或核对上游 MicroPython 源码，请先安装 Git。'
+}
 if (-not (Test-Path (Join-Path $MpDir 'py\makeqstrdefs.py'))) {
-    Fail @"
-MicroPython 源码不在位：$MpDir
-先 clone 一份（README.md 里有完整命令），大致是：
-  git clone --depth 1 https://github.com/micropython/micropython.git "$MpDir"
-"@
+    $bootstrapDir = Join-Path $NativeDir 'build\bootstrap'
+    New-Item -ItemType Directory -Path $bootstrapDir -Force | Out-Null
+    $clone = Invoke-Tool -Exe $gitTool.Source -Arguments @(
+        'clone', '--depth', '1', '--branch', 'v1.24.1',
+        'https://github.com/micropython/micropython.git', $MpDir
+    ) -LogPath (Join-Path $bootstrapDir 'micropython-clone.log') -What 'MicroPython clone'
+    if ($clone.ExitCode -ne 0 -or -not (Test-Path (Join-Path $MpDir 'py\makeqstrdefs.py'))) {
+        Fail '无法获取 MicroPython 1.24.1；见 native/build/bootstrap/micropython-clone.log。'
+    }
+}
+$revision = (& $gitTool.Source -C $MpDir rev-parse --short=7 HEAD).Trim()
+if ($LASTEXITCODE -ne 0 -or $revision -ne 'ecfdd5d') {
+    Fail "MicroPython 源码版本不匹配：需要 ecfdd5d，实际为 $revision。"
 }
 Write-Host "  源码   : $MpDir"
+Write-Host "  commit : $revision"
 
 # ---------------------------------------------------------------------------
 # 4. 配置 + 编译

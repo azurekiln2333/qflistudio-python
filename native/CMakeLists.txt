@@ -100,7 +100,7 @@ endif()
 if(NOT EXISTS ${QFLI_PY_MICROPYTHON_DIR}/py/makeqstrdefs.py)
     message(FATAL_ERROR
         "找不到 MicroPython 源码：${QFLI_PY_MICROPYTHON_DIR}\n"
-        "先按 native/README.md 里的命令把它 clone 进来。")
+        "请先运行 native/build.ps1 自动取得固定版本的上游源码。")
 endif()
 
 # 交叉编译三元组：CMake 实际编译时用的是 CMAKE_C_COMPILER_TARGET，生成器的
