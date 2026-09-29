@@ -165,14 +165,15 @@ Flutter 插件拷 `libapp.so` 用的也是这个目录。
 
 ## 怎么确认后端通了
 
-App 启动时（`registerQfliPyNativeChannel` 里）会跑一次自检，写进 hilog：
+App 启动时（`registerQfliPyNativeChannel` 里）会执行一组原生用例，写进 hilog：
 
 ```powershell
 hdc shell hilog -x | Select-String QfliPyNative
 ```
 
 - 通了：能看到 `libqfli_py.so 已加载，MicroPython 1.24.1 (ecfdd5d)`，
-  以及自检那次运行的输出（`sys.version` / `sys.implementation`）
+  以及 `原生自检通过 7/7`。这些用例在真机上经过 ArkTS/NAPI 调用 C VM，
+  覆盖编译执行、语法错误、运行异常、输入、退出码、内置模块与多次运行隔离。
 - 没通：会看到 `libqfli_py.so 未加载：...`，里面写了原因和下一步
 - 依赖又出问题：`hdc shell hilog -x | Select-String MUSL-LDSO`
 
@@ -211,9 +212,8 @@ hdc shell hilog -x | Select-String QfliPyNative
 > `entry-default-unsigned.hap`（上一次未签名的残留），装它会报
 > `code:9568320 error: no signature file`。
 
-> **待补**：修复后的 `.so` 重新打包、装机、`hilog` 自检这条链路还没跑过
-> （本机沙箱里 `hvigor` 的 `ohpm install` 出不去网，`wmic.exe` 也被策略挡了，
-> 造不出 HAP）。跑完把结果补到这张表里。
+2026-09-30 已重新构建并安装签名 HAP，真机日志确认原生模块加载，
+七项执行用例全部通过。
 
 ## 已知限制
 

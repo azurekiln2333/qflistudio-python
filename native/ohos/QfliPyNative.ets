@@ -63,6 +63,15 @@ interface PyProbeResult {
   detail: string;
 }
 
+interface PySelfCheckCase {
+  name: string;
+  source: string;
+  stdin: string;
+  exitCode: number;
+  output: string;
+  error: string | null;
+}
+
 /** Dart 侧 PythonProgramRunner 用的通道名。 */
 const CHANNEL_NATIVE = 'qfli_py/native';
 
@@ -95,19 +104,18 @@ function nativeReady(): boolean {
 
 /** 模块不可用时的说明。写给用户看，不是写给日志看。 */
 const MODULE_MISSING_DETAIL =
-  'libqfli_py.so 没能加载：ArkTS 的 import 拿到的是 undefined，'
-  + '说明这个 .so 在 dlopen 阶段就失败了。'
-  + '最常见的原因是它带了一个 HAP 里没有的动态依赖（典型是 libc++_shared.so）——'
-  + '在 hilog 里搜 "MUSL-LDSO" 能看到具体缺哪个库。'
-  + '重新编译：apps/qfli_python/native/build.ps1（它会校验动态依赖）。';
+  'Python 运行组件加载失败，请重新安装应用。';
 
 /** 取版本号，拿不到就返回空串（不影响可用性判断）。 */
 function nativeVersion(): string {
-  if (!nativeReady()) {
+  // 同 runNative：先把方法抠成局部变量，避免 ArkTS 在跨语句后
+  // 丢掉 mod 的非空收窄（会报 `'mod' is possibly 'undefined'`）。
+  const version = nativeModule?.version;
+  if (typeof version !== 'function') {
     return '';
   }
   try {
-    return nativeModule.version();
+    return version();
   } catch (e) {
     return '';
   }
@@ -118,7 +126,17 @@ function runNative(
   stdin: string,
   heapKb: number,
 ): PyRunOutcome {
-  return nativeModule.run(source, stdin, heapKb) as PyRunOutcome;
+  // 注意：这里必须把 run 取成一个局部函数再调。
+  // ArkTS 的流分析不会用 nativeModule 的初始化结果去收窄它的类型，
+  // 直接写 `const mod = nativeModule; if (mod === undefined) ...; mod.run(...)`
+  // 会在 mod.run 处报 'nativeModule' is possibly 'undefined'——因为 mod 的声明
+  // 类型里带着 undefined，收窄在跨语句后不保留。
+  // 先把方法抠成局部变量，类型就塌成确定的函数签名，判空也一起做了。
+  const run = nativeModule?.run;
+  if (typeof run !== 'function') {
+    return { exitCode: -1, error: MODULE_MISSING_DETAIL, output: '', truncated: false };
+  }
+  return run(source, stdin, heapKb);
 }
 
 /**
@@ -128,7 +146,7 @@ function runNative(
  * App 手点一次运行：
  *
  *   1. 报出 .so 的加载结果和 MicroPython 的真实版本号；
- *   2. 真跑一段 Python（sys.version / sys.implementation），把结果打出来。
+ *   2. 真跑一组 Python 编译、执行和隔离用例，把结果打出来。
  *
  * 第 2 步顺带把 VM 初始化掉（8MB GC 堆），第一次按运行的时候少一点等待。
  * 整个自检失败不影响 App 启动——出错只写日志。
@@ -146,12 +164,37 @@ function selfCheck(): void {
     hilog.info(LOG_DOMAIN, LOG_TAG, 'libqfli_py.so 已加载，MicroPython %{public}s',
       nativeVersion());
 
-    const probe = runNative(
-      'import sys\nprint(sys.version)\nprint(sys.implementation)',
-      '', 0);
-    hilog.info(LOG_DOMAIN, LOG_TAG,
-      '自检 exitCode=%{public}d output=%{public}s',
-      probe.exitCode, probe.output);
+    const cases: PySelfCheckCase[] = [
+      { name: 'compile-run', source: 'value = 42\nprint(value)', stdin: '',
+        exitCode: 0, output: '42\n', error: null },
+      { name: 'fresh-globals', source: 'print(value)', stdin: '',
+        exitCode: 1, output: '', error: 'NameError' },
+      { name: 'syntax-error', source: 'def broken(:\n    pass', stdin: '',
+        exitCode: 1, output: '', error: 'SyntaxError' },
+      { name: 'runtime-error', source: "raise ValueError('bad')", stdin: '',
+        exitCode: 1, output: '', error: 'ValueError: bad' },
+      { name: 'stdin', source: "print(input('name? '))", stdin: 'Ada\n',
+        exitCode: 0, output: 'Ada\n', error: null },
+      { name: 'exit-code', source: 'import sys\nsys.exit(7)', stdin: '',
+        exitCode: 7, output: '', error: null },
+      { name: 'upstream-module', source: 'import math\nprint(math.sqrt(81))', stdin: '',
+        exitCode: 0, output: '9.0\n', error: null },
+    ];
+    let passed = 0;
+    for (const test of cases) {
+      const actual = runNative(test.source, test.stdin, 0);
+      const outputOk = test.output === '' ? actual.output === '' : actual.output.includes(test.output);
+      const errorOk = test.error === null ? actual.error === null
+        : actual.error !== null && actual.error.includes(test.error);
+      if (actual.exitCode === test.exitCode && outputOk && errorOk && !actual.truncated) {
+        passed++;
+      } else {
+        hilog.error(LOG_DOMAIN, LOG_TAG,
+          '原生自检失败 %{public}s exit=%{public}d stdout=%{public}s stderr=%{public}s',
+          test.name, actual.exitCode, actual.output, actual.error ?? '');
+      }
+    }
+    hilog.info(LOG_DOMAIN, LOG_TAG, '原生自检通过 %{public}d/%{public}d', passed, cases.length);
   } catch (e) {
     const err = e as Error;
     hilog.error(LOG_DOMAIN, LOG_TAG, '自检失败：%{public}s', err.message);

@@ -9,10 +9,9 @@
  *   1. mp_embed_exec_str 把未捕获异常一律交给 mp_obj_print_exception，包括
  *      SystemExit。于是 `sys.exit(3)` 会打出一段 "SystemExit: 3" 的 traceback
  *      并以 0 退出，而我们要的是「退出码 3、不算错误、不打 traceback」。
- *   2. 它把初始化拆不开，没法做到「一次初始化、多次运行」。每次按 Run 都重新
- *      gc_init + mp_init 会白白付一遍初始化开销。
+ *   2. 它把初始化和执行封装在一起，无法分别处理退出码、输出捕获和运行隔离。
  *
- * 所以这里自己实现那几件事。语义上仍然严格遵守 MicroPython 的约定。
+ * 这里复用上游编译器和 VM，只实现宿主调用与生命周期管理。
  */
 #include "qfli_py_bridge.h"
 
@@ -73,24 +72,18 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void *g_heap = NULL;
 static size_t g_heap_size = 0;
-static int g_vm_ready = 0;
 
 /*
- * 建立 VM。只做一次，之后反复运行都复用同一个 VM。
- *
- * 为什么不每次运行都重建：MicroPython 的 mp_deinit() 实际上是个空函数
- * （见 py/mpstate.c），真正能回收的只有我们自己的堆，重建并不能换来
- * 「更干净的状态」，只是白白付一遍初始化成本。
- * 运行之间的隔离由「每次编译出一个全新的模块」保证——模块级变量天然是新的，
- * 也不会进 sys.modules，所以上一次运行的全局变量不会泄漏到下一次。
+ * 只分配一次堆。每次运行都重新 gc_init/mp_init：mp_init 会重新建立
+ * __main__ 字典和已加载模块表，保证前一次的变量和 import 不会泄漏。
  *
  * 返回 0 成功，-1 表示连最小的堆都申请不到。
  */
-static int ensure_vm(int heap_kb)
+static int ensure_heap(int heap_kb)
 {
     size_t want;
 
-    if (g_vm_ready)
+    if (g_heap != NULL)
         return 0;
 
     want = (size_t)(heap_kb > 0 ? heap_kb : QFLI_PY_DEFAULT_HEAP_KB) * 1024;
@@ -107,14 +100,6 @@ static int ensure_vm(int heap_kb)
 
     g_heap_size = want;
 
-    /*
-     * 注意这里没有 mp_stack_set_top：那件事由调用方 qfli_py_run 每次做，
-     * 因为扫栈的顶必须是「当前这一帧」的地址，见那里的注释。
-     */
-    gc_init(g_heap, (uint8_t *)g_heap + g_heap_size);
-    mp_init();
-
-    g_vm_ready = 1;
     return 0;
 }
 
@@ -388,12 +373,15 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
         mp_stack_set_top((void *)&stack_anchor);
     }
 
-    if (ensure_vm(heap_kb) != 0)
+    if (ensure_heap(heap_kb) != 0)
     {
         pthread_mutex_unlock(&g_lock);
         result = make_result(1, "", "内存不足：申请 MicroPython 的 GC 堆失败。");
         return result;
     }
+
+    gc_init(g_heap, (uint8_t *)g_heap + g_heap_size);
+    mp_init();
 
     /* 必须在 mp_init() 之后设：它写的是 VM 状态里的字段。 */
     mp_stack_set_limit(QFLI_PY_STACK_LIMIT_BYTES);
@@ -402,14 +390,16 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     if (execute(source, &exit_code) != 0)
     {
-        pthread_mutex_unlock(&g_lock);
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
+        mp_deinit();
+        pthread_mutex_unlock(&g_lock);
         return result;
     }
 
     result = make_result(exit_code, qfli_py_hal_stdout(), qfli_py_hal_stderr());
     result.truncated = qfli_py_hal_truncated();
 
+    mp_deinit();
     pthread_mutex_unlock(&g_lock);
     return result;
 }
@@ -435,4 +425,3 @@ const char *qfli_py_version(void)
      */
     return MICROPY_VERSION_STRING " (" MICROPY_GIT_HASH ")";
 }
-
