@@ -269,7 +269,20 @@ static int execute(const char *source, const char *project_dir,
             }
             else if (mp_obj_is_int(value))
             {
-                *exit_code = mp_obj_get_int(value);
+                /* The original exception guard has unwound; conversion may overflow. */
+                nlr_buf_t conversion_nlr;
+                if (nlr_push(&conversion_nlr) == 0)
+                {
+                    *exit_code = mp_obj_get_int(value);
+                    nlr_pop();
+                }
+                else
+                {
+                    qfli_py_hal_set_sink(QFLI_PY_SINK_STDERR);
+                    print_safely((mp_obj_t)conversion_nlr.ret_val, 1);
+                    qfli_py_hal_set_sink(QFLI_PY_SINK_STDOUT);
+                    *exit_code = 1;
+                }
             }
             else
             {

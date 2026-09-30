@@ -170,13 +170,16 @@ file(GLOB QFLI_PY_EMBED_SOURCES
 #                                把它包含进 extmod/modtime.c。里面只有一个
 #                                static 函数，单独编只是白编加一条
 #                                -Wunused-function 警告，但同样不该编。
+# The MCU stdio implementation is replaced by src/qfli_py_stdio.c for finite
+# stdin buffers and separate stdout/stderr capture.
 #
 # 用 foreach 而不是 list(FILTER ...)：后者要 CMake 3.6+，而本文件声明的是 3.5。
 set(_qfli_py_not_compiled "")
 set(_qfli_py_embed_sources_kept "")
 foreach(_qfli_py_src ${QFLI_PY_EMBED_SOURCES})
     if(_qfli_py_src MATCHES "/lib/re1\\.5/"
-       OR _qfli_py_src MATCHES "/port/qfli_time_localtime\\.c$")
+       OR _qfli_py_src MATCHES "/port/qfli_time_localtime\\.c$"
+       OR _qfli_py_src MATCHES "/shared/runtime/sys_stdio_mphal\\.c$")
         list(APPEND _qfli_py_not_compiled "${_qfli_py_src}")
     else()
         list(APPEND _qfli_py_embed_sources_kept "${_qfli_py_src}")
@@ -185,7 +188,7 @@ endforeach()
 set(QFLI_PY_EMBED_SOURCES ${_qfli_py_embed_sources_kept})
 list(LENGTH _qfli_py_not_compiled _qfli_py_not_compiled_count)
 message(STATUS
-    "qfli_py: 排除 ${_qfli_py_not_compiled_count} 个「只被文本包含」的源文件，不单独编译")
+    "qfli_py: exclude ${_qfli_py_not_compiled_count} included or port-replaced source files")
 
 list(LENGTH QFLI_PY_EMBED_SOURCES _qfli_py_embed_count)
 if(_qfli_py_embed_count LESS 100)
@@ -198,6 +201,7 @@ message(STATUS "qfli_py: 编译 ${_qfli_py_embed_count} 个 MicroPython 源文�
 add_library(qfli_py SHARED
     ${QFLI_PY_EMBED_SOURCES}
     src/qfli_py_hal.c
+    src/qfli_py_stdio.c
     src/qfli_py_file.c
     src/qfli_py_bridge.c
     src/qfli_py_napi.cpp)

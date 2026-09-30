@@ -69,7 +69,28 @@ int main(void)
     check("syntax-error", "def broken(:", "", 1, "", "SyntaxError", 0);
     check("runtime-error", "raise ValueError('bad')", "", 1, "", "ValueError: bad", 0);
     check("stdin", "print(input())", "Ada\n", 0, "Ada\n", NULL, 0);
+    check("stdin-eof", "input()", "", 1, "", "EOFError", 0);
+    check("stdin-empty-line", "print(repr(input()))", "\n", 0, "''\n", NULL, 0);
+    check("stdin-final-line", "print(input())\ninput()", "Ada", 1, "Ada\n", "EOFError", 0);
+    check("stdin-read-all", "import sys\nprint(repr(sys.stdin.read()))", "Ada\nLin\n",
+        0, "'Ada\\nLin\\n'\n", NULL, 0);
+    check("stdin-readline-eof", "import sys\nprint(repr(sys.stdin.readline()), repr(sys.stdin.readline()), repr(sys.stdin.readline()))",
+        "Ada\nLin", 0, "'Ada\\n' 'Lin' ''\n", NULL, 0);
+    check("stdin-shared-cursor", "import sys\nprint(sys.stdin.read(2), input(), repr(sys.stdin.read()))",
+        "Ada\nLin\n", 0, "Ad a 'Lin\\n'\n", NULL, 0);
+    check("stdin-buffer-shared-cursor", "import sys\nprint(sys.stdin.buffer.read(1), sys.stdin.read(), sys.stdin.buffer.read())",
+        "Ada", 0, "b'A' da b''\n", NULL, 0);
+    check("stdin-readinto", "import sys\ndata = bytearray(5)\nprint(sys.stdin.buffer.readinto(data), list(data), repr(sys.stdin.buffer.read()))",
+        "Ada", 0, "3 [65, 100, 97, 0, 0] b''\n", NULL, 0);
+    check("stderr-stream", "import sys\nsys.stdout.write('out\\n')\nsys.stderr.write('err\\n')\nsys.stdout.flush()\nsys.stderr.flush()",
+        "", 0, "out\n", "err\n", 0);
+    check("binary-stdio", "import sys\nsys.stdout.buffer.write(b'out\\n')\nsys.stderr.buffer.write(b'err\\n')\nsys.stdout.buffer.flush()\nsys.stderr.buffer.flush()",
+        "", 0, "out\n", "err\n", 0);
+    check("stdout-read-error", "import sys\nsys.stdout.read(1)", "", 1, "", "EPERM", 0);
+    check("stdio-error-recovery", "print(input())", "recovered\n", 0, "recovered\n", NULL, 0);
     check("exit", "import sys\nsys.exit(7)", "", 7, "", NULL, 0);
+    check("exit-overflow", "import sys\nsys.exit(1 << 200)", "", 1, "", "OverflowError", 0);
+    check("exit-overflow-recovery", "print('recovered')", "", 0, "recovered\n", NULL, 0);
     check("builtin-module", "import math\nprint(math.sqrt(81))", "", 0, "9.0\n", NULL, 0);
     check("sibling-import", "import helper\nprint(helper.answer)", "", 0, "42\n", NULL, 0);
     write_file("helper.py", "answer = 43\n");

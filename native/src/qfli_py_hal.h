@@ -30,6 +30,9 @@ void qfli_py_hal_reset(const char *stdin_text);
 /* 切换后续输出的去向。 */
 void qfli_py_hal_set_sink(qfli_py_sink_t sink);
 
+/* Write an explicit standard stream without changing exception capture. */
+void qfli_py_hal_write(qfli_py_sink_t sink, const char *text, size_t length);
+
 /* 两条输出流的内容，NUL 结尾，永不为 NULL。 */
 const char *qfli_py_hal_stdout(void);
 const char *qfli_py_hal_stderr(void);

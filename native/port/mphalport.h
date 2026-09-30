@@ -27,7 +27,7 @@
  * ——App 的模型是「一次性喂一段标准输入」，所以自己实现一个只认换行的版本。
  *
  * 语义跟上游一致：读一行塞进 vstr（不含结尾换行），返回 0；
- * 输入耗尽返回 -1（调用方据此抛 EOFError）。
+ * 输入耗尽返回 CHAR_CTRL_D（调用方据此抛 EOFError）。
  *
  * 注意这里必须写成 `#define mp_hal_readline mp_hal_readline` 的形式：
  * 光定义 static inline 函数，`#ifndef` 依然成立，宏会把它覆盖成 readline()。

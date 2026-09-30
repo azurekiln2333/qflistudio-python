@@ -16,6 +16,7 @@
 #include "py/mphal.h"
 #include "py/misc.h"
 #include "py/stream.h"
+#include "shared/readline/readline.h"
 
 #include <string.h>
 #include <time.h>
@@ -128,6 +129,14 @@ static void emit(const char *str, size_t len)
     buffer[*used] = '\0';
 }
 
+void qfli_py_hal_write(qfli_py_sink_t sink, const char *text, size_t length)
+{
+    qfli_py_sink_t previous = g_sink;
+    g_sink = sink;
+    emit(text, length);
+    g_sink = previous;
+}
+
 /*
  * 注意这里**不做** \n → \r\n 转换。
  *
@@ -159,13 +168,13 @@ void mp_hal_stdout_tx_str(const char *str)
 /*
  * input() 的实现，由 port/mphalport.h 里的 mp_hal_readline 宏钩进来。
  *
- * 语义和 CPython 对齐：读到换行为止，**不含**结尾换行；输入耗尽返回 -1，
+ * 语义和 CPython 对齐：读到换行为止，**不含**结尾换行；输入耗尽返回 CHAR_CTRL_D，
  * 调用方 py/modbuiltins.c 会据此抛 EOFError。
  */
 int qfli_py_hal_readline(vstr_t *vstr)
 {
     if (g_stdin_pos >= g_stdin_len)
-        return -1;
+        return CHAR_CTRL_D;
 
     while (g_stdin_pos < g_stdin_len)
     {
