@@ -113,6 +113,8 @@ void main() {
 
     test('产品名使用 QFLIPyFlow', () {
       expect(pythonProfile.appTitle, 'QFLIPyFlow');
+      expect(pythonProfile.runtimeStatus, 'available');
+      expect(pythonProfile.toolsPageBuilder, isNotNull);
     });
   });
 
@@ -150,8 +152,9 @@ void main() {
       final result = await runEntry('main.py');
       expect(result, isNotNull, reason: '运行后端没有接管本语言文件');
       expect(result!.title, '运行 main.py');
-      expect(await result.stdout.toList(),
-          ['${_appPrefix}Python 运行组件不可用，请重新安装应用。']);
+      expect(await result.stdout.toList(), [
+        '${_appPrefix}Python 运行组件不可用，请重新安装应用。',
+      ]);
       expect(await result.exitCode, _notRun);
     });
 
@@ -162,6 +165,40 @@ void main() {
   });
 
   group('运行后端：原生后端可用时', () {
+    test('语法检查只编译当前项目文件', () async {
+      write('src/main.py', 'print("not executed")');
+      _installNativeHandler((call) async {
+        if (call.method == 'available') return _probe();
+        expect(call.method, 'checkSyntax');
+        final args = call.arguments as Map;
+        expect(args['source'], 'print("not executed")');
+        expect(args['projectPath'], project.path);
+        expect(args['entryFile'], p.join(project.path, 'src/main.py'));
+        return _outcome();
+      });
+      final result = await const PythonProgramRunner().checkSyntax(
+        projectPath: project.path,
+        entryFile: p.join(project.path, 'src/main.py'),
+      );
+      expect(result.success, isTrue);
+      expect(result.error, isEmpty);
+    });
+
+    test('语法错误返回原生编译器诊断', () async {
+      write('main.py', 'def broken(:');
+      _installNativeHandler(
+        (call) async => call.method == 'available'
+            ? _probe()
+            : _outcome(exitCode: 1, error: 'SyntaxError: invalid syntax'),
+      );
+      final result = await const PythonProgramRunner().checkSyntax(
+        projectPath: project.path,
+        entryFile: p.join(project.path, 'main.py'),
+      );
+      expect(result.success, isFalse);
+      expect(result.error, contains('SyntaxError'));
+    });
+
     test('走原生，输出与退出码原样带回', () async {
       write('main.py', 'print("hi")');
       final calls = <MethodCall>[];

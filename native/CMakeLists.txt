@@ -198,6 +198,7 @@ message(STATUS "qfli_py: 编译 ${_qfli_py_embed_count} 个 MicroPython 源文�
 add_library(qfli_py SHARED
     ${QFLI_PY_EMBED_SOURCES}
     src/qfli_py_hal.c
+    src/qfli_py_file.c
     src/qfli_py_bridge.c
     src/qfli_py_napi.cpp)
 

@@ -54,7 +54,7 @@ interface PyRunOutcome {
 /** 与 native/src/qfli_py_napi.cpp 导出的成员一一对应。 */
 interface QfliPyModule {
   run(source: string, stdin: string, heapKb: number,
-    projectPath: string, entryFile: string): PyRunOutcome;
+    projectPath: string, entryFile: string, compileOnly: boolean): PyRunOutcome;
   version(): string;
 }
 
@@ -74,6 +74,7 @@ interface PySelfCheckCase {
   error: string | null;
   projectPath?: string;
   entryFile?: string;
+  compileOnly?: boolean;
 }
 
 /** Dart 侧 PythonProgramRunner 用的通道名。 */
@@ -131,6 +132,7 @@ function runNative(
   heapKb: number,
   projectPath: string = '',
   entryFile: string = '',
+  compileOnly: boolean = false,
 ): PyRunOutcome {
   // 注意：这里必须把 run 取成一个局部函数再调。
   // ArkTS 的流分析不会用 nativeModule 的初始化结果去收窄它的类型，
@@ -142,7 +144,7 @@ function runNative(
   if (typeof run !== 'function') {
     return { exitCode: -1, error: MODULE_MISSING_DETAIL, output: '', truncated: false };
   }
-  return run(source, stdin, heapKb, projectPath, entryFile);
+  return run(source, stdin, heapKb, projectPath, entryFile, compileOnly);
 }
 
 /**
@@ -173,7 +175,9 @@ function selfCheck(): void {
     const projectPath = '/data/storage/el2/base/cache/qfli_py_selfcheck';
     const srcPath = `${projectPath}/src`;
     const packagePath = `${srcPath}/samplepkg`;
-    fs.mkdirSync(packagePath, true);
+    if (!fs.accessSync(packagePath)) {
+      fs.mkdirSync(packagePath, true);
+    }
     const writeSource = (path: string, source: string): void => {
       const file = fs.openSync(path, fs.OpenMode.CREATE | fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
       try {
@@ -212,11 +216,33 @@ function selfCheck(): void {
       { name: 'package-import', source: 'from samplepkg import answer\nprint(answer)', stdin: '',
         exitCode: 0, output: '84\n', error: null,
         projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'text-file',
+        source: "with open('notes.txt', 'w') as file:\n    file.write('hello')\nwith open('notes.txt') as file:\n    print(file.read())",
+        stdin: '', exitCode: 0, output: 'hello\n', error: null,
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'append-file',
+        source: "import io\nwith io.open('notes.txt', mode='a') as file:\n    file.write('!')\nwith open('notes.txt') as file:\n    print(file.read())",
+        stdin: '', exitCode: 0, output: 'hello!\n', error: null,
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'binary-file',
+        source: "with open('raw.bin', 'wb') as file:\n    file.write(bytes([0, 255]))\nwith open('raw.bin', 'rb') as file:\n    print(list(file.read()))",
+        stdin: '', exitCode: 0, output: '[0, 255]\n', error: null,
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'missing-file', source: "open('absent.txt')", stdin: '',
+        exitCode: 1, output: '', error: 'ENOENT',
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'outside-project', source: "open('../outside.txt', 'w')", stdin: '',
+        exitCode: 1, output: '', error: 'EACCES',
+        projectPath, entryFile: `${srcPath}/main.py` },
+      { name: 'compile-only', source: "print('must not run')", stdin: '',
+        exitCode: 0, output: '', error: null, compileOnly: true },
+      { name: 'compile-error', source: 'def broken(:', stdin: '',
+        exitCode: 1, output: '', error: 'SyntaxError', compileOnly: true },
     ];
     let passed = 0;
     for (const test of cases) {
       const actual = runNative(test.source, test.stdin, 0,
-        test.projectPath ?? '', test.entryFile ?? '');
+        test.projectPath ?? '', test.entryFile ?? '', test.compileOnly ?? false);
       const outputOk = test.output === '' ? actual.output === '' : actual.output.includes(test.output);
       const errorOk = test.error === null ? actual.error === null
         : actual.error !== null && actual.error.includes(test.error);
@@ -257,7 +283,7 @@ export function registerQfliPyNativeChannel(flutterEngine: FlutterEngine): void 
         result.success(probe);
         return;
       }
-      if (call.method !== 'run') {
+      if (call.method !== 'run' && call.method !== 'checkSyntax') {
         result.notImplemented();
         return;
       }
@@ -273,7 +299,8 @@ export function registerQfliPyNativeChannel(flutterEngine: FlutterEngine): void 
         const heapKb = (call.argument('heapKb') as number) ?? DEFAULT_HEAP_KB;
         const projectPath = (call.argument('projectPath') as string) ?? '';
         const entryFile = (call.argument('entryFile') as string) ?? '';
-        const outcome = runNative(source, stdin, heapKb, projectPath, entryFile);
+        const outcome = runNative(source, stdin, heapKb, projectPath, entryFile,
+          call.method === 'checkSyntax');
         result.success({
           'exitCode': outcome.exitCode,
           'output': outcome.output,

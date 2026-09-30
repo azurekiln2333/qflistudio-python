@@ -48,11 +48,13 @@ typedef struct {
  *              申请不到时会自动逐级减半，直到 1MB。
  * project_dir: 项目根目录，用于导入同项目的 .py 文件。
  * entry_file : 入口文件的完整路径，用于 traceback、sys.argv 和入口目录。
+ * compile_only: 非零时只编译源码，不执行字节码。
  *
  * 返回值的 output 一定非 NULL；error 可能为 NULL。
  */
 QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
-                            const char *project_dir, const char *entry_file);
+                            const char *project_dir, const char *entry_file,
+                            int compile_only);
 
 /* 释放 qfli_py_run 返回的两个缓冲区。可以安全地对 NULL 调用。 */
 void qfli_py_result_free(QfliPyRunResult *result);

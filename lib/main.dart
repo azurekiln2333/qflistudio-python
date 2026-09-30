@@ -11,6 +11,7 @@ import 'package:qfli_studio_core/store/project_store.dart';
 import 'package:qfli_studio_core/store/settings_store.dart';
 
 import 'python_runner.dart';
+import 'python_tools_page.dart';
 
 /// 本 App 的产品名。窗口标题、任务切换器和应用内顶栏都读它。
 const String _appTitle = StudioProductCatalog.pyFlow;
@@ -23,11 +24,12 @@ const StudioProfile pythonProfile = StudioProfile(
   appTitle: _appTitle,
   templates: [ProjectTemplate.empty, ProjectTemplate.python],
   runner: PythonProgramRunner(),
+  toolsPageBuilder: buildPythonToolsPage,
   isOffline: true,
   productKey: StudioProductCatalog.pyFlowKey,
   showHomeTabs: false,
   runtimeKind: 'micropython-native-and-desktop',
-  runtimeStatus: 'unavailable',
+  runtimeStatus: 'available',
   supportedFileExtensions: ['.py'],
   // main.py 排在默认入口表前面，保证本版一定先命中它。
   entryFileNames: ['main.py', 'src/main.py'],

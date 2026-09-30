@@ -46,6 +46,51 @@ class PythonProgramRunner implements ProgramRunner {
   /// 与 `native/ohos/QfliPyNative.ets` 里的通道名一致。
   static const MethodChannel _channel = MethodChannel('qfli_py/native');
 
+  Future<PythonSyntaxResult> checkSyntax({
+    required String projectPath,
+    required String entryFile,
+  }) async {
+    if (p.extension(entryFile).toLowerCase() != '.py') {
+      return const PythonSyntaxResult(error: '请选择 Python 文件。');
+    }
+    final entry = File(entryFile);
+    if (!entry.existsSync()) {
+      return const PythonSyntaxResult(error: '文件不存在。');
+    }
+    final source = _readText(entry);
+    if (source == null) {
+      return const PythonSyntaxResult(error: '无法读取文件。');
+    }
+    final probe = await _probeNative();
+    if (!probe.available) {
+      return PythonSyntaxResult(
+        error: probe.detail.isEmpty ? 'Python 运行组件不可用。' : probe.detail,
+      );
+    }
+    try {
+      final raw = await _channel.invokeMethod<Object?>('checkSyntax', {
+        'source': source,
+        'stdin': '',
+        'heapKb': heapKb,
+        'projectPath': projectPath,
+        'entryFile': entryFile,
+      });
+      if (raw is! Map || raw['exitCode'] is! int) {
+        return const PythonSyntaxResult(error: '原生运行时返回了意外的结果。');
+      }
+      final error = '${raw['error'] ?? ''}'.trim();
+      return PythonSyntaxResult(
+        success: raw['exitCode'] == 0 && error.isEmpty,
+        error: error,
+        version: probe.version,
+      );
+    } on MissingPluginException {
+      return const PythonSyntaxResult(error: 'Python 运行组件不可用。');
+    } on PlatformException catch (error) {
+      return PythonSyntaxResult(error: error.message ?? error.code);
+    }
+  }
+
   /// App 自己写的诊断行的前缀。
   ///
   /// 存在的理由：终端面板里同时会显示**程序自己的输出**和**App 的诊断**，
@@ -287,6 +332,18 @@ class PythonProgramRunner implements ProgramRunner {
         line.endsWith('\r') ? line.substring(0, line.length - 1) : line,
     ];
   }
+}
+
+class PythonSyntaxResult {
+  const PythonSyntaxResult({
+    this.success = false,
+    this.error = '',
+    this.version = '',
+  });
+
+  final bool success;
+  final String error;
+  final String version;
 }
 
 /// 原生后端的探测结果。

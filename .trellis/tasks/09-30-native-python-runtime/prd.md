@@ -24,9 +24,9 @@ Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by a por
 ## Acceptance Criteria
 
 - [ ] A clean checkout can reproduce the native arm64 library and signed HAP using documented commands.
-- [ ] A repeatable test executes source through the C VM and checks successful output, compilation errors, exceptions, input, exit codes, and state isolation.
-- [ ] The installed app loads its native module and can run a project entry file on a device.
-- [ ] Entry files can import sibling and package `.py` modules, and project-local read/write works with predictable errors.
-- [ ] The app exposes practical Python workflow actions without unfinished-development copy.
+- [x] A repeatable test executes source through the C VM and checks successful output, compilation errors, exceptions, input, exit codes, and state isolation.
+- [x] The installed app loads its native module and can run a project entry file on a device.
+- [x] Entry files can import sibling and package `.py` modules, and project-local read/write works with predictable errors.
+- [x] The app exposes practical Python workflow actions without unfinished-development copy.
 - [ ] Flutter tests, native execution tests, static analysis, native build, HAP build, and device checks pass for the delivered scope.
-- [ ] Work is committed in coherent conventional commits; unrelated existing changes remain untouched.
+- [x] Work is committed in coherent conventional commits; unrelated existing changes remain untouched.

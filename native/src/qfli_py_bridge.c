@@ -16,6 +16,7 @@
 #include "qfli_py_bridge.h"
 
 #include "qfli_py_hal.h"
+#include "qfli_py_file.h"
 
 #include "py/builtin.h"
 #include "py/compile.h"
@@ -160,31 +161,6 @@ mp_import_stat_t mp_import_stat(const char *path)
     return MP_IMPORT_STAT_NO_EXIST;
 }
 
-/*
- * `open()` 和 `io.open()` 都指向这个对象，而它**必须由 port 提供**：
- *
- *   py/builtin.h 第 62 行（MICROPY_VFS 为 0 的那一支）：
- *       // A port can provide this object.
- *       MP_DECLARE_CONST_FUN_OBJ_KW(mp_builtin_open_obj);
- *   py/modio.c 第 207 行：
- *       // Note: mp_builtin_open_obj should be defined by port, it's not
- *       // part of the core.
- *
- * 而且 py/modio.c 里那处引用是**无条件**的（外面没有 MICROPY_PY_* 开关），
- * 所以只要把 io 模块编进来就躲不掉——关掉别的宏也没用。
- *
- * 没有文件系统，所以一律报 ENOENT。这比给个假实现诚实：用户看到的是
- * `OSError: [Errno 2] ENOENT`，而不是「打开成功但读出来是空的」。
- */
-mp_obj_t mp_builtin_open(size_t n_args, const mp_obj_t *args, mp_map_t *kwargs)
-{
-    (void)n_args;
-    (void)args;
-    (void)kwargs;
-    mp_raise_OSError(MP_ENOENT);
-}
-MP_DEFINE_CONST_FUN_OBJ_KW(mp_builtin_open_obj, 1, mp_builtin_open);
-
 /* ------------------------------------------------------------------ *
  * 执行
  * ------------------------------------------------------------------ */
@@ -228,7 +204,7 @@ static void print_safely(mp_obj_t obj, int as_exception)
  * *exit_code 带回退出码。返回非 0 表示环境级失败（目前只有 OOM）。
  */
 static int execute(const char *source, const char *project_dir,
-                   const char *entry_file, int *exit_code)
+                   const char *entry_file, int compile_only, int *exit_code)
 {
     nlr_buf_t nlr;
 
@@ -265,8 +241,9 @@ static int execute(const char *source, const char *project_dir,
             source_name, source, strlen(source), 0);
 
         parse_tree = mp_parse(lex, MP_PARSE_FILE_INPUT);
-        module_fun = mp_compile(&parse_tree, source_name, true);
-        mp_call_function_0(module_fun);
+        module_fun = mp_compile(&parse_tree, source_name, false);
+        if (!compile_only)
+            mp_call_function_0(module_fun);
 
         nlr_pop();
         *exit_code = 0;
@@ -347,7 +324,8 @@ static QfliPyRunResult make_result(int exit_code, const char *output, const char
 }
 
 QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
-                            const char *project_dir, const char *entry_file)
+                            const char *project_dir, const char *entry_file,
+                            int compile_only)
 {
     QfliPyRunResult result;
     int exit_code = 0;
@@ -399,10 +377,12 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
     mp_stack_set_limit(QFLI_PY_STACK_LIMIT_BYTES);
 
     qfli_py_hal_reset(stdin_text);
+    qfli_py_file_begin(project_dir);
 
-    if (execute(source, project_dir, entry_file, &exit_code) != 0)
+    if (execute(source, project_dir, entry_file, compile_only, &exit_code) != 0)
     {
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
+        qfli_py_file_end();
         mp_deinit();
         pthread_mutex_unlock(&g_lock);
         return result;
@@ -411,6 +391,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
     result = make_result(exit_code, qfli_py_hal_stdout(), qfli_py_hal_stderr());
     result.truncated = qfli_py_hal_truncated();
 
+    qfli_py_file_end();
     mp_deinit();
     pthread_mutex_unlock(&g_lock);
     return result;

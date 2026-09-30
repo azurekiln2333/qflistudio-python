@@ -78,13 +78,13 @@ napi_value MakeString(napi_env env, const char *text)
 
 /*
  * run(source: string, stdin: string, heapKb?: number,
- *     projectPath?: string, entryFile?: string)
+ *     projectPath?: string, entryFile?: string, compileOnly?: boolean)
  *   -> { exitCode: number, output: string, error: string | null, truncated: boolean }
  */
 napi_value Run(napi_env env, napi_callback_info info)
 {
-    size_t argc = 5;
-    napi_value argv[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+    size_t argc = 6;
+    napi_value argv[6] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
     napi_value thisArg = nullptr;
 
     if (napi_get_cb_info(env, info, &argc, argv, &thisArg, nullptr) != napi_ok)
@@ -116,11 +116,15 @@ napi_value Run(napi_env env, napi_callback_info info)
     if (argc >= 5)
         GetStringArg(env, argv[4], &entryFile);
 
+    bool compileOnly = false;
+    if (argc >= 6)
+        napi_get_value_bool(env, argv[5], &compileOnly);
+
     // ---- 跑 ----
     QfliPyRunResult raw = qfli_py_run(
         source.c_str(),
         stdinText.empty() ? nullptr : stdinText.c_str(),
-        heapKb, projectPath.c_str(), entryFile.c_str());
+        heapKb, projectPath.c_str(), entryFile.c_str(), compileOnly ? 1 : 0);
 
     napi_value result = nullptr;
     napi_create_object(env, &result);

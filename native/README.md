@@ -34,7 +34,7 @@ MicroPython 自带完整的编译器 + 字节码 VM，语义跟 CPython 对得�
 **不想信上面的说法就自己验**（不用装任何东西，Python 标准库就够）：
 
 ```powershell
-python apps\qfli_python\native\tools\inspect_so.py
+python native\tools\inspect_so.py
 ```
 
 它直接扫 `.so` 的字节，输出版本字符串、上游特征符号、动态依赖、未定义的 C++ 符号：
@@ -107,10 +107,12 @@ linker namespace 里，照样 errno=2。所以「设备上有这个库」不能�
 | `tools/inspect_so.py` | 事后复查：动态依赖 + 引擎身份 + 未定义 C++ 符号（**随时可跑**，见上） |
 | `port/mpconfigport.h` | MicroPython 的 port 配置（特性档位、浮点、模块开关） |
 | `port/mphalport.h` | port HAL 头：`input()` 的 `mp_hal_readline` 钩子 |
-| `port/qstrdefsport.h` | port 自己的 qstr 定义（当前为空，但生成器要这个文件存在） |
+| `port/qstrdefsport.h` | port 自己的 qstr 定义（包括文件对象需要的名称） |
 | `port/qfli_time_localtime.c` | `time.localtime()` 的 port 钩子（**不是独立编译单元**） |
 | `src/qfli_py_bridge.h` / `.c` | VM 生命周期 + 执行一次 + `qfli_py_version()`（纯 C，无平台依赖） |
 | `src/qfli_py_hal.h` / `.c` | 输出捕获与标准输入（含 `sys.stdout` 走的 `mp_hal_*`） |
+| `src/qfli_py_file.h` / `.c` | 项目文件流、路径解析及每次运行后的文件描述符清理 |
+| `tests/run_host.sh` / `smoke.c` | 使用相同 C 桥接与 MicroPython 源码的 Linux 主机测试 |
 | `src/qfli_py_napi.cpp` | NAPI 外壳，把 `run()` / `version()` 暴露给 ArkTS |
 | `ohos/QfliPyNative.ets` | ArkTS 接线模板（复制到 `ohos/entry/...` 才进构建） |
 | `third_party/micropython/` | 上游源码（首次运行 `build.ps1` 自动拉取并核对版本） |
@@ -119,7 +121,7 @@ linker namespace 里，照样 errno=2。所以「设备上有这个库」不能�
 ## 构建 .so
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File apps\qfli_python\native\build.ps1
+& .\native\build.ps1
 ```
 
 它会自动找 DevEco Studio / NDK / 宿主 Python（DevEco 自带的那个），
@@ -162,7 +164,56 @@ powershell -ExecutionPolicy Bypass -File apps\qfli_python\native\build.ps1
 hvigor 会自动打包（实测 `libs/arm64-v8a/libqfli_py.so` 出现在 HAP 里）。
 Flutter 插件拷 `libapp.so` 用的也是这个目录。
 
-打包时注意 DevEco 里 **Open 的必须是 `apps/qfli_python/ohos`**，不是 `apps/qfli_python`。
+打包时注意 DevEco 里 **Open 的必须是 `ohos`**。
+
+完整 App 构建还需要鸿蒙版 Flutter SDK、相邻目录中的 `qfli_studio_core`
+（见 `pubspec.yaml` 的 path 依赖），以及本机有效的签名配置。这些不是原生
+MicroPython 源码的一部分。仓库根目录运行 `flutter pub get` 后，从 `ohos` 打包：
+
+```powershell
+hvigorw.bat assembleHap --mode module -p product=default --no-daemon
+```
+
+产物为 `ohos/entry/build/default/outputs/default/entry-default-signed.hap`。
+
+## 项目运行与文件操作
+
+- 入口源码仍由 Dart 读取；模块导入使用上游 POSIX reader。
+- `sys.path` 依次包含入口所在目录和项目根目录；`sys.argv[0]`、`__file__`
+  与 traceback 使用真实入口路径。每次运行重新建立 VM 状态和模块缓存。
+- `open(file, mode='r')` 与 `io.open` 使用项目根目录解析相对路径；支持
+  `r/w/a/x`、`+`、文本和二进制模式、上下文管理器、文件迭代、
+  `read/readline/readlines/readinto/write/seek/tell/flush/close`。
+- `open` 的路径经过 `realpath` 检查。现有目标或新文件的父目录超出项目
+  时返回 `EACCES`；不存在的读取目标返回 `ENOENT`；独占创建已存在文件
+  返回 `EEXIST`；关闭后读写返回 `EBADF`。运行结束后关闭所有遗留描述符。
+- 文件流不提供 CPython 的 `encoding/errors/newline` 参数。目录操作、
+  `os`、网络和 CPython 扩展包不在当前端口能力内。
+- 文件路径检查只适用于本端口的 `open`；模块导入沿用上游 POSIX reader，
+  不构成对不可信 Python 代码的隔离环境。
+
+工具页使用真实本地项目和 `.py` 文件列表，提供语法检查与运行。
+`checkSyntax` 和 `run` 使用同一条原生链路，前者只调用上游解析器及编译器，
+不执行字节码，也不导入模块或验证导入目标。脚本编译使用
+`mp_compile(..., false)`，顶层表达式不会像 REPL 一样自动打印。
+
+## 主机原生测试
+
+Linux 环境需要 GCC、标准 C 库、pthread 和 `/proc/self/fd`：
+
+```sh
+sh native/tests/run_host.sh
+```
+
+Windows 可使用已安装的 WSL 发行版，例如本机：
+
+```powershell
+wsl.exe -d qfli-java-build --exec sh /mnt/d/MyNewProjects/qfli_python/native/tests/run_host.sh
+```
+
+脚本使用仓库中的 `micropython_embed` 和 C 桥接构建测试程序，不使用
+Dart mock。覆盖模块刷新、文件流与路径失败、仅编译时没有文件副作用，
+以及成功和异常运行后的描述符清理；主机通过不能替代设备打包验证。
 
 ## 怎么确认后端通了
 
@@ -173,15 +224,16 @@ hdc shell hilog -z 5000 -T QfliPyNative
 ```
 
 - 通了：能看到 `libqfli_py.so 已加载，MicroPython 1.24.1 (ecfdd5d)`，
-  以及 `原生自检通过 10/10`。这些用例在真机上经过 ArkTS/NAPI 调用 C VM，
+  以及 `原生自检通过 17/17`。这些用例在真机上经过 ArkTS/NAPI 调用 C VM，
   覆盖编译执行、语法错误、运行异常、输入、退出码、内置模块、多次运行隔离、
-  入口路径，以及从应用沙箱中的真实 `.py` 文件导入同级模块和包。
+  入口路径、真实 `.py` 模块和包导入、项目文本/二进制读写与追加、路径失败，
+  以及仅编译的成功和错误。17/17 是当前构建的预期结果，设备验证状态见下。
 - 没通：会看到 `libqfli_py.so 未加载：...`，里面写了原因和下一步
 - 依赖又出问题：`hdc shell hilog -x | Select-String MUSL-LDSO`
 
 ## 实测过的证据（2026-09-20）
 
-### 修复后这一版 `libqfli_py.so`（当前在 `ohos/entry/libs/arm64-v8a/` 里的）
+### 2026-09-20 修复版 `libqfli_py.so`（历史产物）
 
 `tools/inspect_so.py` 的完整输出：
 
@@ -214,16 +266,19 @@ hdc shell hilog -z 5000 -T QfliPyNative
 > `entry-default-unsigned.hap`（上一次未签名的残留），装它会报
 > `code:9568320 error: no signature file`。
 
-2026-09-30 已重新构建并安装签名 HAP，真机日志确认原生模块加载，
-七项执行用例全部通过。
+2026-09-30 的已安装版本先后通过 7/7、10/10、14/14 原生自检。
+加入追加文件与语法检查后的版本已通过主机 C VM 测试 51/51，并生成
+最新签名 HAP。设备从 hdc 断开，因此最新版本的 17/17 尚未验证。
 
 ## 已知限制
 
 - **交互式 stdin 不支持。** 模型是「先跑完再输出」，`input()` 从一次性喂进去的
   缓冲区里按行取。约定：项目根目录放 `input.txt`。要做真交互得把执行改成
   可挂起/可恢复的状态机。
-- **没有文件系统。** `open()` / `io.open()` 一律 `OSError: [Errno 2] ENOENT`，
-  `import` 只找内置模块。
+- **运行同步且没有中断接口。** 无限循环会阻塞当前执行；标准输入来自
+  `input.txt`，输出在本次运行结束后返回。
+- **引擎是 MicroPython，不是 CPython。** 支持项目 `.py` 模块和当前启用的
+  内置模块，不提供 pip、CPython C 扩展或完整标准库。
 - **只出 `arm64-v8a`。** 要覆盖 32 位设备得再加 `armeabi-v7a`，安装包体积翻倍。
 
 ## 维护注意
@@ -243,8 +298,8 @@ hdc shell hilog -z 5000 -T QfliPyNative
    编译错误或测试失败**，所以只能靠哈希查：
 
    ```powershell
-   Get-FileHash apps\qfli_python\native\ohos\QfliPyNative.ets,
-     apps\qfli_python\ohos\entry\src\main\ets\plugins\QfliPyNative.ets -Algorithm MD5
+   Get-FileHash native\ohos\QfliPyNative.ets,
+     ohos\entry\src\main\ets\plugins\QfliPyNative.ets -Algorithm SHA256
    ```
 
    两份必须一致（复制即可，不用手改）。通道协议（`available` 返回
