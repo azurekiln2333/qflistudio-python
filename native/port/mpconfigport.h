@@ -180,12 +180,20 @@ typedef long mp_off_t;
  * ------------------------------------------------------------------ */
 
 #define MICROPY_HW_BOARD_NAME "qfli-python"
+#if defined(__ANDROID__)
+#define MICROPY_HW_MCU_NAME   "android"
+#else
 #define MICROPY_HW_MCU_NAME   "harmonyos"
+#endif
 
 /*
  * sys.platform 的值。py/modsys.c 第 139 行是 `#ifdef MICROPY_PY_SYS_PLATFORM`，
  * 不定义就没有 sys.platform 这个属性；教程里偶尔会 print 它，给个能认出来的。
  */
+#if defined(__ANDROID__)
+#define MICROPY_PY_SYS_PLATFORM "android"
+#else
 #define MICROPY_PY_SYS_PLATFORM "ohos"
+#endif
 
 #endif /* QFLI_PY_MPCONFIGPORT_H */

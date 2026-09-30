@@ -8,8 +8,8 @@ import 'package:qfli_studio_core/services/studio_profile.dart';
 
 /// 用内嵌的 MicroPython 执行项目里的 Python 代码。
 ///
-/// 只有一个后端：**原生后端**（`libqfli_py.so`，内嵌 MicroPython + NAPI）。
-/// 链路上要过 ArkTS，具体见 `native/README.md`。
+/// 只有一个后端：**原生后端**（`libqfli_py.so`，内嵌 MicroPython）。
+/// Android 使用 Kotlin/JNI，鸿蒙使用 ArkTS/NAPI，具体见 `native/README.md`。
 ///
 /// 为什么没有「纯 Dart 解释器」兜底：MicroPython 是带完整编译器和字节码 VM 的
 /// 真实现，语义跟 CPython 对得上；手写一个 Python 子集解释器既保证不了兼容性

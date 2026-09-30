@@ -2,7 +2,7 @@
 
 ## Goal
 
-Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by a ported C runtime on HarmonyOS, with practical project tools and a release-ready interface.
+Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by the same ported C runtime on Android and HarmonyOS, with practical project tools and a release-ready interface.
 
 ## Confirmed State
 
@@ -20,6 +20,8 @@ Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by a por
 - Add useful Python workflow tools where supported by the port, with honest capability boundaries for MicroPython-specific differences.
 - Keep unfinished-work and build-instruction language out of normal app screens. Runtime failures should use concise, actionable messages.
 - Commit each coherent implementation batch with a conventional commit message. Preserve unrelated dirty files.
+- Android must package the shared C engine through NDK/JNI and register the existing MethodChannel protocol. Verify real execution on the Android emulator, including project imports, input, file I/O and compile-only syntax checks.
+- The user narrowed current device debugging to Android on 2026-10-01. Do not launch or test HarmonyOS devices/emulators again in this session; preserve the pending HarmonyOS final device gate separately.
 
 ## Acceptance Criteria
 
@@ -30,3 +32,4 @@ Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by a por
 - [x] The app exposes practical Python workflow actions without unfinished-development copy.
 - [ ] Flutter tests, native execution tests, static analysis, native build, HAP build, and device checks pass for the delivered scope.
 - [x] Work is committed in coherent conventional commits; unrelated existing changes remain untouched.
+- [x] Android APK contains the shared C VM and passes native self-checks and editor execution on the emulator.

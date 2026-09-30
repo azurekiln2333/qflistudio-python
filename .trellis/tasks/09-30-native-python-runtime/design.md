@@ -4,6 +4,7 @@
 
 - Flutter owns project selection, entry resolution, display, and user-facing commands.
 - ArkTS passes typed MethodChannel arguments to the NAPI module.
+- Android Kotlin registers the same MethodChannel, encodes strings as standard UTF-8 byte arrays, and calls JNI on one executor with a 1 MiB stack. Results return on the main thread. The Android CMake target consumes the tracked embedding sources without regenerating shared files during parallel ABI builds.
 - The C bridge owns VM lifetime, per-run state, source compilation, error capture, and runtime path setup.
 - Upstream MicroPython owns parsing, bytecode generation, execution, builtins, and module semantics. Port code only adapts platform I/O and filesystem access.
 
@@ -22,3 +23,8 @@ The Linux host smoke executable links the same generated MicroPython sources and
 ## Compatibility
 
 MicroPython is not CPython. Claims and UI should identify the actual engine. `sys.path` and file access must use the app's project location; app-wide current directory changes are avoided because Flutter and native code share a process.
+
+Android builds all three Flutter ABIs with static C++ linkage and 16 KiB ELF page
+alignment. Debug startup checks exercise the actual JNI library; release/profile
+builds omit those checks. `sys.platform` is selected in the shared port header
+using `__ANDROID__`. Both platforms use the same C API and VM state isolation.

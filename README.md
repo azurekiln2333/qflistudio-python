@@ -26,8 +26,19 @@ adb -s emulator-5556 shell am start -n com.azurekiln.qfli.pyflow/.MainActivity
 The debug APK is `build/app/outputs/flutter-apk/app-debug.apk`. Replace the
 device ID with the one reported by `adb devices`.
 
-The Android UI, project creation and editor were smoke-tested on an x86_64
-Android 17 emulator on 2026-10-01. Android does not yet register the
-`qfli_py/native` MethodChannel or package an Android MicroPython library;
-running a Python entry currently returns exit code 127. The implemented native
-Python execution path is HarmonyOS-specific; see [native/README.md](native/README.md).
+Android and HarmonyOS compile the same upstream C MicroPython 1.24.1 engine and
+share the VM, project imports, file I/O and compile-only syntax checker. Android
+uses a Kotlin MethodChannel and JNI adapter; HarmonyOS uses ArkTS and NAPI.
+Android packages `libqfli_py.so` for `armeabi-v7a`, `arm64-v8a` and `x86_64`, with
+16 KiB page alignment. Native Android execution runs on a background thread.
+
+The debug APK runs real native self-checks at startup. Inspect them with:
+
+```powershell
+adb -s emulator-5556 logcat -d -s QfliPyNative
+```
+
+On 2026-10-01, the Android 17 x86_64 emulator executed a project from the editor,
+imported a sibling module, read `input.txt`, wrote and reread a project file, and
+printed `ANDROID_PROJECT_OK android Ada:42` with exit code 0. See
+[native/README.md](native/README.md) for contracts and MicroPython limitations.

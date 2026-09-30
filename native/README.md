@@ -4,8 +4,43 @@ Python 版 App 的执行后端。**引擎是上游 MicroPython 1.24.1（commit `
 不是手写的解释器。**
 
 ```
-Dart → MethodChannel('qfli_py/native') → ArkTS → libqfli_py.so → MicroPython
+Dart → MethodChannel('qfli_py/native') → Kotlin/JNI 或 ArkTS/NAPI → libqfli_py.so → MicroPython
 ```
+
+## Android
+
+Android 与鸿蒙使用同一份 C VM、bridge、HAL、标准流和项目文件接口。
+`native/android/CMakeLists.txt` 从已跟踪的 `micropython_embed` 编译，JNI 是
+独立平台适配，NDK 构建不会写回共享生成目录。
+
+```powershell
+flutter build apk --debug
+adb -s emulator-5556 install -r build/app/outputs/flutter-apk/app-debug.apk
+adb -s emulator-5556 shell am start -n com.azurekiln.qfli.pyflow/.MainActivity
+adb -s emulator-5556 logcat -d -s QfliPyNative
+```
+
+- NDK 固定为 `27.0.12077973`，CMake 为 `3.22.1`，构建目标包括
+  `armeabi-v7a`、`arm64-v8a` 和 `x86_64`，使用静态 C++ 和 16 KiB ELF 页对齐。
+- Kotlin 注册相同的 `available/run/checkSyntax` 协议。编译和执行在一个
+  1 MiB 栈的后台线程上串行运行，结果回到主线程。C 层仍保留 mutex。
+- JNI 用 UTF-8 字节数组传递源码、输入、路径和输出，不使用 JNI modified UTF-8。
+  非 BMP 字符可以往返；传入参数包含实际 NUL 时明确拒绝。
+- debug 启动执行真实 JNI 自检，profile/release 使用空实现。
+  `@Keep` 保留 JNI 所需的类名、方法名和结果构造函数。
+- `input()`、`sys.stdin` 和 `sys.stdin.buffer` 消费同一段有限输入。
+  `input()` 耗尽时抛 `EOFError`；标准流读取返回空文本或空字节。
+  `sys.stderr` 进入结果的 `error` 字段，即使程序正常以 0 退出。
+- 超出 VM 整数范围的 `sys.exit()` 返回退出码 1 和 `OverflowError`，下一次运行仍可继续。
+
+2026-10-01 的 Android 17 x86_64 模拟器已从编辑器执行多文件项目，读取
+`input.txt`，写入并读回项目文件，输出 `ANDROID_PROJECT_OK android Ada:42`
+并以 0 退出。当前最终验证结果见任务记录。
+
+最终 debug 自检 **36/36**，主机 C VM **65/65**，Flutter **25/25**，静态分析通过。
+debug/release APK 和 x86_64 profile APK 均构建成功，release 安装后运行与语法检查
+也通过。两个完整 APK 均通过 16 KiB ZIP 对齐检查，release 中全部 ELF 库满足
+至少 16 KiB 的 LOAD 段对齐。发布签名仍使用项目现有的 debug key 配置。
 
 ## 为什么是 MicroPython
 
@@ -107,6 +142,9 @@ linker namespace 里，照样 errno=2。所以「设备上有这个库」不能�
 | `tools/inspect_so.py` | 事后复查：动态依赖 + 引擎身份 + 未定义 C++ 符号（**随时可跑**，见上） |
 | `port/mpconfigport.h` | MicroPython 的 port 配置（特性档位、浮点、模块开关） |
 | `port/mphalport.h` | port HAL 头：`input()` 的 `mp_hal_readline` 钩子 |
+| `src/qfli_py_stdio.c` | 有限 stdin、分离 stdout/stderr 的标准流适配 |
+| `src/qfli_py_jni.cpp` | Android JNI 接线，复用 C bridge |
+| `android/CMakeLists.txt` | Android NDK 构建，复用共享源码 |
 | `port/qstrdefsport.h` | port 自己的 qstr 定义（包括文件对象需要的名称） |
 | `port/qfli_time_localtime.c` | `time.localtime()` 的 port 钩子（**不是独立编译单元**） |
 | `src/qfli_py_bridge.h` / `.c` | VM 生命周期 + 执行一次 + `qfli_py_version()`（纯 C，无平台依赖） |
@@ -267,19 +305,23 @@ hdc shell hilog -z 5000 -T QfliPyNative
 > `code:9568320 error: no signature file`。
 
 2026-09-30 的已安装版本先后通过 7/7、10/10、14/14 原生自检。
-加入追加文件与语法检查后的版本已通过主机 C VM 测试 51/51，并生成
-最新签名 HAP。设备从 hdc 断开，因此最新版本的 17/17 尚未验证。
+加入追加文件与语法检查后的版本生成了签名 HAP，最新版本的 17/17 尚未验证。
+2026-10-01 曾编译鸿蒙 x86_64 原生库并打包 HAP，随后用户要求停止鸿蒙调试。
+当前共享标准流与退出码修复由主机 C VM 和 Android 验证；尚未重新打包到鸿蒙 HAP。
 
 ## 已知限制
 
 - **交互式 stdin 不支持。** 模型是「先跑完再输出」，`input()` 从一次性喂进去的
   缓冲区里按行取。约定：项目根目录放 `input.txt`。要做真交互得把执行改成
   可挂起/可恢复的状态机。
-- **运行同步且没有中断接口。** 无限循环会阻塞当前执行；标准输入来自
+- **C VM 运行同步且没有中断接口。** Android 在后台线程执行。无限循环会阻塞当前执行；标准输入来自
   `input.txt`，输出在本次运行结束后返回。
 - **引擎是 MicroPython，不是 CPython。** 支持项目 `.py` 模块和当前启用的
   内置模块，不提供 pip、CPython C 扩展或完整标准库。
-- **只出 `arm64-v8a`。** 要覆盖 32 位设备得再加 `armeabi-v7a`，安装包体积翻倍。
+- **终端结果是 NUL 结尾的 UTF-8 文本。** 标准流的 `.buffer` 可用，但任意二进制
+  输出中的 NUL 无法完整往返；二进制数据应写入项目文件。
+- **Android ABI** 为 `armeabi-v7a`、`arm64-v8a`、`x86_64`；当前鸿蒙分发仍以
+  `arm64-v8a` 为主，`native/build.ps1 -Abi x86_64` 可编译模拟器原生库。
 
 ## 维护注意
 

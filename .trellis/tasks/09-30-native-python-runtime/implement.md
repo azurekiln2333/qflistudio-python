@@ -30,6 +30,8 @@ The signed HAP has been rebuilt with file append and compile-only checks (17 cas
 The latest installed-device evidence is 14/14 from the earlier file-I/O batch;
 hdc currently reports no connected targets. Keep this task in progress until the
 latest HAP is installed and launched and the 17/17 result is recorded.
+On 2026-10-01 the user explicitly stopped further HarmonyOS runtime debugging;
+this gate remains pending and does not block the requested Android delivery.
 
 ## Latest Local Verification (2026-09-30)
 
@@ -68,3 +70,59 @@ adjacent shared-core package and a valid local HarmonyOS signing setup.
   adapter and NDK build of the same C engine; this smoke test does not verify it.
 - An intervening JVMX app owned the first page-size compatibility dialog;
   foreground package checks distinguished it from this APK.
+
+## Android Native Runtime Delivery (2026-10-01)
+
+- [x] Compile the existing C MicroPython engine through Android NDK/CMake for
+  armeabi-v7a, arm64-v8a and x86_64; keep the same bridge, file I/O and VM.
+- [x] Register `qfli_py/native` in Kotlin and forward UTF-8 byte arrays via JNI;
+  execute on one background thread and return results on the main thread.
+- [x] Add actual JNI debug self-checks plus release/profile no-op variants.
+- [x] Correct shared stdin EOF, finite standard stream reads, stdout/stderr
+  routing, and overflow of integer SystemExit values; verify recovery.
+- [x] Build debug/release APKs and an x86_64 profile APK.
+- [x] Install debug APK and pass **36/36** native cases on emulator-5556
+  (Android 17 x86_64, 16 KiB pages).
+- [x] Install release APK after shrinking; execute a multi-file editor project
+  with `input.txt` and real project file I/O, exit 0; check syntax through UI.
+- [x] Real host C VM **65/65**, Flutter **25/25**, analysis clean, changed C
+  sources warning-clean, and whitespace check passed.
+- [x] Inspect all three ABI native libraries: 0x4000 LOAD alignment and only
+  libm.so/libdl.so/libc.so dependencies. Both debug and release APKs pass
+  `zipalign -c -P 16 -v 4`. All nine release ELF libraries are aligned to at
+  least 16 KiB.
+
+Editor result: `ANDROID_PROJECT_OK android Ada:42`, exit code 0. The C engine
+imported `src/helper.py`, consumed the project's input buffer, wrote
+`android-result.txt` and read it back. Debug file contents were independently
+read through `adb run-as` as `Ada:42`. Release syntax UI reported success.
+
+Evidence is in ignored `build/android-native-selfcheck.log`,
+`build/android-native-project-run.png`, `build/android-release-project-run.png`
+and `build/android-release-syntax.png`. Artifacts are
+`build/app/outputs/flutter-apk/app-debug.apk` (188,866,119 bytes) and
+`app-release.apk` (70,925,142 bytes); release still uses the configured debug
+signing key. The profile build used `--target-platform android-x64`.
+
+The first Android run exposed the HAL's wrong -1 EOF marker (26/27 before the
+fix). Additional review caught unguarded SystemExit overflow and upstream MCU
+stdio behavior that assumed endless input and merged stderr into stdout.
+`src/qfli_py_stdio.c` is the shared port adaptation; the upstream compiler and
+VM remain unchanged, and the generated header churn was removed.
+
+The first release build failed due to C: having zero free bytes while Gradle
+extracted Flutter dependencies. After stopping the Gradle 8.14 daemon, its
+generated `caches/8.14/transforms` was moved to
+`D:/ProgramData/Gradle/cache-8.14-transforms` with a junction at the original
+path, freeing about 8 GiB. The release rebuild then passed. No project-wide
+SDK/cache path configuration was changed.
+
+A shared-emulator page-size dialog listed Java/JVM libraries absent from this
+APK. The actual release ZIP contains only libapp.so, libflutter.so and
+libqfli_py.so per ABI; package path, focused activity and ELF inspection were
+checked before attributing it. PyFlow-specific logcat had no runtime errors.
+
+HarmonyOS x86_64 native build and HAP packaging passed earlier in this session,
+before the final shared stdin/stdio/exit fixes. The user then requested Android
+debugging only. No final HarmonyOS installation/runtime check was performed;
+the original task remains in progress pending its separate final gate.
