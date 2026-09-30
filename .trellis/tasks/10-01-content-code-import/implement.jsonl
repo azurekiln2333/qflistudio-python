@@ -1,0 +1,4 @@
+{"file":".trellis/tasks/10-01-content-code-import/prd.md","reason":"Content and code import acceptance criteria"}
+{"file":".trellis/tasks/10-01-content-code-import/design.md","reason":"Shared package data flow and boundaries"}
+{"file":".trellis/tasks/10-01-content-code-import/implement.md","reason":"Verification and repair execution"}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"Shared navigation/editor ownership"}

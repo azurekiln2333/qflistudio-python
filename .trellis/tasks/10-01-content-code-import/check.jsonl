@@ -1,0 +1,5 @@
+{"file":".trellis/tasks/10-01-content-code-import/prd.md","reason":"Requested content overview and import behavior"}
+{"file":".trellis/tasks/10-01-content-code-import/design.md","reason":"Shared core ownership and real project data flow"}
+{"file":".trellis/tasks/10-01-content-code-import/implement.md","reason":"Verification scope and Android acceptance gates"}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"App profile and shared UI boundaries"}
+{"file":".trellis/spec/frontend/index.md","reason":"Flutter quality gate and responsive checks"}
