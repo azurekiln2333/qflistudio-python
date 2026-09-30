@@ -48,3 +48,23 @@ Native/backend and Python workflow code contracts were captured in the local
 `native/README.md` records build prerequisites, commands, capabilities and limits.
 Fresh full-app checkout verification remains separate because it requires the
 adjacent shared-core package and a valid local HarmonyOS signing setup.
+
+## Android APK Smoke (2026-10-01)
+
+- Fixed APK build prerequisites by pinning the installed complete NDK
+  `27.0.12077973`. Flutter's default `28.2.13676358` had only an installer
+  directory and no `source.properties`; its download was stopped due to speed.
+- Reduced Gradle heap from 8 GiB to 2 GiB, limited workers to two and JVM active
+  processors to four, and bounded the Kotlin daemon heap to 512 MiB. The prior
+  Gradle JVM crashed with a native-memory allocation failure.
+- `flutter build apk --debug` passed; installed via `adb install -r` and launched
+  `com.azurekiln.qfli.pyflow/.MainActivity` on `emulator-5556` (Android 17 x86_64).
+- Verified the QFLIPyFlow home, Python tools empty state, creation of an
+  `AndroidSmoke` Python project, and the source editor. Screenshots are under
+  the ignored `build/android-smoke-*.png` paths.
+- Run correctly reported unavailable backend with exit code 127. The Android
+  activity has no native MethodChannel registration and the APK contains no
+  Android MicroPython library. Android Python execution needs a separate JNI
+  adapter and NDK build of the same C engine; this smoke test does not verify it.
+- An intervening JVMX app owned the first page-size compatibility dialog;
+  foreground package checks distinguished it from this APK.
