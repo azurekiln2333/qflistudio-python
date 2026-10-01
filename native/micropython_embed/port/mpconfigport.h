@@ -55,6 +55,13 @@
 #define MICROPY_ENABLE_COMPILER (1)
 #define MICROPY_ENABLE_GC       (1)
 
+#define MICROPY_PERSISTENT_CODE_LOAD (1)
+#define MICROPY_PERSISTENT_CODE_SAVE (1)
+void qfli_py_check_cancel(void);
+#define MICROPY_VM_HOOK_INIT qfli_py_check_cancel();
+#define MICROPY_VM_HOOK_LOOP qfli_py_check_cancel();
+#define MICROPY_VM_HOOK_RETURN qfli_py_check_cancel();
+
 /*
  * 这个必须显式关掉，而且理由很硬：EXTRA 档默认把它打开，但
  * py/builtinevex.c 里有一句
@@ -102,9 +109,7 @@
 #define MICROPY_PY_PLATFORM (0)
 
 /*
- * 我们跑的是「整段脚本」，没有交互式 REPL，也没有「随时中断」的通道，
- * 所以键盘中断那套不装。少了它 py/runtime.c 里就少一处对
- * mp_hal_set_interrupt_char 的依赖。
+ * No keyboard/REPL input; host cancellation uses the VM hooks above.
  */
 #define MICROPY_KBD_EXCEPTION (0)
 

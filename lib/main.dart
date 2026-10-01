@@ -28,9 +28,9 @@ const StudioProfile pythonProfile = StudioProfile(
   showHomeTabs: false,
   runtimeKind: 'micropython-native-and-desktop',
   runtimeStatus: 'available',
-  supportedFileExtensions: ['.py'],
+  supportedFileExtensions: ['.py', '.mpy'],
   // main.py 排在默认入口表前面，保证本版一定先命中它。
-  entryFileNames: ['main.py', 'src/main.py'],
+  entryFileNames: ['main.py', 'src/main.py', 'main.mpy', 'src/main.mpy'],
 );
 
 Future<void> main() async {

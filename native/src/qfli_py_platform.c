@@ -8,6 +8,7 @@
 #endif
 
 #include "qfli_py_platform.h"
+#include "qfli_py_bridge.h"
 
 #include <errno.h>
 #include <limits.h>
@@ -16,12 +17,33 @@
 #include <sys/stat.h>
 #include <time.h>
 
+struct qfli_py_cancel {
+    volatile long requested;
+};
+
+QfliPyCancel *qfli_py_cancel_create(void)
+{
+    return calloc(1, sizeof(QfliPyCancel));
+}
+
+void qfli_py_cancel_free(QfliPyCancel *token) { free(token); }
+
 #if defined(_WIN32)
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <io.h>
 #include <wchar.h>
+
+void qfli_py_cancel_request(QfliPyCancel *token)
+{
+    if (token != NULL) InterlockedExchange(&token->requested, 1);
+}
+
+int qfli_py_cancel_requested(QfliPyCancel *token)
+{
+    return token != NULL && InterlockedCompareExchange(&token->requested, 0, 0) != 0;
+}
 
 static SRWLOCK runtime_lock = SRWLOCK_INIT;
 
@@ -342,6 +364,16 @@ void qfli_py_sleep_us(uint64_t us)
 #else
 
 #include <pthread.h>
+
+void qfli_py_cancel_request(QfliPyCancel *token)
+{
+    if (token != NULL) __atomic_store_n(&token->requested, 1, __ATOMIC_RELEASE);
+}
+
+int qfli_py_cancel_requested(QfliPyCancel *token)
+{
+    return token != NULL && __atomic_load_n(&token->requested, __ATOMIC_ACQUIRE) != 0;
+}
 #include <unistd.h>
 
 static pthread_mutex_t runtime_lock = PTHREAD_MUTEX_INITIALIZER;

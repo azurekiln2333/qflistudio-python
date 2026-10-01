@@ -20,6 +20,22 @@ NAPI exports `run(source, stdin, heapKb, projectPath, entryFile, compileOnly)`
 and `version()`. MethodChannel `qfli_py/native` handles `available`, `run`,
 and `checkSyntax`. The latter maps to `compileOnly=true`.
 
+The legacy C/NAPI ABI remains available. Controlled callers use
+`qfli_py_execute[_into](..., compile_only, token, artifact_output, bytecode_file)`.
+Create/request/free cancellation tokens through `qfli_py_cancel_*`. The caller
+retains its token until queued or executing work has completed. Native VM state
+is touched only by the worker under the runtime lock; stop only sets an atomic
+flag. A pending or executing stop returns 130 with KeyboardInterrupt. Exception
+printing clears the active token before writing diagnostics. Long sleeps check
+the signal every 20 ms; arbitrary blocking native I/O is not interruptible.
+
+Android probe includes `runControl: true` and `bytecode: true`. `prepareRun`
+registers a token and returns an opaque string ID before `run` is submitted.
+`run` accepts `runId`; `cancel(runId)` signals it directly on the platform
+thread. Registry lookup, signaling, removal and token freeing share one lock.
+Completion removes the ID, making late cancellation harmless. OHOS retains its
+legacy channel; these new channel capabilities are not advertised there.
+
 Platform adapters are HarmonyOS ArkTS/NAPI and Android Kotlin/JNI. Android
 calls the same C API on one executor with a 1 MiB stack and returns results
 on the main thread. JNI exchanges standard UTF-8 byte arrays and rejects
@@ -58,6 +74,22 @@ Use upstream POSIX reading for `.py` imports and never change process cwd.
 `checkSyntax` compiles the selected source without executing it or resolving
 its imports. `mp_compile` uses `is_repl=false` for scripts.
 
+`compile` accepts `artifactOutput`, invokes upstream `mp_compile_to_raw_code`
+and `mp_raw_code_save`, and writes bytecode-only .mpy data through the existing
+project file resolver/tracker. Compile errors do not touch a previous artifact;
+I/O failures are reported and may leave partial output. `run` can accept
+`bytecodeFile` and uses upstream `mp_raw_code_load_file`. Imported .mpy modules
+use the same upstream importer; source files are unnecessary after compilation.
+File format/version and integer-width compatibility are enforced by upstream.
+Keep both port configs and generated qstr headers synchronized; do not edit
+upstream serializer or invent a different bytecode format.
+
+The tools page discovers .py/.mpy and exposes compile/stop commands. Compilation
+saves a sibling .mpy and refreshes the file list. Source-only commands are
+disabled for bytecode. Retain the run callback while working, cancel on page
+disposal, and also cancel a run handle arriving after disposal. Outputs are
+buffered until native completion; preserve stdout/stderr and actual exit codes.
+
 `open(file, mode='r')` / `io.open` support `r/w/a/x`, optional `+`, `b/t`,
 upstream stream methods, iteration, and context managers. Project paths use
 `realpath`; new files require an existing parent inside the project.
@@ -93,7 +125,7 @@ not an isolation mechanism for untrusted Python code.
 - Bad: `open('../outside.txt', 'w')` fails; syntax checking
   `open('new.txt', 'w')` must not create the file.
 - Unsupported: CPython extension modules, pip, `os`, networking,
-  `encoding/errors/newline` arguments, interactive stdin and run cancellation.
+  `encoding/errors/newline` arguments and interactive stdin.
 
 ## 6. Tests Required
 
@@ -118,6 +150,12 @@ not an isolation mechanism for untrusted Python code.
   dynamic dependencies are `libace_napi.z.so`, `libhilog_ndk.z.so`, and `libc.so`.
 - Keep semantic generated port/qstr changes; remove incidental line-ending
   and build-date changes before staging.
+- `test/python_lifecycle_test.dart`: real loop/sleep interruption, pre-start
+  and queued stop, token isolation, recovery, early runner result, upstream
+  artifacts without entry/imported source and rejected bytecode/path escapes.
+- Android's ordinary debug entry must pass the expanded 46-case JNI self-check;
+  additionally operate the normal tools page to stop a loop and compile/run an
+  artifact after removing its source from the selectable file set.
 
 ## 7. Wrong vs Correct
 

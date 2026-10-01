@@ -1,6 +1,7 @@
 #include <jni.h>
 
 #include <cstring>
+#include <cstdint>
 #include <new>
 #include <string>
 
@@ -67,14 +68,17 @@ Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeVersion(JNIEnv *env, jobject)
 extern "C" JNIEXPORT jobject JNICALL
 Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeRun(
     JNIEnv *env, jobject, jbyteArray source, jbyteArray stdin_text, jint heap_kb,
-    jbyteArray project_dir, jbyteArray entry_file, jboolean compile_only)
+    jbyteArray project_dir, jbyteArray entry_file, jboolean compile_only,
+    jlong token, jbyteArray artifact_output, jbyteArray bytecode_file)
 {
     try {
-        std::string source_text, input_text, project_path, entry_path;
+        std::string source_text, input_text, project_path, entry_path, output_path, bytecode_path;
         if (!ReadUtf8(env, source, &source_text)
             || !ReadUtf8(env, stdin_text, &input_text)
             || !ReadUtf8(env, project_dir, &project_path)
-            || !ReadUtf8(env, entry_file, &entry_path))
+            || !ReadUtf8(env, entry_file, &entry_path)
+            || !ReadUtf8(env, artifact_output, &output_path)
+            || !ReadUtf8(env, bytecode_file, &bytecode_path))
             return nullptr;
 
         // Byte arrays avoid JNI's modified UTF-8, which corrupts non-BMP source/input.
@@ -85,8 +89,10 @@ Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeRun(
         if (constructor == nullptr)
             return nullptr;
 
-        RunResult raw{qfli_py_run(source_text.c_str(), input_text.c_str(), heap_kb,
-            project_path.c_str(), entry_path.c_str(), compile_only ? 1 : 0)};
+        RunResult raw{qfli_py_execute(source_text.c_str(), input_text.c_str(), heap_kb,
+            project_path.c_str(), entry_path.c_str(), compile_only ? 1 : 0,
+            reinterpret_cast<QfliPyCancel *>(static_cast<intptr_t>(token)),
+            output_path.c_str(), bytecode_path.c_str())};
         jbyteArray output = Utf8Bytes(env, raw.value.output);
         if (env->ExceptionCheck())
             return nullptr;
@@ -99,4 +105,25 @@ Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeRun(
         ThrowJava(env, "java/lang/IllegalStateException", "Unable to allocate native Python arguments");
         return nullptr;
     }
+}
+
+extern "C" JNIEXPORT jlong JNICALL
+Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeCreateCancel(JNIEnv *env, jobject)
+{
+    QfliPyCancel *token = qfli_py_cancel_create();
+    if (token == nullptr)
+        ThrowJava(env, "java/lang/IllegalStateException", "Unable to allocate cancellation token");
+    return static_cast<jlong>(reinterpret_cast<intptr_t>(token));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeCancel(JNIEnv *, jobject, jlong token)
+{
+    qfli_py_cancel_request(reinterpret_cast<QfliPyCancel *>(static_cast<intptr_t>(token)));
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_azurekiln_qfli_pyflow_QfliPyNative_nativeFreeCancel(JNIEnv *, jobject, jlong token)
+{
+    qfli_py_cancel_free(reinterpret_cast<QfliPyCancel *>(static_cast<intptr_t>(token)));
 }

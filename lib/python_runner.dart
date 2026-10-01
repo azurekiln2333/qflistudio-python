@@ -63,10 +63,52 @@ class PythonProgramRunner implements ProgramRunner {
   static const String stdinFileName = 'input.txt';
 
   /// 本后端接管的源码后缀。
-  static const Set<String> _sourceExtensions = {'.py'};
+  static const Set<String> _sourceExtensions = {'.py', '.mpy'};
 
   /// 与 `native/ohos/QfliPyNative.ets` 里的通道名一致。
   static const MethodChannel _channel = MethodChannel('qfli_py/native');
+
+  Future<PythonCompilationResult> compile({
+    required String projectPath,
+    required String entryFile,
+  }) async {
+    if (p.extension(entryFile).toLowerCase() != '.py') {
+      return const PythonCompilationResult(error: '请选择 Python 源码文件。');
+    }
+    final source = _readText(File(entryFile));
+    if (source == null) return const PythonCompilationResult(error: '无法读取文件。');
+    final probe = await _probeNative();
+    if (!probe.available || !probe.supportsArtifacts) {
+      return PythonCompilationResult(
+        error: probe.detail.isEmpty ? '此运行组件不支持生成 .mpy 文件。' : probe.detail,
+      );
+    }
+    final artifact = p.setExtension(entryFile, '.mpy');
+    try {
+      final raw = await _invokeNative('compile', {
+        'source': source,
+        'stdin': '',
+        'heapKb': heapKb,
+        'projectPath': projectPath,
+        'entryFile': entryFile,
+        'artifactOutput': artifact,
+      });
+      if (raw is! Map || raw['exitCode'] is! int) {
+        return const PythonCompilationResult(error: '原生运行时返回了意外的结果。');
+      }
+      final success = raw['exitCode'] == 0;
+      return PythonCompilationResult(
+        success: success,
+        artifactPath: success ? artifact : '',
+        error: '${raw['error'] ?? ''}',
+        version: probe.version,
+      );
+    } on MissingPluginException {
+      return const PythonCompilationResult(error: 'Python 运行组件不可用。');
+    } on PlatformException catch (error) {
+      return PythonCompilationResult(error: error.message ?? error.code);
+    }
+  }
 
   Future<PythonSyntaxResult> checkSyntax({
     required String projectPath,
@@ -145,7 +187,8 @@ class PythonProgramRunner implements ProgramRunner {
 
     final fileName = p.basename(entryFile);
 
-    final source = _readText(entry);
+    final isBytecode = p.extension(entryFile).toLowerCase() == '.mpy';
+    final source = isBytecode ? '' : _readText(entry);
     if (source == null) {
       return _failure(fileName, '$_appPrefix无法读取 $fileName（编码或权限问题）。');
     }
@@ -156,7 +199,21 @@ class PythonProgramRunner implements ProgramRunner {
     if (!probe.available) {
       return _notWired(fileName, probe.detail);
     }
+    if (isBytecode && !probe.supportsArtifacts) {
+      return _failure(fileName, '$_appPrefix此运行组件不支持 .mpy 文件。');
+    }
 
+    if (_useFfi || probe.supportsCancellation) {
+      return _runControlled(
+        fileName: fileName,
+        version: probe.version,
+        source: source,
+        stdin: _readStdin(projectPath),
+        projectPath: projectPath,
+        entryFile: entryFile,
+        bytecodeFile: isBytecode ? entryFile : '',
+      );
+    }
     return _runNative(
       fileName: fileName,
       version: probe.version,
@@ -165,6 +222,105 @@ class PythonProgramRunner implements ProgramRunner {
       projectPath: projectPath,
       entryFile: entryFile,
     );
+  }
+
+  Future<ProgramRunResult> _runControlled({
+    required String fileName,
+    required String version,
+    required String source,
+    required String stdin,
+    required String projectPath,
+    required String entryFile,
+    required String bytecodeFile,
+  }) async {
+    final Future<Object?> pending;
+    final Future<void> Function() cancel;
+    try {
+      if (_useFfi) {
+        final execution = PythonFfiBackend(libraryPath: libraryPath).start(
+          source: source,
+          stdin: stdin,
+          heapKb: heapKb,
+          projectPath: projectPath,
+          entryFile: entryFile,
+          bytecodeFile: bytecodeFile,
+        );
+        pending = execution.result;
+        cancel = execution.cancel;
+      } else {
+        final runId = await _channel.invokeMethod<String>('prepareRun');
+        if (runId == null || runId.isEmpty) {
+          return _failure(fileName, '$_appPrefix无法创建原生运行句柄。');
+        }
+        var finished = false;
+        pending = _channel
+            .invokeMethod<Object?>('run', {
+              'source': source,
+              'stdin': stdin,
+              'heapKb': heapKb,
+              'projectPath': projectPath,
+              'entryFile': entryFile,
+              'runId': runId,
+              if (bytecodeFile.isNotEmpty) 'bytecodeFile': bytecodeFile,
+            })
+            .whenComplete(() => finished = true);
+        cancel = () async {
+          if (!finished) {
+            await _channel.invokeMethod<Object?>('cancel', {'runId': runId});
+          }
+        };
+      }
+    } on PythonFfiException catch (error) {
+      return _failure(fileName, '$_appPrefix${error.message}');
+    } on MissingPluginException {
+      return _notWired(fileName, '');
+    } on PlatformException catch (error) {
+      return _failure(fileName, '$_appPrefix${error.message ?? error.code}');
+    }
+    final stdout = StreamController<String>();
+    final stderr = StreamController<String>();
+    final exit = Completer<int>();
+    unawaited(_completeControlled(pending, stdout, stderr, exit));
+    final label = version.isEmpty ? '内嵌 MicroPython' : 'MicroPython $version';
+    return ProgramRunResult(
+      title: '运行 $fileName（$label）',
+      stdout: stdout.stream,
+      stderr: stderr.stream,
+      exitCode: exit.future,
+      cancel: cancel,
+    );
+  }
+
+  Future<void> _completeControlled(
+    Future<Object?> pending,
+    StreamController<String> stdout,
+    StreamController<String> stderr,
+    Completer<int> exit,
+  ) async {
+    try {
+      final raw = await pending;
+      if (raw is! Map || raw['exitCode'] is! int) {
+        stderr.add('$_appPrefix原生运行时返回了意外的结果。');
+        exit.complete(notRunExitCode);
+      } else {
+        _splitLines('${raw['output'] ?? ''}').forEach(stdout.add);
+        final error = '${raw['error'] ?? ''}';
+        if (error.isNotEmpty) _splitLines(error).forEach(stderr.add);
+        if (raw['truncated'] == true) stderr.add('$_appPrefix输出过长，已被截断。');
+        exit.complete(raw['exitCode'] as int);
+      }
+    } catch (error) {
+      final detail = error is PythonFfiException
+          ? error.message
+          : error is PlatformException
+          ? error.message ?? error.code
+          : '$error';
+      stderr.add('$_appPrefix原生运行时出错：$detail');
+      exit.complete(notRunExitCode);
+    } finally {
+      unawaited(stdout.close());
+      unawaited(stderr.close());
+    }
   }
 
   /// 走原生 .so。
@@ -258,6 +414,8 @@ class PythonProgramRunner implements ProgramRunner {
           available: raw['available'] == true,
           version: '${raw['version'] ?? ''}',
           detail: '${raw['detail'] ?? ''}',
+          supportsCancellation: raw['runControl'] == true,
+          supportsArtifacts: raw['bytecode'] == true,
         );
       }
       // 兼容只回 bool 的旧接线（两份 QfliPyNative.ets 副本没同步时会走到这里）。
@@ -287,7 +445,9 @@ class PythonProgramRunner implements ProgramRunner {
         heapKb: arguments['heapKb'] as int,
         projectPath: arguments['projectPath'] as String,
         entryFile: arguments['entryFile'] as String,
-        compileOnly: method == 'checkSyntax',
+        compileOnly: method != 'run',
+        artifactOutput: arguments['artifactOutput'] as String? ?? '',
+        bytecodeFile: arguments['bytecodeFile'] as String? ?? '',
       );
     } on PythonFfiException catch (error) {
       throw PlatformException(code: error.code, message: error.message);
@@ -387,12 +547,24 @@ class PythonSyntaxResult {
   final String version;
 }
 
+class PythonCompilationResult extends PythonSyntaxResult {
+  const PythonCompilationResult({
+    super.success,
+    super.error,
+    super.version,
+    this.artifactPath = '',
+  });
+  final String artifactPath;
+}
+
 /// 原生后端的探测结果。
 class _NativeProbe {
   const _NativeProbe({
     required this.available,
     this.version = '',
     this.detail = '',
+    this.supportsCancellation = false,
+    this.supportsArtifacts = false,
   });
 
   /// 模块是否真的可用（不是「文件在不在」，是「dlopen 成没成功」）。
@@ -403,4 +575,6 @@ class _NativeProbe {
 
   /// 不可用时的原因。可用时为空串。
   final String detail;
+  final bool supportsCancellation;
+  final bool supportsArtifacts;
 }

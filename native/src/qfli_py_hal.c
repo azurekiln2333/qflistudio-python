@@ -228,21 +228,29 @@ mp_uint_t mp_hal_ticks_cpu(void)
     return mp_hal_ticks_us();
 }
 
-void mp_hal_delay_us(mp_uint_t us)
+static void delay_us(uint64_t us)
 {
-    qfli_py_sleep_us(us);
+    uint64_t deadline = qfli_py_monotonic_ns() / 1000u + us;
+    for (;;)
+    {
+        qfli_py_check_cancel();
+        uint64_t now = qfli_py_monotonic_ns() / 1000u;
+        if (now >= deadline) break;
+        uint64_t remaining = deadline - now;
+        qfli_py_sleep_us(remaining > 20000u ? 20000u : remaining);
+    }
 }
+
+void mp_hal_delay_us(mp_uint_t us) { delay_us(us); }
 
 /*
  * time.sleep() 走这里。
  *
- * 上游的 unix port 会在延时里调 mp_handle_pending()，好让 Ctrl-C 能打断
- * sleep。我们没有「随时中断」的通道（MICROPY_KBD_EXCEPTION 是关的），
- * 所以就是一个纯粹的睡。
+ * Check the host cancellation signal at most every 20 ms while sleeping.
  */
 void mp_hal_delay_ms(mp_uint_t ms)
 {
-    qfli_py_sleep_us((uint64_t)ms * 1000u);
+    delay_us((uint64_t)ms * 1000u);
 }
 
 uint64_t mp_hal_time_ns(void)

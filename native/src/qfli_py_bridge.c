@@ -27,6 +27,7 @@
 #include "py/mphal.h"
 #include "py/obj.h"
 #include "py/parse.h"
+#include "py/persistentcode.h"
 #include "py/runtime.h"
 #include "py/stackctrl.h"
 #include "shared/runtime/gchelper.h"
@@ -71,6 +72,13 @@
 
 static void *g_heap = NULL;
 static size_t g_heap_size = 0;
+static QfliPyCancel *g_active_cancel;
+
+void qfli_py_check_cancel(void)
+{
+    if (qfli_py_cancel_requested(g_active_cancel))
+        mp_raise_type(&mp_type_KeyboardInterrupt);
+}
 
 /*
  * 只分配一次堆。每次运行都重新 gc_init/mp_init：mp_init 会重新建立
@@ -196,7 +204,8 @@ static void print_safely(mp_obj_t obj, int as_exception)
  * *exit_code 带回退出码。返回非 0 表示环境级失败（目前只有 OOM）。
  */
 static int execute(const char *source, const char *project_dir,
-                   const char *entry_file, int compile_only, int *exit_code)
+                   const char *entry_file, int compile_only, int *exit_code,
+                   const char *artifact_output, const char *bytecode_file)
 {
     nlr_buf_t nlr;
 
@@ -206,6 +215,8 @@ static int execute(const char *source, const char *project_dir,
         qstr source_name;
         mp_parse_tree_t parse_tree;
         mp_obj_t module_fun;
+
+        qfli_py_check_cancel();
 
         mp_sys_path = mp_obj_new_list(0, NULL);
         if (entry_file != NULL && entry_file[0] != '\0')
@@ -229,11 +240,25 @@ static int execute(const char *source, const char *project_dir,
          */
         source_name = (entry_file == NULL || entry_file[0] == '\0')
             ? MP_QSTR__lt_stdin_gt_ : qstr_from_str(entry_file);
-        lex = mp_lexer_new_from_str_len(
-            source_name, source, strlen(source), 0);
-
-        parse_tree = mp_parse(lex, MP_PARSE_FILE_INPUT);
-        module_fun = mp_compile(&parse_tree, source_name, false);
+        mp_compiled_module_t module;
+        module.context = m_new_obj(mp_module_context_t);
+        module.context->module.globals = mp_globals_get();
+        if (bytecode_file != NULL && bytecode_file[0] != '\0')
+        {
+            char resolved[QFLI_PY_PATH_MAX];
+            qfli_py_file_resolve(bytecode_file, 0, resolved);
+            mp_raw_code_load_file(qstr_from_str(resolved), &module);
+        }
+        else
+        {
+            lex = mp_lexer_new_from_str_len(source_name, source, strlen(source), 0);
+            parse_tree = mp_parse(lex, MP_PARSE_FILE_INPUT);
+            mp_compile_to_raw_code(&parse_tree, source_name, false, &module);
+        }
+        qfli_py_check_cancel();
+        if (compile_only && artifact_output != NULL && artifact_output[0] != '\0')
+            qfli_py_file_save_bytecode(&module, artifact_output);
+        module_fun = mp_make_function_from_proto_fun(module.rc, module.context, NULL);
         if (!compile_only)
             mp_call_function_0(module_fun);
 
@@ -244,6 +269,17 @@ static int execute(const char *source, const char *project_dir,
 
     {
         mp_obj_t exc = (mp_obj_t)nlr.ret_val;
+        int cancelled = qfli_py_cancel_requested(g_active_cancel);
+        /* Exception printing must not trigger another cancellation exception. */
+        g_active_cancel = NULL;
+        if (cancelled)
+        {
+            qfli_py_hal_set_sink(QFLI_PY_SINK_STDERR);
+            mp_hal_stdout_tx_strn_cooked("KeyboardInterrupt\n", 18);
+            qfli_py_hal_set_sink(QFLI_PY_SINK_STDOUT);
+            *exit_code = 130;
+            return 0;
+        }
 
         /*
          * sys.exit() 走的是 SystemExit 异常，这在 CPython 和 MicroPython 里
@@ -332,6 +368,14 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
                             const char *project_dir, const char *entry_file,
                             int compile_only)
 {
+    return qfli_py_execute(source, stdin_text, heap_kb, project_dir, entry_file,
+        compile_only, NULL, NULL, NULL);
+}
+
+QfliPyRunResult qfli_py_execute(const char *source, const char *stdin_text, int heap_kb,
+    const char *project_dir, const char *entry_file, int compile_only,
+    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file)
+{
     QfliPyRunResult result;
     int exit_code = 0;
 
@@ -347,6 +391,11 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
      * worker），所以这里必须锁。
      */
     qfli_py_runtime_lock();
+    if (qfli_py_cancel_requested(token))
+    {
+        qfli_py_runtime_unlock();
+        return make_result(130, "", "KeyboardInterrupt\n");
+    }
 
     /*
      * 设 GC 扫栈的「顶」。
@@ -383,10 +432,13 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     qfli_py_hal_reset(stdin_text);
     qfli_py_file_begin(project_dir);
+    g_active_cancel = token;
 
-    if (execute(source, project_dir, entry_file, compile_only, &exit_code) != 0)
+    if (execute(source, project_dir, entry_file, compile_only, &exit_code,
+        artifact_output, bytecode_file) != 0)
     {
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
+        g_active_cancel = NULL;
         qfli_py_file_end();
         mp_deinit();
         qfli_py_runtime_unlock();
@@ -395,6 +447,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     result = make_result(exit_code, qfli_py_hal_stdout(), qfli_py_hal_stderr());
     result.truncated = qfli_py_hal_truncated();
+    g_active_cancel = NULL;
 
     qfli_py_file_end();
     mp_deinit();

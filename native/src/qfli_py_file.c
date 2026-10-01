@@ -3,6 +3,7 @@
 
 #include "py/builtin.h"
 #include "py/runtime.h"
+#include "py/persistentcode.h"
 #include "py/stream.h"
 
 #include <errno.h>
@@ -112,6 +113,36 @@ static void resolve_path(mp_obj_t file, bool create, char resolved[QFLI_PY_PATH_
     written = snprintf(resolved, QFLI_PY_PATH_MAX, "%s/%s", parent, slash + 1);
     if (written < 0 || written >= QFLI_PY_PATH_MAX)
         mp_raise_OSError(ENAMETOOLONG);
+}
+
+void qfli_py_file_resolve(const char *name, int create, char *resolved)
+{
+    resolve_path(mp_obj_new_str(name, strlen(name)), create != 0, resolved);
+}
+
+static void write_bytecode(void *data, const char *bytes, size_t length)
+{
+    qfli_py_file_node_t *node = data;
+    while (length > 0)
+    {
+        intptr_t written = qfli_py_write(node->fd, bytes, length);
+        if (written < 0 && errno == EINTR) continue;
+        if (written <= 0) mp_raise_OSError(written < 0 ? errno : MP_EIO);
+        bytes += written;
+        length -= (size_t)written;
+    }
+}
+
+void qfli_py_file_save_bytecode(mp_compiled_module_t *module, const char *name)
+{
+    char resolved[QFLI_PY_PATH_MAX];
+    qfli_py_file_resolve(name, 1, resolved);
+    int fd = qfli_py_open(resolved, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0) mp_raise_OSError(errno);
+    qfli_py_file_node_t *node = qfli_py_file_track(fd);
+    mp_print_t print = {node, write_bytecode};
+    mp_raw_code_save(module, &print);
+    qfli_py_file_close(node);
 }
 
 static mp_uint_t file_read(mp_obj_t self, void *buf, mp_uint_t size, int *errcode)

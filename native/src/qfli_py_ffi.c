@@ -8,3 +8,13 @@ QFLI_PY_API void qfli_py_run_into(QfliPyRunResult *result,
     if (result != NULL)
         *result = qfli_py_run(source, stdin_text, heap_kb, project_dir, entry_file, compile_only);
 }
+
+QFLI_PY_API void qfli_py_execute_into(QfliPyRunResult *result,
+    const char *source, const char *stdin_text, int heap_kb,
+    const char *project_dir, const char *entry_file, int compile_only,
+    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file)
+{
+    if (result != NULL)
+        *result = qfli_py_execute(source, stdin_text, heap_kb, project_dir,
+            entry_file, compile_only, token, artifact_output, bytecode_file);
+}

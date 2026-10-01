@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -42,6 +43,94 @@ void main() {
   });
 
   for (final size in [const Size(360, 800), const Size(1200, 800)]) {
+    testWidgets('compile and stop workflow at $size', (tester) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final pending = Completer<Object?>();
+      final calls = <MethodCall>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            calls.add(call);
+            switch (call.method) {
+              case 'available':
+                return {
+                  'available': true,
+                  'runControl': true,
+                  'bytecode': true,
+                };
+              case 'compile':
+                File(
+                  (call.arguments as Map)['artifactOutput'] as String,
+                ).writeAsBytesSync([77, 6, 0, 31]);
+                return {'exitCode': 0};
+              case 'prepareRun':
+                return 'tools-run';
+              case 'run':
+                return pending.future;
+              case 'cancel':
+                expect((call.arguments as Map)['runId'], 'tools-run');
+                pending.complete({
+                  'exitCode': 130,
+                  'output': 'before\n',
+                  'error': 'KeyboardInterrupt\n',
+                });
+                return true;
+            }
+            return null;
+          });
+      await tester.runAsync(() async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PythonToolsPage(
+              store: store,
+              runner: const PythonProgramRunner(
+                transport: PythonNativeTransport.methodChannel,
+              ),
+            ),
+          ),
+        );
+        for (var attempt = 0; attempt < 100; attempt++) {
+          await tester.pump();
+          if (find.byType(LinearProgressIndicator).evaluate().isEmpty) break;
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+        }
+      });
+      await tester.tap(find.byTooltip('编译'));
+      await tester.runAsync(() async {
+        for (var attempt = 0; attempt < 100; attempt++) {
+          await tester.pump();
+          if (find.text('编译完成').evaluate().isNotEmpty &&
+              find.byType(LinearProgressIndicator).evaluate().isEmpty) {
+            break;
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+        }
+      });
+      await tester.pumpAndSettle();
+      expect(find.text('编译完成'), findsOneWidget);
+      expect(
+        File(p.join(directory.path, 'src', 'main.mpy')).existsSync(),
+        isTrue,
+      );
+      await tester.tap(find.widgetWithText(FilledButton, '运行'));
+      await tester.pumpAndSettle();
+      expect(pending.isCompleted, isFalse);
+      await tester.tap(find.byTooltip('停止运行'));
+      await tester.pumpAndSettle();
+      expect(find.text('运行结束 · 退出码 130'), findsOneWidget);
+      expect(find.text('before\nKeyboardInterrupt'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      expect(calls.map((call) => call.method), [
+        'available',
+        'compile',
+        'available',
+        'prepareRun',
+        'run',
+        'cancel',
+      ]);
+    });
     testWidgets('syntax workflow at $size', (tester) async {
       tester.view.physicalSize = size;
       tester.view.devicePixelRatio = 1;

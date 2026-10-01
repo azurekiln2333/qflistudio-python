@@ -16,8 +16,9 @@ void qfli_py_result_free(QfliPyRunResult *result);
 const char *qfli_py_version(void);
 ```
 
-`PythonFfiBackend({String? libraryPath}).probe/run` executes these symbols on
-a worker isolate. `PythonNativeTransport.automatic` selects FFI on Windows,
+`PythonFfiBackend({String? libraryPath}).probe/run/start` uses the controlled
+`qfli_py_execute_into` symbol on a worker isolate. `start` returns a result
+future and cancel callback immediately. `PythonNativeTransport.automatic` selects FFI on Windows,
 Linux, iOS and macOS; Android/OHOS retain their channel adapters. Tests can
 explicitly choose either transport.
 
@@ -32,6 +33,11 @@ explicitly choose either transport.
   paths are development/test overrides, never an evaluator fallback.
 - Shared C locking serializes all isolate invocations. Every run resets VM
   globals/modules and closes project descriptors, including error paths.
+- The owner isolate creates a token, sends only its integer address and request
+  data to the worker, and frees it in result completion. Late cancellation is a
+  no-op after completion. Never capture FFI bindings or native function pointers
+  in the worker closure. Apple app linker flags must retain execute and all
+  cancellation exports as well as result_free/version.
 - Windows uses OS-native UTF-8 paths, locking, clocks and module readers.
   Both tracked port headers must agree. Do not modify upstream lexer syntax.
 - Apple local pods stage compilation units under their pod root; sibling ../
@@ -43,7 +49,9 @@ explicitly choose either transport.
 | --- | --- |
 | Missing library/symbol | Probe unavailable; run retains QFLI_PY_MODULE_MISSING |
 | NUL argument / invalid heap size | INVALID_ARGUMENT before native allocation |
-| Compile-only | No Python side effect or project artifact |
+| Syntax check | No Python side effect or project artifact |
+| Compilation with artifactOutput | Upstream .mpy written without executing |
+| Pending/running stop | Exit 130; previous stdout retained; subsequent run works |
 | Concurrent runs | Separate results; serialized C VM state |
 | Native exception / explicit exit | Real traceback and exit code preserved |
 
@@ -71,5 +79,4 @@ Correct: also supply mp_lexer_new_from_file using mp_lexer_new and the custom
 reader; the upstream lexer omits that adapter when those readers are disabled.
 
 Wrong: kill a Dart isolate and assume its native C execution has stopped.
-Correct: record cancellation as unsupported until a cooperative C API and
-runner stop contract are implemented and tested.
+Correct: keep the worker alive through cleanup and signal its own native token.

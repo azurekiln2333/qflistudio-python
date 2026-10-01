@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
   bool _loadingFiles = false;
   bool _working = false;
   int _fileLoadGeneration = 0;
+  Future<void> Function()? _cancelRun;
 
   List<Project> get _projects => widget.store.projects
       .where(
@@ -65,6 +67,8 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
 
   @override
   void dispose() {
+    final cancel = _cancelRun;
+    if (cancel != null) unawaited(cancel());
     widget.store.removeListener(_onProjectsChanged);
     super.dispose();
   }
@@ -104,7 +108,8 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
       await for (final entity in Directory(
         project.path,
       ).list(recursive: true, followLinks: false)) {
-        if (entity is File && p.extension(entity.path).toLowerCase() == '.py') {
+        if (entity is File &&
+            {'.py', '.mpy'}.contains(p.extension(entity.path).toLowerCase())) {
           files.add(entity.path);
         }
       }
@@ -154,6 +159,11 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
           if (mounted) setState(() => _status = '无法运行此文件');
           return;
         }
+        if (mounted) {
+          setState(() => _cancelRun = result.cancel);
+        } else {
+          await result.cancel?.call();
+        }
         final stdout = result.stdout.toList();
         final stderr = result.stderr.toList();
         final exitCode = await result.exitCode;
@@ -172,7 +182,65 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
         });
       }
     } finally {
+      if (mounted) {
+        setState(() {
+          _working = false;
+          _cancelRun = null;
+        });
+      }
+    }
+  }
+
+  Future<void> _compile() async {
+    final project = _project;
+    final file = _selectedFile;
+    if (_working || project == null || file == null) return;
+    setState(() {
+      _working = true;
+      _status = '正在编译';
+      _output = '';
+    });
+    try {
+      final result = await _runner.compile(
+        projectPath: project.path,
+        entryFile: file,
+      );
+      if (!mounted) return;
+      setState(() {
+        _status = result.success ? '编译完成' : '编译失败';
+        _output = result.success
+            ? p.relative(result.artifactPath, from: project.path)
+            : result.error;
+      });
+      if (result.success) await _refreshFiles();
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _status = '编译失败';
+          _output = '$error';
+        });
+      }
+    } finally {
       if (mounted) setState(() => _working = false);
+    }
+  }
+
+  Future<void> _stop() async {
+    final cancel = _cancelRun;
+    if (cancel == null) return;
+    setState(() {
+      _cancelRun = null;
+      _status = '正在停止';
+    });
+    try {
+      await cancel();
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _cancelRun = cancel;
+          _output = '$error';
+        });
+      }
     }
   }
 
@@ -262,7 +330,7 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
                 else if (_files.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text('项目中没有 .py 文件'),
+                    child: Text('项目中没有 Python 文件'),
                   ),
                 const SizedBox(height: 16),
                 Wrap(
@@ -270,11 +338,31 @@ class _PythonToolsPageState extends State<PythonToolsPage> {
                   runSpacing: 8,
                   children: [
                     FilledButton.tonalIcon(
-                      onPressed: file == null || _working || _loadingFiles
+                      onPressed:
+                          file == null ||
+                              p.extension(file).toLowerCase() != '.py' ||
+                              _working ||
+                              _loadingFiles
                           ? null
                           : () => _execute(checkOnly: true),
                       icon: const Icon(Icons.fact_check_outlined),
                       label: const Text('检查语法'),
+                    ),
+                    IconButton.filledTonal(
+                      tooltip: '编译',
+                      onPressed:
+                          file == null ||
+                              p.extension(file).toLowerCase() != '.py' ||
+                              _working ||
+                              _loadingFiles
+                          ? null
+                          : _compile,
+                      icon: const Icon(Icons.build_outlined),
+                    ),
+                    IconButton.filledTonal(
+                      tooltip: '停止运行',
+                      onPressed: _cancelRun == null ? null : _stop,
+                      icon: const Icon(Icons.stop),
                     ),
                     FilledButton.icon(
                       onPressed: file == null || _working || _loadingFiles

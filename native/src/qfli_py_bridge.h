@@ -46,6 +46,14 @@ typedef struct {
     int truncated;
 } QfliPyRunResult;
 
+typedef struct qfli_py_cancel QfliPyCancel;
+/* The caller owns a token until its queued/executing worker has completed. */
+QFLI_PY_API QfliPyCancel *qfli_py_cancel_create(void);
+QFLI_PY_API void qfli_py_cancel_request(QfliPyCancel *token);
+QFLI_PY_API void qfli_py_cancel_free(QfliPyCancel *token);
+int qfli_py_cancel_requested(QfliPyCancel *token);
+void qfli_py_check_cancel(void);
+
 /*
  * 同步运行一次。
  *
@@ -68,6 +76,16 @@ QFLI_PY_API QfliPyRunResult qfli_py_run(const char *source, const char *stdin_te
 QFLI_PY_API void qfli_py_run_into(QfliPyRunResult *result,
     const char *source, const char *stdin_text, int heap_kb,
     const char *project_dir, const char *entry_file, int compile_only);
+
+/* Optional .mpy output for compilation, or .mpy input for execution. */
+QFLI_PY_API QfliPyRunResult qfli_py_execute(const char *source,
+    const char *stdin_text, int heap_kb, const char *project_dir,
+    const char *entry_file, int compile_only, QfliPyCancel *token,
+    const char *artifact_output, const char *bytecode_file);
+QFLI_PY_API void qfli_py_execute_into(QfliPyRunResult *result,
+    const char *source, const char *stdin_text, int heap_kb,
+    const char *project_dir, const char *entry_file, int compile_only,
+    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file);
 
 /* 释放 qfli_py_run 返回的两个缓冲区。可以安全地对 NULL 调用。 */
 QFLI_PY_API void qfli_py_result_free(QfliPyRunResult *result);

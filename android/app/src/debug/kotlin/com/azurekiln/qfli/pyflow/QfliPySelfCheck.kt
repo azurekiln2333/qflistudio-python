@@ -135,6 +135,71 @@ internal object QfliPySelfCheck {
                 Log.e(TAG, "FAIL ${test.name}: exit=${actual.exitCode}, output=${actual.output}, error=${actual.error}")
             }
         }
-        Log.i(TAG, "Native self-check passed $passed/${cases.size}")
+        val lifecycle = runLifecycle(root, src)
+        Log.i(TAG, "Native self-check passed ${passed + lifecycle}/${cases.size + 10}")
+    }
+
+    private fun runLifecycle(root: File, src: File): Int {
+        var passed = 0
+        fun verify(name: String, ok: Boolean) {
+            if (ok) { passed++; Log.i(TAG, "PASS $name") }
+            else Log.e(TAG, "FAIL $name")
+        }
+        val entry = File(src, "lifecycle.py").absolutePath
+        fun run(source: String, id: String? = null, compile: Boolean = false,
+                output: String = "", bytecode: String = "", stdin: String = "") =
+            QfliPyNative.run(source, stdin, projectPath = root.absolutePath,
+                entryFile = entry, compileOnly = compile, runId = id,
+                artifactOutput = output, bytecodeFile = bytecode)
+
+        val before = QfliPyNative.prepareRun()
+        QfliPyNative.cancelRun(before)
+        val pre = run("open('must-not-exist', 'w').close()", before)
+        verify("cancel-before-start", pre.exitCode == 130 && !File(root, "must-not-exist").exists())
+
+        for ((name, body) in listOf("loop" to "while True: pass", "sleep" to "import time\ntime.sleep(60)")) {
+            val id = QfliPyNative.prepareRun()
+            val timer = Thread({ Thread.sleep(200); QfliPyNative.cancelRun(id) }, "QfliPyCancel")
+            timer.start()
+            val result = run("print('before')\n$body", id)
+            timer.join(3000)
+            verify("cancel-$name", result.exitCode == 130 && result.output == "before\n" &&
+                result.error?.contains("KeyboardInterrupt") == true)
+        }
+        val firstId = QfliPyNative.prepareRun()
+        val queuedId = QfliPyNative.prepareRun()
+        QfliPyNative.cancelRun(queuedId)
+        val first = run("import time\ntime.sleep(0.05)\nprint(42)", firstId)
+        val queued = run("open('must-not-exist', 'w').close()", queuedId)
+        verify("cancel-token-isolation", first.exitCode == 0 && first.output == "42\n" &&
+            queued.exitCode == 130 && !File(root, "must-not-exist").exists())
+        verify("cancel-after-completion", !QfliPyNative.cancelRun(firstId) && !QfliPyNative.cancelRun(queuedId))
+        verify("fresh-after-cancel", run("print(42)").output == "42\n")
+
+        val helper = File(src, "compiled_helper.py").also { it.writeText("value = 7\n") }
+        val helperArtifact = File(src, "compiled_helper.mpy")
+        val artifact = File(src, "lifecycle.mpy")
+        val code = "import compiled_helper\ndef twice(value):\n    return value * 2\n" +
+            "with open('compiled-result.txt', 'w') as f:\n    f.write(input())\n" +
+            "print(twice(compiled_helper.value), open('compiled-result.txt').read())\n"
+        val helperCompile = QfliPyNative.run(helper.readText(), projectPath = root.absolutePath,
+            entryFile = helper.absolutePath, compileOnly = true, artifactOutput = helperArtifact.absolutePath)
+        val compile = run(code, compile = true, output = artifact.absolutePath)
+        verify("compile-mpy-no-execution", helperCompile.exitCode == 0 && compile.exitCode == 0 &&
+            artifact.readBytes().take(3) == listOf<Byte>(77, 6, 0) &&
+            !File(root, "compiled-result.txt").exists())
+        helper.delete()
+        val nonBmp = "\u4F60\u597D\uD83D\uDE80"
+        val loaded = run("", bytecode = artifact.absolutePath, stdin = "$nonBmp\n")
+        verify("load-entry-and-import-mpy", loaded.exitCode == 0 && loaded.output == "14 $nonBmp\n" && loaded.error == null)
+        val bytes = artifact.readBytes()
+        val badCompile = run("def broken(:", compile = true, output = artifact.absolutePath)
+        verify("failed-compile-retains-mpy", badCompile.exitCode == 1 &&
+            badCompile.error?.contains("SyntaxError") == true && artifact.readBytes().contentEquals(bytes))
+        val badArtifact = File(src, "bad.mpy").also { it.writeBytes(byteArrayOf(77, 5, 0, 31)) }
+        val badLoad = run("", bytecode = badArtifact.absolutePath)
+        verify("invalid-mpy-and-recovery", badLoad.exitCode == 1 &&
+            badLoad.error?.contains("incompatible .mpy file") == true && run("print(42)").output == "42\n")
+        return passed
     }
 }

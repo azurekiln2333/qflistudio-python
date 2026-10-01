@@ -69,7 +69,7 @@ module QfliPythonNative
     }
     # These flags belong on the app link, where static archive dead stripping occurs.
     spec.user_target_xcconfig = {
-      'OTHER_LDFLAGS' => '$(inherited) -Wl,-u,_qfli_py_run_into -Wl,-u,_qfli_py_result_free -Wl,-u,_qfli_py_version'
+      'OTHER_LDFLAGS' => '$(inherited) -Wl,-u,_qfli_py_run_into -Wl,-u,_qfli_py_execute_into -Wl,-u,_qfli_py_cancel_create -Wl,-u,_qfli_py_cancel_request -Wl,-u,_qfli_py_cancel_free -Wl,-u,_qfli_py_result_free -Wl,-u,_qfli_py_version'
     }
 
     case platform
