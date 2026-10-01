@@ -20,6 +20,8 @@ endif()
 
 add_library(qfli_py SHARED
     ${QFLI_PY_EMBED_SOURCES}
+    "${QFLI_PY_NATIVE_DIR}/src/qfli_py_platform.c"
+    "${QFLI_PY_NATIVE_DIR}/src/qfli_py_reader.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_hal.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_stdio.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_file.c"

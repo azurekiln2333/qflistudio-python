@@ -1,47 +1,43 @@
 #include "qfli_py_file.h"
+#include "qfli_py_platform.h"
 
 #include "py/builtin.h"
 #include "py/runtime.h"
 #include "py/stream.h"
 
 #include <errno.h>
-#include <fcntl.h>
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
-typedef struct file_node {
+struct qfli_py_file_node {
     int fd;
-    struct file_node *next;
-} file_node_t;
+    struct qfli_py_file_node *next;
+};
 
 typedef struct {
     mp_obj_base_t base;
-    file_node_t *node;
+    qfli_py_file_node_t *node;
 } qfli_file_t;
 
-static char project_root[PATH_MAX];
-static file_node_t *open_files;
+static char project_root[QFLI_PY_PATH_MAX];
+static qfli_py_file_node_t *open_files;
 
 void qfli_py_file_begin(const char *project_dir)
 {
     project_root[0] = '\0';
     if (project_dir != NULL && project_dir[0] != '\0' &&
-        realpath(project_dir, project_root) == NULL)
+        qfli_py_realpath(project_dir, project_root, sizeof(project_root)) == NULL)
         project_root[0] = '\0';
 }
 
 void qfli_py_file_end(void)
 {
-    file_node_t *node = open_files;
+    qfli_py_file_node_t *node = open_files;
     while (node != NULL)
     {
-        file_node_t *next = node->next;
-        if (node->fd >= 0)
-            close(node->fd);
+        qfli_py_file_node_t *next = node->next;
+        qfli_py_file_close(node);
         free(node);
         node = next;
     }
@@ -49,19 +45,35 @@ void qfli_py_file_end(void)
     project_root[0] = '\0';
 }
 
-static bool inside_project(const char *path)
+qfli_py_file_node_t *qfli_py_file_track(int fd)
 {
-    size_t len = strlen(project_root);
-    return len != 0 && strncmp(path, project_root, len) == 0 &&
-        (path[len] == '/' || path[len] == '\0' ||
-         (len == 1 && project_root[0] == '/'));
+    qfli_py_file_node_t *node = malloc(sizeof(*node));
+    if (node == NULL)
+    {
+        qfli_py_close(fd);
+        mp_raise_OSError(MP_ENOMEM);
+    }
+    node->fd = fd;
+    node->next = open_files;
+    open_files = node;
+    return node;
 }
 
-static void resolve_path(mp_obj_t file, bool create, char resolved[PATH_MAX])
+void qfli_py_file_close(qfli_py_file_node_t *node)
+{
+    if (node != NULL && node->fd >= 0)
+    {
+        int fd = node->fd;
+        node->fd = -1;
+        qfli_py_close(fd);
+    }
+}
+
+static void resolve_path(mp_obj_t file, bool create, char resolved[QFLI_PY_PATH_MAX])
 {
     size_t length;
     const char *name = (const char *)mp_obj_str_get_data(file, &length);
-    char candidate[PATH_MAX];
+    char candidate[QFLI_PY_PATH_MAX];
     int written;
 
     if (project_root[0] == '\0')
@@ -69,33 +81,36 @@ static void resolve_path(mp_obj_t file, bool create, char resolved[PATH_MAX])
     if (length == 0 || strlen(name) != length)
         mp_raise_OSError(MP_EINVAL);
 
-    written = name[0] == '/'
+    written = qfli_py_path_is_absolute(name)
         ? snprintf(candidate, sizeof(candidate), "%s", name)
         : snprintf(candidate, sizeof(candidate), "%s/%s", project_root, name);
     if (written < 0 || (size_t)written >= sizeof(candidate))
         mp_raise_OSError(ENAMETOOLONG);
 
-    if (realpath(candidate, resolved) != NULL)
+    if (qfli_py_realpath(candidate, resolved, QFLI_PY_PATH_MAX) != NULL)
     {
-        if (!inside_project(resolved))
+        if (!qfli_py_path_contains(project_root, resolved))
             mp_raise_OSError(MP_EACCES);
         return;
     }
     if (!create || errno != ENOENT)
         mp_raise_OSError(errno);
 
-    char *slash = strrchr(candidate, '/');
+    char *slash = (char *)qfli_py_path_last_separator(candidate);
     if (slash == NULL || slash[1] == '\0' || strcmp(slash + 1, ".") == 0 ||
         strcmp(slash + 1, "..") == 0)
         mp_raise_OSError(MP_EINVAL);
-    *slash = '\0';
-    char parent[PATH_MAX];
-    if (realpath(candidate, parent) == NULL)
+    /* Keep the separator so both / and C:/ remain valid parent roots. */
+    char first_name_char = slash[1];
+    slash[1] = '\0';
+    char parent[QFLI_PY_PATH_MAX];
+    if (qfli_py_realpath(candidate, parent, sizeof(parent)) == NULL)
         mp_raise_OSError(errno);
-    if (!inside_project(parent))
+    slash[1] = first_name_char;
+    if (!qfli_py_path_contains(project_root, parent))
         mp_raise_OSError(MP_EACCES);
-    written = snprintf(resolved, PATH_MAX, "%s/%s", parent, slash + 1);
-    if (written < 0 || written >= PATH_MAX)
+    written = snprintf(resolved, QFLI_PY_PATH_MAX, "%s/%s", parent, slash + 1);
+    if (written < 0 || written >= QFLI_PY_PATH_MAX)
         mp_raise_OSError(ENAMETOOLONG);
 }
 
@@ -107,8 +122,8 @@ static mp_uint_t file_read(mp_obj_t self, void *buf, mp_uint_t size, int *errcod
         *errcode = EBADF;
         return MP_STREAM_ERROR;
     }
-    ssize_t count;
-    do { count = read(file->node->fd, buf, size); } while (count < 0 && errno == EINTR);
+    intptr_t count;
+    do { count = qfli_py_read(file->node->fd, buf, size); } while (count < 0 && errno == EINTR);
     if (count < 0)
     {
         *errcode = errno;
@@ -125,8 +140,8 @@ static mp_uint_t file_write(mp_obj_t self, const void *buf, mp_uint_t size, int 
         *errcode = EBADF;
         return MP_STREAM_ERROR;
     }
-    ssize_t count;
-    do { count = write(file->node->fd, buf, size); } while (count < 0 && errno == EINTR);
+    intptr_t count;
+    do { count = qfli_py_write(file->node->fd, buf, size); } while (count < 0 && errno == EINTR);
     if (count < 0)
     {
         *errcode = errno;
@@ -141,11 +156,7 @@ static mp_uint_t file_ioctl(mp_obj_t self, mp_uint_t request, uintptr_t arg, int
     int fd = file->node->fd;
     if (request == MP_STREAM_CLOSE)
     {
-        if (fd >= 0)
-        {
-            file->node->fd = -1;
-            close(fd);
-        }
+        qfli_py_file_close(file->node);
         return 0;
     }
     if (fd < 0)
@@ -158,7 +169,7 @@ static mp_uint_t file_ioctl(mp_obj_t self, mp_uint_t request, uintptr_t arg, int
     if (request == MP_STREAM_SEEK)
     {
         struct mp_stream_seek_t *seek = (struct mp_stream_seek_t *)arg;
-        off_t offset = lseek(fd, seek->offset, seek->whence);
+        int64_t offset = qfli_py_seek(fd, seek->offset, seek->whence);
         if (offset >= 0)
         {
             seek->offset = offset;
@@ -237,33 +248,25 @@ static mp_obj_t file_open(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_
     int flags = parse_mode(mode, &binary, &create);
     if (flags < 0)
         mp_raise_ValueError(MP_ERROR_TEXT("invalid mode"));
-    char path[PATH_MAX];
+    char path[QFLI_PY_PATH_MAX];
     resolve_path(args[ARG_file].u_obj, create, path);
-    int fd = open(path, flags | O_CLOEXEC | O_NOFOLLOW, 0644);
+    int fd = qfli_py_open(path, flags, 0644);
     if (fd < 0)
         mp_raise_OSError(errno);
-    struct stat stat_info;
-    if (fstat(fd, &stat_info) != 0)
+    int regular = qfli_py_fd_is_regular(fd);
+    if (regular < 0)
     {
         int error = errno;
-        close(fd);
+        qfli_py_close(fd);
         mp_raise_OSError(error);
     }
-    if (!S_ISREG(stat_info.st_mode))
+    if (!regular)
     {
-        close(fd);
+        qfli_py_close(fd);
         mp_raise_OSError(EISDIR);
     }
 
-    file_node_t *node = malloc(sizeof(*node));
-    if (node == NULL)
-    {
-        close(fd);
-        mp_raise_OSError(MP_ENOMEM);
-    }
-    node->fd = fd;
-    node->next = open_files;
-    open_files = node;
+    qfli_py_file_node_t *node = qfli_py_file_track(fd);
     qfli_file_t *file = mp_obj_malloc(qfli_file_t,
         binary ? &qfli_binary_file_type : &qfli_text_file_type);
     file->node = node;

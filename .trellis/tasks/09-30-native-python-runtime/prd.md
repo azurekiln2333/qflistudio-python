@@ -25,6 +25,32 @@ Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by the s
 
 ## Acceptance Criteria
 
+## Cross-platform Continuation (2026-10-01)
+
+The active user goal asks to implement missing platform runtime paths and test
+only where the target environment is actually available. Android and OHOS
+already reach the upstream C compiler/VM; Windows, Linux, macOS and iOS were
+unwired plain Flutter shells at this audit.
+
+- Package and invoke the same C MicroPython engine on these four native targets.
+- Preserve compile/run, finite stdin/stdout/stderr, exit status, fresh VM state,
+  project module imports and project-local files, including Windows Unicode
+  paths and real path containment.
+- Reuse the series' existing FFI/isolate pattern for desktop and Apple targets;
+  keep mobile MethodChannel protocols and behavior compatible.
+- Supply reproducible build/link configuration for desktop and Apple. Test real
+  native execution on available Windows/WSL and Android; do not pretend a
+  Windows host can build or test iOS/macOS without Xcode.
+- Report the separate browser boundary: web/ is a Flutter template, while the
+  current IDE and runner depend on dart:io/local projects. A browser VM would
+  require WASM and a virtual project filesystem; native bindings cannot be
+  presented as browser support.
+- Other QFLI language projects have independent ongoing platform tasks and
+  dirty source work. Their audit is read-only here while scope clarification
+  is pending; do not overwrite parallel implementations or claim them complete.
+
+## Original Acceptance Criteria
+
 - [ ] A clean checkout can reproduce the native arm64 library and signed HAP using documented commands.
 - [x] A repeatable test executes source through the C VM and checks successful output, compilation errors, exceptions, input, exit codes, and state isolation.
 - [x] The installed app loads its native module and can run a project entry file on a device.

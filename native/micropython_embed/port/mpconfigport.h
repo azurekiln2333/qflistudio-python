@@ -14,7 +14,29 @@
 #define QFLI_PY_MPCONFIGPORT_H
 
 #include <stdint.h>
+#if defined(_WIN32)
+#include <malloc.h>
+#else
 #include <alloca.h>
+#endif
+#if defined(_MSC_VER)
+#ifndef alloca
+#define alloca _alloca
+#endif
+#define NORETURN __declspec(noreturn)
+#define MP_NOINLINE __declspec(noinline)
+#define MP_ALWAYSINLINE __forceinline
+#define MP_WEAK
+#define MP_LIKELY(x) (x)
+#define MP_UNLIKELY(x) (x)
+#endif
+
+#if defined(_WIN32)
+/* Windows LLP64 and MSVC cannot use the upstream GCC register assembly. */
+#define MICROPY_NLR_SETJMP (1)
+#define MICROPY_GCREGS_SETJMP (1)
+#define MP_SSIZE_MAX INTPTR_MAX
+#endif
 
 /* ------------------------------------------------------------------ *
  * 特性档位
@@ -50,7 +72,12 @@
 #define MICROPY_VFS          (0)
 #define MICROPY_VFS_POSIX    (0)
 #define MICROPY_READER_VFS   (0)
+#if defined(_WIN32)
+#define MICROPY_READER_POSIX (0)
+#define MICROPY_HAS_FILE_READER (1)
+#else
 #define MICROPY_READER_POSIX (1)
+#endif
 #define MICROPY_PY_IO_FILEIO (0)
 #define MICROPY_PY_OS        (0)
 
@@ -160,7 +187,11 @@
 /* 必须是指针宽度。aarch64 上 intptr_t 就是 8 字节。 */
 typedef intptr_t mp_int_t;
 typedef uintptr_t mp_uint_t;
+#if defined(_WIN32)
+typedef int64_t mp_off_t;
+#else
 typedef long mp_off_t;
+#endif
 
 /*
  * py/mphal.h 里写的是 `#include MICROPY_MPHALPORT_H`，所以这个宏要带引号。
@@ -182,18 +213,32 @@ typedef long mp_off_t;
 #define MICROPY_HW_BOARD_NAME "qfli-python"
 #if defined(__ANDROID__)
 #define MICROPY_HW_MCU_NAME   "android"
-#else
+#define MICROPY_PY_SYS_PLATFORM "android"
+#elif defined(__OHOS__) || defined(__OPENHARMONY__)
 #define MICROPY_HW_MCU_NAME   "harmonyos"
+#define MICROPY_PY_SYS_PLATFORM "ohos"
+#elif defined(_WIN32)
+#define MICROPY_HW_MCU_NAME   "windows"
+#define MICROPY_PY_SYS_PLATFORM "win32"
+#elif defined(__APPLE__)
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
+#define MICROPY_HW_MCU_NAME   "ios"
+#define MICROPY_PY_SYS_PLATFORM "ios"
+#else
+#define MICROPY_HW_MCU_NAME   "macos"
+#define MICROPY_PY_SYS_PLATFORM "darwin"
+#endif
+#elif defined(__linux__)
+#define MICROPY_HW_MCU_NAME   "linux"
+#define MICROPY_PY_SYS_PLATFORM "linux"
+#else
+#define MICROPY_HW_MCU_NAME   "native"
+#define MICROPY_PY_SYS_PLATFORM "native"
 #endif
 
 /*
  * sys.platform 的值。py/modsys.c 第 139 行是 `#ifdef MICROPY_PY_SYS_PLATFORM`，
  * 不定义就没有 sys.platform 这个属性；教程里偶尔会 print 它，给个能认出来的。
  */
-#if defined(__ANDROID__)
-#define MICROPY_PY_SYS_PLATFORM "android"
-#else
-#define MICROPY_PY_SYS_PLATFORM "ohos"
-#endif
-
 #endif /* QFLI_PY_MPCONFIGPORT_H */

@@ -13,6 +13,11 @@ dependencies:
   qfli_studio_core:
     path: ../qfli_studio_core
 
+  qfli_python_native:
+    path: native
+
+  ffi: ^2.1.4
+
   cupertino_icons: ^1.0.8
 
   # python_runner.dart 用它做路径处理（p.extension / p.basename / p.join）。

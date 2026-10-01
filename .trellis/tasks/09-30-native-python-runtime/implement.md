@@ -1,5 +1,29 @@
 # Implementation Plan
 
+## Cross-platform Continuation
+
+- [x] Audit real platform registration/packaging and available toolchains.
+- [x] Port the shared C engine's lock/clock/paths/import reader to Windows.
+- [x] Package the same C engine through a desktop/Apple FFI plugin.
+- [x] Connect Dart compile/run/probe using the existing FFI/isolate pattern.
+- [x] Windows native build and 34 real FFI cases; Linux SO and 65 real C cases.
+- [x] Rebuild Android x86_64 after shared C changes; Apple target hosts absent.
+- [ ] Install and run the fresh APK; automatic approval review returned HTTP 503.
+- [ ] Perform full-scope review, document platform evidence and commit scoped work.
+
+Windows has MinGW64 GCC 4.9.2 and SDK CMake/Ninja for native execution tests;
+Visual Studio/MSVC was not found, so complete Flutter Windows builds are not
+currently available. WSL native execution was verified in qfli-java-build.
+No Apple host/Xcode is available; do not run fabricated Apple target tests.
+Sibling language repositories have their own active platform tasks.
+
+On 2026-10-02, default-runner validation additionally confirmed real project
+imports, input.txt, stdout/stderr, native compile-only without file effects and
+persisted native file output. All 43 preceding Flutter tests passed; the new
+default-runner case passed separately. Static analysis was clean.
+
+## Earlier Runtime Batches
+
 - [x] Inspect current native, Dart, ArkTS, build, test, and device state.
 - [x] Build the existing arm64 library and signed HAP; install and launch on a device; record the real self-check result.
 - [x] Make each C VM invocation independent and run packaged on-device C VM checks for compile/run, errors, input, exit, and repeat runs (7/7).

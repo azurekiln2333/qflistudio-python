@@ -6,10 +6,15 @@ import 'package:path/path.dart' as p;
 import 'package:qfli_studio_core/services/file_encoding.dart';
 import 'package:qfli_studio_core/services/studio_profile.dart';
 
+import 'python_ffi.dart';
+
+enum PythonNativeTransport { automatic, methodChannel, ffi }
+
 /// 用内嵌的 MicroPython 执行项目里的 Python 代码。
 ///
 /// 只有一个后端：**原生后端**（`libqfli_py.so`，内嵌 MicroPython）。
-/// Android 使用 Kotlin/JNI，鸿蒙使用 ArkTS/NAPI，具体见 `native/README.md`。
+/// Android 使用 Kotlin/JNI，鸿蒙使用 ArkTS/NAPI，桌面与 Apple 平台使用 FFI。
+/// 具体见 `native/README.md`。
 ///
 /// 为什么没有「纯 Dart 解释器」兜底：MicroPython 是带完整编译器和字节码 VM 的
 /// 真实现，语义跟 CPython 对得上；手写一个 Python 子集解释器既保证不了兼容性
@@ -22,7 +27,24 @@ import 'package:qfli_studio_core/services/studio_profile.dart';
 /// 应用具备生产力应用资格）。但沙箱从来不限制应用解释自己的数据，所以把源码
 /// 交给进程内的 VM，是普通应用唯一走得通的路。
 class PythonProgramRunner implements ProgramRunner {
-  const PythonProgramRunner({this.heapKb = defaultHeapKb});
+  const PythonProgramRunner({
+    this.heapKb = defaultHeapKb,
+    this.transport = PythonNativeTransport.automatic,
+    this.libraryPath,
+  });
+
+  final PythonNativeTransport transport;
+  final String? libraryPath;
+
+  bool get _useFfi => switch (transport) {
+    PythonNativeTransport.automatic =>
+      Platform.isWindows ||
+          Platform.isLinux ||
+          Platform.isIOS ||
+          Platform.isMacOS,
+    PythonNativeTransport.methodChannel => false,
+    PythonNativeTransport.ffi => true,
+  };
 
   /// MicroPython 的 GC 堆大小（KB）。
   ///
@@ -68,7 +90,7 @@ class PythonProgramRunner implements ProgramRunner {
       );
     }
     try {
-      final raw = await _channel.invokeMethod<Object?>('checkSyntax', {
+      final raw = await _invokeNative('checkSyntax', {
         'source': source,
         'stdin': '',
         'heapKb': heapKb,
@@ -156,7 +178,7 @@ class PythonProgramRunner implements ProgramRunner {
   }) async {
     final Object? raw;
     try {
-      raw = await _channel.invokeMethod<Object?>('run', {
+      raw = await _invokeNative('run', {
         'source': source,
         'stdin': stdin,
         'heapKb': heapKb,
@@ -183,7 +205,7 @@ class PythonProgramRunner implements ProgramRunner {
       );
     }
 
-    if (raw is! Map) {
+    if (raw is! Map || raw['exitCode'] is! int) {
       return _failure(fileName, '$_appPrefix原生运行时返回了意外的结果。');
     }
 
@@ -220,9 +242,7 @@ class PythonProgramRunner implements ProgramRunner {
       title: '运行 $fileName（$label）',
       stdout: stdout.stream,
       stderr: stderr.stream,
-      exitCode: Future<int>.value(
-        raw['exitCode'] is int ? raw['exitCode'] as int : 0,
-      ),
+      exitCode: Future<int>.value(raw['exitCode'] as int),
     );
   }
 
@@ -232,7 +252,7 @@ class PythonProgramRunner implements ProgramRunner {
   /// 讲清楚是「没打进 HAP」还是「打进去了但加载失败」，两者的修法完全不同。
   Future<_NativeProbe> _probeNative() async {
     try {
-      final raw = await _channel.invokeMethod<Object?>('available');
+      final raw = await _invokeNative('available');
       if (raw is Map) {
         return _NativeProbe(
           available: raw['available'] == true,
@@ -250,6 +270,27 @@ class PythonProgramRunner implements ProgramRunner {
         available: false,
         detail: error.message ?? error.code,
       );
+    }
+  }
+
+  Future<Object?> _invokeNative(
+    String method, [
+    Map<String, Object?>? arguments,
+  ]) async {
+    if (!_useFfi) return _channel.invokeMethod<Object?>(method, arguments);
+    final backend = PythonFfiBackend(libraryPath: libraryPath);
+    try {
+      if (method == 'available') return await backend.probe();
+      return await backend.run(
+        source: arguments!['source'] as String,
+        stdin: arguments['stdin'] as String,
+        heapKb: arguments['heapKb'] as int,
+        projectPath: arguments['projectPath'] as String,
+        entryFile: arguments['entryFile'] as String,
+        compileOnly: method == 'checkSyntax',
+      );
+    } on PythonFfiException catch (error) {
+      throw PlatformException(code: error.code, message: error.message);
     }
   }
 

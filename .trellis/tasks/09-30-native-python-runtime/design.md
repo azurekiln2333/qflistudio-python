@@ -28,3 +28,29 @@ Android builds all three Flutter ABIs with static C++ linkage and 16 KiB ELF pag
 alignment. Debug startup checks exercise the actual JNI library; release/profile
 builds omit those checks. `sys.platform` is selected in the shared port header
 using `__ANDROID__`. Both platforms use the same C API and VM state isolation.
+
+## Desktop and Apple Continuation
+
+Add a local FFI plugin package under native/ for Windows/Linux shared-library
+bundling and iOS/macOS CocoaPods static linking. Dart uses the same native
+result fields in an isolate, following the existing Lua project's pattern.
+The Android/OHOS channel remains available for the existing adapters and mocks;
+tests inject that transport explicitly where the host otherwise selects FFI.
+
+Add an exported C entry qfli_py_run_into(result, source, stdin, heapKb,
+projectPath, entryFile, compileOnly) and retain qfli_py_result_free/version.
+FFI allocates the result struct, always frees native buffers with the engine's
+function, then releases argument/result allocations. Static Apple linking must
+retain these exported symbols against dead stripping.
+
+The shared C port receives the required Windows adaptation: OS-native locking
+without a pthread DLL, clocks/sleep, UTF-8 Windows file paths, canonical final
+paths, case-aware containment, and a custom Windows module reader. POSIX targets
+retain their current implementations and upstream parser/compiler/VM.
+Both the original port and tracked embedding port headers remain synchronized.
+Do not regenerate date-dependent embedding headers just for platform binding.
+
+Ownership: parent owns shared C port/platform/FFI exports and validation;
+Dart worker owns lib backend/runner integration, ffi dependency and focused
+tests; build worker owns native local-plugin manifests/CMake/Podspecs and build
+helpers. All workers preserve unrelated OHOS agreement edits and adjacent repos.

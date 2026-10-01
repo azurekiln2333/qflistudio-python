@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
+import 'package:qfli_python/python_runner.dart';
 import 'package:qfli_python/python_tools_page.dart';
 import 'package:qfli_studio_core/models/project.dart';
 import 'package:qfli_studio_core/store/project_store.dart';
@@ -63,7 +64,14 @@ void main() {
 
       await tester.runAsync(() async {
         await tester.pumpWidget(
-          MaterialApp(home: PythonToolsPage(store: store)),
+          MaterialApp(
+            home: PythonToolsPage(
+              store: store,
+              runner: const PythonProgramRunner(
+                transport: PythonNativeTransport.methodChannel,
+              ),
+            ),
+          ),
         );
         for (var attempt = 0; attempt < 100; attempt++) {
           await tester.pump();

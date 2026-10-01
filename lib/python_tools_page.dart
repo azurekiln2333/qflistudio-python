@@ -11,16 +11,21 @@ Widget buildPythonToolsPage(ProjectStore store) =>
     PythonToolsPage(store: store);
 
 class PythonToolsPage extends StatefulWidget {
-  const PythonToolsPage({super.key, required this.store});
+  const PythonToolsPage({
+    super.key,
+    required this.store,
+    this.runner = const PythonProgramRunner(),
+  });
 
   final ProjectStore store;
+  final PythonProgramRunner runner;
 
   @override
   State<PythonToolsPage> createState() => _PythonToolsPageState();
 }
 
 class _PythonToolsPageState extends State<PythonToolsPage> {
-  static const _runner = PythonProgramRunner();
+  PythonProgramRunner get _runner => widget.runner;
 
   String? _projectId;
   String? _entryFile;

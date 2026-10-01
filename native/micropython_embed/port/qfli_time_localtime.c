@@ -60,7 +60,15 @@
 static mp_obj_t mp_time_localtime_get(void) {
     time_t now = time(NULL);
     struct tm tm;
-    localtime_r(&now, &tm);
+#if defined(_WIN32)
+    /* The engine mutex serializes access; the CRT supplies per-thread storage on Windows. */
+    struct tm *local = localtime(&now);
+    if (local == NULL) mp_raise_ValueError(MP_ERROR_TEXT("invalid local time"));
+    tm = *local;
+#else
+    if (localtime_r(&now, &tm) == NULL)
+        mp_raise_ValueError(MP_ERROR_TEXT("invalid local time"));
+#endif
 
     // libc 的 tm_wday 是周日=0，MicroPython 要周一=0。
     int wday = tm.tm_wday - 1;

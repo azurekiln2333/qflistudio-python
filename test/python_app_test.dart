@@ -18,6 +18,9 @@ import 'package:qfli_studio_core/services/studio_profile.dart';
 /// `libqfli_py.so` 那一侧）和**原生后端不可用**（通道缺失，等价于打包时没把
 /// `.so` 放进去；或者通道在、但 .so 加载失败）。
 const MethodChannel _nativeChannel = MethodChannel('qfli_py/native');
+const _channelRunner = PythonProgramRunner(
+  transport: PythonNativeTransport.methodChannel,
+);
 
 /// App 自己写的诊断行的前缀，与 `python_runner.dart` 里的 `_appPrefix` 一致。
 const String _appPrefix = '[qfli] ';
@@ -72,7 +75,14 @@ void main() {
 
   setUp(() {
     previousProfile = StudioProfile.current;
-    StudioProfile.current = pythonProfile;
+    StudioProfile.current = StudioProfile(
+      id: pythonProfile.id,
+      appTitle: pythonProfile.appTitle,
+      templates: pythonProfile.templates,
+      entryFileNames: pythonProfile.entryFileNames,
+      isOffline: pythonProfile.isOffline,
+      runner: _channelRunner,
+    );
     project = Directory.systemTemp.createTempSync('qfli_python_app_test');
   });
 
@@ -88,7 +98,7 @@ void main() {
     file.writeAsStringSync(content);
   }
 
-  Future<ProgramRunResult?> runEntry(String entry) => pythonProfile.runner!.run(
+  Future<ProgramRunResult?> runEntry(String entry) => _channelRunner.run(
     projectPath: project.path,
     entryFile: p.join(project.path, entry),
   );
@@ -176,7 +186,7 @@ void main() {
         expect(args['entryFile'], p.join(project.path, 'src/main.py'));
         return _outcome();
       });
-      final result = await const PythonProgramRunner().checkSyntax(
+      final result = await _channelRunner.checkSyntax(
         projectPath: project.path,
         entryFile: p.join(project.path, 'src/main.py'),
       );
@@ -191,7 +201,7 @@ void main() {
             ? _probe()
             : _outcome(exitCode: 1, error: 'SyntaxError: invalid syntax'),
       );
-      final result = await const PythonProgramRunner().checkSyntax(
+      final result = await _channelRunner.checkSyntax(
         projectPath: project.path,
         entryFile: p.join(project.path, 'main.py'),
       );
@@ -322,6 +332,18 @@ void main() {
 
       expect(await result!.exitCode, 3);
       expect(await result.stderr.toList(), isEmpty);
+    });
+
+    test('原生结果缺少有效退出码时不能当成成功', () async {
+      write('main.py', 'print(1)');
+      _installNativeHandler((call) async {
+        if (call.method == 'available') return _probe();
+        return {'exitCode': '0', 'output': 'unexpected'};
+      });
+      final result = await runEntry('main.py');
+      expect(await result!.exitCode, _notRun);
+      expect(await result.stdout.toList(), isEmpty);
+      expect(await result.stderr.toList(), [contains('意外的结果')]);
     });
 
     test('原生后端存在但执行失败时，把错误显示出来而不是静默降级', () async {

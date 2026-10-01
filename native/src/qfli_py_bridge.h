@@ -12,6 +12,14 @@
 #ifndef QFLI_PY_BRIDGE_H
 #define QFLI_PY_BRIDGE_H
 
+#if defined(_WIN32)
+#define QFLI_PY_API __declspec(dllexport)
+#elif defined(__GNUC__)
+#define QFLI_PY_API __attribute__((visibility("default")))
+#else
+#define QFLI_PY_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -52,12 +60,17 @@ typedef struct {
  *
  * 返回值的 output 一定非 NULL；error 可能为 NULL。
  */
-QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
+QFLI_PY_API QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap_kb,
                             const char *project_dir, const char *entry_file,
                             int compile_only);
 
+/* FFI callers supply the result storage to avoid platform struct-return conventions. */
+QFLI_PY_API void qfli_py_run_into(QfliPyRunResult *result,
+    const char *source, const char *stdin_text, int heap_kb,
+    const char *project_dir, const char *entry_file, int compile_only);
+
 /* 释放 qfli_py_run 返回的两个缓冲区。可以安全地对 NULL 调用。 */
-void qfli_py_result_free(QfliPyRunResult *result);
+QFLI_PY_API void qfli_py_result_free(QfliPyRunResult *result);
 
 /*
  * 内嵌的 MicroPython 版本，形如 "1.24.1 (ecfdd5d)"。
@@ -69,7 +82,7 @@ void qfli_py_result_free(QfliPyRunResult *result);
  * hash 都是编译期从 py/mpconfig.h 和 genhdr/mpversion.h 里取的真值，
  * 不是我们手写的常量。
  */
-const char *qfli_py_version(void);
+QFLI_PY_API const char *qfli_py_version(void);
 
 #ifdef __cplusplus
 }

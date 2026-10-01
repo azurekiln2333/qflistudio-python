@@ -7,6 +7,9 @@ Python 版 App 的执行后端。**引擎是上游 MicroPython 1.24.1（commit `
 Dart → MethodChannel('qfli_py/native') → Kotlin/JNI 或 ArkTS/NAPI → libqfli_py.so → MicroPython
 ```
 
+Windows/Linux 和 iOS/macOS 使用同一引擎的本地 FFI 插件。打包、调用路径和
+实际验证结果见 [Native Python Platforms](PLATFORMS.md)。
+
 ## Android
 
 Android 与鸿蒙使用同一份 C VM、bridge、HAL、标准流和项目文件接口。

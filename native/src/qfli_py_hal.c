@@ -12,6 +12,7 @@
  * 四个时钟、两个 delay、以及 mp_hal_time_ns（time.time() 用）。
  */
 #include "qfli_py_hal.h"
+#include "qfli_py_platform.h"
 
 #include "py/mphal.h"
 #include "py/misc.h"
@@ -19,7 +20,6 @@
 #include "shared/readline/readline.h"
 
 #include <string.h>
-#include <time.h>
 
 /*
  * 输出上限。教学程序的输出远小于这个数；超了就截断并打标记，免得一个
@@ -209,23 +209,14 @@ uintptr_t mp_hal_stdio_poll(uintptr_t poll_flags)
  * 时钟与延时
  * ------------------------------------------------------------------ */
 
-static void now_monotonic(struct timespec *ts)
-{
-    clock_gettime(CLOCK_MONOTONIC, ts);
-}
-
 mp_uint_t mp_hal_ticks_ms(void)
 {
-    struct timespec ts;
-    now_monotonic(&ts);
-    return (mp_uint_t)ts.tv_sec * 1000u + (mp_uint_t)(ts.tv_nsec / 1000000);
+    return (mp_uint_t)(qfli_py_monotonic_ns() / 1000000u);
 }
 
 mp_uint_t mp_hal_ticks_us(void)
 {
-    struct timespec ts;
-    now_monotonic(&ts);
-    return (mp_uint_t)ts.tv_sec * 1000000u + (mp_uint_t)(ts.tv_nsec / 1000);
+    return (mp_uint_t)(qfli_py_monotonic_ns() / 1000u);
 }
 
 /*
@@ -239,10 +230,7 @@ mp_uint_t mp_hal_ticks_cpu(void)
 
 void mp_hal_delay_us(mp_uint_t us)
 {
-    struct timespec ts;
-    ts.tv_sec = (time_t)(us / 1000000u);
-    ts.tv_nsec = (long)((us % 1000000u) * 1000u);
-    nanosleep(&ts, NULL);
+    qfli_py_sleep_us(us);
 }
 
 /*
@@ -254,12 +242,10 @@ void mp_hal_delay_us(mp_uint_t us)
  */
 void mp_hal_delay_ms(mp_uint_t ms)
 {
-    mp_hal_delay_us(ms * 1000u);
+    qfli_py_sleep_us((uint64_t)ms * 1000u);
 }
 
 uint64_t mp_hal_time_ns(void)
 {
-    struct timespec ts;
-    clock_gettime(CLOCK_REALTIME, &ts);
-    return (uint64_t)ts.tv_sec * 1000000000ull + (uint64_t)ts.tv_nsec;
+    return qfli_py_realtime_ns();
 }

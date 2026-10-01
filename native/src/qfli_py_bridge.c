@@ -17,6 +17,7 @@
 
 #include "qfli_py_hal.h"
 #include "qfli_py_file.h"
+#include "qfli_py_platform.h"
 
 #include "py/builtin.h"
 #include "py/compile.h"
@@ -36,10 +37,8 @@
  */
 #include "genhdr/mpversion.h"
 
-#include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 
 /*
  * GC 堆的默认大小。
@@ -69,8 +68,6 @@
 /* ------------------------------------------------------------------ *
  * VM 生命周期
  * ------------------------------------------------------------------ */
-
-static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void *g_heap = NULL;
 static size_t g_heap_size = 0;
@@ -150,14 +147,9 @@ void nlr_jump_fail(void *val)
  */
 mp_import_stat_t mp_import_stat(const char *path)
 {
-    struct stat info;
-    if (stat(path, &info) == 0)
-    {
-        if (S_ISDIR(info.st_mode))
-            return MP_IMPORT_STAT_DIR;
-        if (S_ISREG(info.st_mode))
-            return MP_IMPORT_STAT_FILE;
-    }
+    qfli_py_path_type_t type = qfli_py_path_type(path);
+    if (type == QFLI_PY_PATH_DIRECTORY) return MP_IMPORT_STAT_DIR;
+    if (type == QFLI_PY_PATH_FILE) return MP_IMPORT_STAT_FILE;
     return MP_IMPORT_STAT_NO_EXIST;
 }
 
@@ -218,7 +210,7 @@ static int execute(const char *source, const char *project_dir,
         mp_sys_path = mp_obj_new_list(0, NULL);
         if (entry_file != NULL && entry_file[0] != '\0')
         {
-            const char *slash = strrchr(entry_file, '/');
+            const char *slash = qfli_py_path_last_separator(entry_file);
             if (slash != NULL && slash > entry_file)
                 mp_obj_list_append(mp_sys_path,
                     mp_obj_new_str(entry_file, (size_t)(slash - entry_file)));
@@ -354,7 +346,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
      * 两个线程同时跑会互相踩。NAPI 侧可能从不同线程进来（平台线程 /
      * worker），所以这里必须锁。
      */
-    pthread_mutex_lock(&g_lock);
+    qfli_py_runtime_lock();
 
     /*
      * 设 GC 扫栈的「顶」。
@@ -378,7 +370,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     if (ensure_heap(heap_kb) != 0)
     {
-        pthread_mutex_unlock(&g_lock);
+        qfli_py_runtime_unlock();
         result = make_result(1, "", "内存不足：申请 MicroPython 的 GC 堆失败。");
         return result;
     }
@@ -397,7 +389,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
         qfli_py_file_end();
         mp_deinit();
-        pthread_mutex_unlock(&g_lock);
+        qfli_py_runtime_unlock();
         return result;
     }
 
@@ -406,7 +398,7 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
 
     qfli_py_file_end();
     mp_deinit();
-    pthread_mutex_unlock(&g_lock);
+    qfli_py_runtime_unlock();
     return result;
 }
 
