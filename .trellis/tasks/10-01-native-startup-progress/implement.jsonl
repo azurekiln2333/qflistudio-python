@@ -1,0 +1,5 @@
+{"file":".trellis/tasks/10-01-native-startup-progress/prd.md","reason":"Authorized startup requirements"}
+{"file":".trellis/tasks/10-01-native-startup-progress/design.md","reason":"Platform ownership and shared progress/first-frame contract"}
+{"file":".trellis/tasks/10-01-native-startup-progress/implement.md","reason":"Build and device boundaries"}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"App bootstrap and profile boundaries"}
+{"file":".trellis/spec/backend/android-build.md","reason":"Android entry/runtime preservation and build environment"}

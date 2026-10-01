@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="startup_background">#111418</color>
+    <color name="startup_progress">#9ECAFF</color>
+    <color name="startup_progress_track">#00497E</color>
+</resources>

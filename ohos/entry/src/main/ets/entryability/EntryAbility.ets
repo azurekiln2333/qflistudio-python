@@ -17,6 +17,8 @@ import { handlePickerCall, isPickerMethod } from './PickerBridge';
 
 const CHANNEL_PLATFORM = 'qflistudio/platform';
 const CHANNEL_HUAWEI = 'qflistudio/huawei_account';
+const EVENT_STARTUP_PROGRESS = 'EVENT_STARTUP_PROGRESS';
+const STARTUP_PROGRESS_KEY = 'pyflowStartupProgress';
 
 export default class EntryAbility extends FlutterAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
@@ -44,6 +46,7 @@ export default class EntryAbility extends FlutterAbility {
     registerQfliPyNativeChannel(flutterEngine)
 
     const abilityContext = this.context as common.UIAbilityContext;
+    AppStorage.setOrCreate(STARTUP_PROGRESS_KEY, 0);
 
     // 通用平台能力：打开系统浏览器（HTML 预览用）。
     const platformChannel = new MethodChannel(
@@ -52,7 +55,17 @@ export default class EntryAbility extends FlutterAbility {
     );
     platformChannel.setMethodCallHandler({
       onMethodCall(call: MethodCall, result: MethodResult): void {
-        if (call.method === 'openUrl') {
+        if (call.method === 'startupProgress') {
+          const progress = call.argument('progress') as number;
+          if (typeof progress === 'number' && Number.isFinite(progress)) {
+            const boundedProgress = Math.max(0, Math.min(1, progress));
+            AppStorage.setOrCreate(STARTUP_PROGRESS_KEY, boundedProgress);
+            abilityContext.eventHub.emit(EVENT_STARTUP_PROGRESS, boundedProgress);
+            result.success(null);
+          } else {
+            result.error('INVALID_PROGRESS', 'Startup progress must be a finite number', null);
+          }
+        } else if (call.method === 'openUrl') {
           const url = call.argument('url') as string;
           const want: Want = {
             action: 'ohos.want.action.viewData',

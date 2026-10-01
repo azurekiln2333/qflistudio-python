@@ -1,15 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'package:qfli_studio_core/app.dart';
 import 'package:qfli_studio_core/services/project_templates.dart';
 import 'package:qfli_studio_core/services/studio_profile.dart';
-import 'package:qfli_studio_core/splash_screen.dart';
 import 'package:qfli_studio_core/store/auth_store.dart';
 import 'package:qfli_studio_core/store/project_store.dart';
 import 'package:qfli_studio_core/store/settings_store.dart';
 
+import 'app_startup.dart';
 import 'python_runner.dart';
 import 'python_tools_page.dart';
 
@@ -35,7 +33,7 @@ const StudioProfile pythonProfile = StudioProfile(
   entryFileNames: ['main.py', 'src/main.py'],
 );
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 在 runApp 之前定档。
@@ -45,17 +43,11 @@ void main() async {
   final auth = AuthStore();
   final settings = SettingsStore();
   final ready = ValueNotifier<bool>(false);
-  // 先 runApp 品牌启动页（与原生遮罩同色，无白屏），数据后台并行加载。
-  runApp(QfliApp(store: store, auth: auth, settings: settings, ready: ready));
-  // 首帧提交后再做磁盘/插件初始化，避免与首帧构建争用主 isolate。
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    unawaited(
-      AppBootstrap.run(
-        store: store,
-        auth: auth,
-        settings: settings,
-        ready: ready,
-      ),
-    );
-  });
+  await runWithAppStartup(
+    app: QfliApp(store: store, auth: auth, settings: settings, ready: ready),
+    store: store,
+    auth: auth,
+    settings: settings,
+    ready: ready,
+  );
 }

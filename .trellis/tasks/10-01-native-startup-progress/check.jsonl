@@ -1,0 +1,6 @@
+{"file":".trellis/tasks/10-01-native-startup-progress/prd.md","reason":"Full startup acceptance scope"}
+{"file":".trellis/tasks/10-01-native-startup-progress/design.md","reason":"First-frame and listener/channel lifetime contracts"}
+{"file":".trellis/tasks/10-01-native-startup-progress/implement.md","reason":"Verification commands and platform limits"}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"Flutter quality gate"}
+{"file":".trellis/spec/frontend/native-startup.md","reason":"Verified cross-platform startup and system splash handoff contract"}
+{"file":".trellis/spec/backend/android-build.md","reason":"APK/emulator and native registration checks"}
