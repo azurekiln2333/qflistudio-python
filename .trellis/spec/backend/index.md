@@ -1,53 +1,44 @@
 # Backend Development Guidelines
 
-> Best practices for backend development in this project.
-
----
-
-## Overview
-
-This directory contains guidelines for backend development. Fill in each file with your project's specific conventions.
-
----
+This app embeds MicroPython and adapts it to Flutter through native bridges or
+FFI. Shared persistence belongs to adjacent `qfli_studio_core`. There is no
+app-owned HTTP service or database.
 
 ## Guidelines Index
 
 | Guide | Description | Status |
-|-------|-------------|--------|
-| [Native Python Runtime](./native-python-runtime.md) | C VM, file I/O, MethodChannel and verification contracts | Implemented |
-| [Python FFI](./python-ffi.md) | Desktop/Apple packaging, C ownership and Windows reader contract | Implemented |
-| [Android Build](./android-build.md) | NDK, JVM budgets, APK and emulator verification | Implemented |
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Database Guidelines](./database-guidelines.md) | ORM patterns, queries, migrations | To fill |
-| [Error Handling](./error-handling.md) | Error types, handling strategies | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Logging Guidelines](./logging-guidelines.md) | Structured logging, log levels | To fill |
+| --- | --- | --- |
+| [Native Python Runtime](./native-python-runtime.md) | VM, I/O, lifetime, channel and verification | Documented |
+| [Python FFI](./python-ffi.md) | Desktop/Apple packaging, C ownership, Windows reader | Documented |
+| [Android Build](./android-build.md) | NDK, JVM budgets, APK and installed-runtime checks | Documented |
+| [Directory Structure](./directory-structure.md) | Native, adapter, generated and shared ownership | Documented |
+| [Local Persistence](./database-guidelines.md) | Shared JSON stores/project files; no ORM/migrations | Documented |
+| [Error Handling](./error-handling.md) | Program failures, unavailable backends and cleanup | Documented |
+| [Quality Guidelines](./quality-guidelines.md) | Real native evidence and review/commit boundaries | Documented |
+| [Logging Guidelines](./logging-guidelines.md) | Program streams, platform tags and evidence | Documented |
 
----
-
-## How to Fill These Guidelines
-
-For each guideline file:
-
-1. Document your project's **actual conventions** (not ideals)
-2. Include **code examples** from your codebase
-3. List **forbidden patterns** and why
-4. Add **common mistakes** your team has made
-
-The goal is to help AI assistants and new team members understand how YOUR project works.
-
----
-
-**Language**: All documentation should be written in **English**.
+Status describes documentation, not a claim that every target device passed
+current release validation. Record actual outcomes in the task.
 
 ## Pre-Development Checklist
 
-Read `native-python-runtime.md` for changes in native C/C++, ArkTS bridges,
-or the Python runner. Read `../frontend/python-workflow.md` when UI is involved.
-Read `python-ffi.md` for FFI, desktop/Apple packaging and Windows port changes.
+1. Read [Directory Structure](./directory-structure.md),
+   [Error Handling](./error-handling.md) and [Quality Guidelines](./quality-guidelines.md).
+2. Read [Native Python Runtime](./native-python-runtime.md) for C/C++, ArkTS,
+   channel, cancellation, artifact or runner changes.
+3. Read [Python FFI](./python-ffi.md) for bindings/desktop/Apple work and
+   [Android Build](./android-build.md) for JNI/Gradle/package changes.
+4. Read [Local Persistence](./database-guidelines.md) for shared file ownership
+   and [Logging Guidelines](./logging-guidelines.md) for diagnostics.
+5. Read [Python Workflow](../frontend/python-workflow.md) when UI is involved
+   and the [shared thinking guides](../guides/index.md).
+6. Confirm exact repository, worker ownership and mirrored paths. Coordinate
+   shared-core changes with other consumers before editing.
 
 ## Quality Check
 
-Follow the native runtime spec's test section: real host C VM, Flutter checks,
-ARM64 build/dependency scan, ArkTS copy hashes, signed HAP and device self-check.
-Record missing device evidence explicitly and keep unfinished tasks active.
+Run focused regressions, full Flutter analyzer/tests and applicable real native
+checks. Packaging additionally requires dependency/ABI inspection and separate
+installed-device evidence. Compare ArkTS hashes. Record unavailable hosts/devices;
+a successful build does not close their runtime gates. Maintain English docs
+with concrete source/test references.
