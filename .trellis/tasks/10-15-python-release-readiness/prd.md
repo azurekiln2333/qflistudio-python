@@ -39,3 +39,13 @@ Prepare QFLIPyFlow for storefront submission by verifying the complete local Pyt
 ## Scope boundaries
 
 No changes to sibling language apps, no mass deletion, no blanket Git staging, no remote Git push/store publication. Shared-core modifications require exact file/segment ownership and cross-workspace coordination. Existing custom content is retained.
+
+### Authorized Git publication — 2026-10-16
+
+The user subsequently supplied five Python repository URLs (GitHub, Gitee,
+GitLab, GitCode and CNB) and explicitly requested configuration and push.
+That instruction supersedes the no-remote-push boundary for these five Python
+destinations. Publish the committed release work and a safe fast-forward of
+`main`; preserve unrelated dirty files and do not force-push. Configuration
+details are in `research/git-mirrors.md`. Store publication and sibling/core
+repository pushes remain outside this request.
