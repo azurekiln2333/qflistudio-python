@@ -6,9 +6,11 @@ import 'package:qfli_studio_core/services/studio_profile.dart';
 import 'package:qfli_studio_core/store/auth_store.dart';
 import 'package:qfli_studio_core/store/project_store.dart';
 import 'package:qfli_studio_core/store/settings_store.dart';
+import 'package:qfli_studio_core/terminal/shell/sandbox_shell_backend.dart';
 
 import 'app_startup.dart';
 import 'python_runner.dart';
+import 'python_terminal.dart';
 import 'python_tools_page.dart';
 
 /// 本 App 的产品名。窗口标题、任务切换器和应用内顶栏都读它。
@@ -31,7 +33,16 @@ const StudioProfile pythonProfile = StudioProfile(
   supportedFileExtensions: ['.py', '.mpy'],
   // main.py 排在默认入口表前面，保证本版一定先命中它。
   entryFileNames: ['main.py', 'src/main.py', 'main.mpy', 'src/main.mpy'],
+  // 终端命令挂钩：让内置终端（独立终端与编辑器终端共用此挂钩）能手动
+  // 跑 `python main.py`，复用运行按钮同一条内嵌 MicroPython 路径。
+  // 包一层是因为 [pythonTerminalDelegate] 还带可注入的可选参数（测试用），
+  // 不能直接当作无参 tear-off 赋给档位。
+  terminalCommandDelegate: _pythonTerminalDelegate,
 );
+
+/// 档位用的无参包装：生产路径用默认 runner 与默认探测源。
+Future<bool> _pythonTerminalDelegate(SandboxShellBackend backend, String command) =>
+    pythonTerminalDelegate(backend, command);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
