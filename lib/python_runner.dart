@@ -185,28 +185,30 @@ class PythonProgramRunner implements ProgramRunner {
     final entry = File(entryFile);
     if (!entry.existsSync()) return null;
 
-    final fileName = p.basename(entryFile);
+    final label = commandLabel(projectPath, entryFile);
 
     final isBytecode = p.extension(entryFile).toLowerCase() == '.mpy';
     final source = isBytecode ? '' : _readText(entry);
     if (source == null) {
-      return _failure(fileName, '$_appPrefix无法读取 $fileName（编码或权限问题）。');
+      final display = p
+          .relative(entryFile, from: projectPath)
+          .replaceAll('\\', '/');
+      return _failure(label, '$_appPrefix无法读取 $display（编码或权限问题）。');
     }
 
     // 探测原生后端。每次运行都问一遍而不是缓存：一次通道往返对「按一下运行」
     // 这个频率完全无所谓，而缓存会引入跨运行的可变状态，得不偿失。
     final probe = await _probeNative();
     if (!probe.available) {
-      return _notWired(fileName, probe.detail);
+      return _notWired(label, probe.detail);
     }
     if (isBytecode && !probe.supportsArtifacts) {
-      return _failure(fileName, '$_appPrefix此运行组件不支持 .mpy 文件。');
+      return _failure(label, '$_appPrefix此运行组件不支持 .mpy 文件。');
     }
 
-    if (_useFfi || probe.supportsCancellation) {
+    if (_useFfi || probe.supportsCancellation || isBytecode) {
       return _runControlled(
-        fileName: fileName,
-        version: probe.version,
+        fileName: label,
         source: source,
         stdin: _readStdin(projectPath),
         projectPath: projectPath,
@@ -215,8 +217,7 @@ class PythonProgramRunner implements ProgramRunner {
       );
     }
     return _runNative(
-      fileName: fileName,
-      version: probe.version,
+      fileName: label,
       source: source,
       stdin: _readStdin(projectPath),
       projectPath: projectPath,
@@ -224,9 +225,30 @@ class PythonProgramRunner implements ProgramRunner {
     );
   }
 
+  /// 终端里显示的调用行，形如 `python src/main.py`。
+  ///
+  /// 只是**展示**：它不是一条真去执行的 shell 命令，也不能被当成命令解析。
+  /// 用命令风格是为了让编辑器终端里的运行记录和用户自己敲的命令看起来一致；
+  /// 路径是项目相对路径，绝对路径在手机上太长，会把一行挤满。
+  /// 入参是绝对路径且项目根目录已知时给出相对路径，否则退回首选的绝对路径。
+  /// 含空格或非常规字符的路径用单引号包起来，保证它仍然是「一个可读的参数」，
+  /// 而不是让人以为参数被切成了两段。
+  static String commandLabel(String projectPath, String entryFile) {
+    String display = entryFile;
+    if (projectPath.isNotEmpty) {
+      final relative = p.relative(entryFile, from: projectPath);
+      // p.relative 在跨盘符/无法相对化时会原样返回绝对路径，这时保留绝对路径。
+      if (!p.isAbsolute(relative)) display = relative;
+    }
+    display = display.replaceAll('\\', '/');
+    if (display.contains(' ') || display.contains("'")) {
+      display = "'${display.replaceAll("'", "'\\''")}'";
+    }
+    return 'python $display';
+  }
+
   Future<ProgramRunResult> _runControlled({
     required String fileName,
-    required String version,
     required String source,
     required String stdin,
     required String projectPath,
@@ -281,9 +303,8 @@ class PythonProgramRunner implements ProgramRunner {
     final stderr = StreamController<String>();
     final exit = Completer<int>();
     unawaited(_completeControlled(pending, stdout, stderr, exit));
-    final label = version.isEmpty ? '内嵌 MicroPython' : 'MicroPython $version';
     return ProgramRunResult(
-      title: '运行 $fileName（$label）',
+      title: fileName,
       stdout: stdout.stream,
       stderr: stderr.stream,
       exitCode: exit.future,
@@ -326,7 +347,6 @@ class PythonProgramRunner implements ProgramRunner {
   /// 走原生 .so。
   Future<ProgramRunResult> _runNative({
     required String fileName,
-    required String version,
     required String source,
     required String stdin,
     required String projectPath,
@@ -390,15 +410,31 @@ class PythonProgramRunner implements ProgramRunner {
       stderr.close();
     });
 
-    // 标题里带上真实版本号（形如 "1.24.1 (ecfdd5d)"）：它是从 .so 里问出来的，
-    // 不是写死的常量，顺手就当了一次后端身份的自证。
-    final label = version.isEmpty ? '内嵌 MicroPython' : 'MicroPython $version';
-
     return ProgramRunResult(
-      title: '运行 $fileName（$label）',
+      title: fileName,
       stdout: stdout.stream,
       stderr: stderr.stream,
       exitCode: Future<int>.value(raw['exitCode'] as int),
+    );
+  }
+
+  /// 问原生后端「你能不能跑」，并拿回不能跑的原因。
+  ///
+  /// 公开的运行时信息查询（命令行 `--version`、终端启动横幅这类只读探测用）。
+  /// 它**不**读源码、**不**执行任何文件，只走一次 `available` 通道往返；
+  /// 版本号来自 `.so` 里的上游 MicroPython 头文件，不是写死的常量。
+  ///
+  /// 复用自己的 [_probeNative]：其它调用方不要再复制一份探测逻辑，
+  /// 否则通道协议变了就会同时出现两个不一致的真相。
+  Future<PythonRuntimeInfo> runtimeInfo() async {
+    final probe = await _probeNative();
+    return PythonRuntimeInfo(
+      available: probe.available,
+      version: probe.version,
+      detail: probe.detail,
+      supportsCancellation: probe.supportsCancellation,
+      supportsArtifacts: probe.supportsArtifacts,
+      transport: _useFfi ? 'ffi' : 'methodChannel',
     );
   }
 
@@ -466,7 +502,7 @@ class PythonProgramRunner implements ProgramRunner {
       controller.close();
     });
     return ProgramRunResult(
-      title: '运行 $fileName',
+      title: fileName,
       stdout: controller.stream,
       stderr: const Stream<String>.empty(),
       exitCode: Future<int>.value(notRunExitCode),
@@ -486,7 +522,7 @@ class PythonProgramRunner implements ProgramRunner {
       controller.close();
     });
     return ProgramRunResult(
-      title: '运行 $fileName',
+      title: fileName,
       stdout: const Stream<String>.empty(),
       stderr: controller.stream,
       exitCode: Future<int>.value(notRunExitCode),
@@ -555,6 +591,39 @@ class PythonCompilationResult extends PythonSyntaxResult {
     this.artifactPath = '',
   });
   final String artifactPath;
+}
+
+/// 一次性运行时信息（`--version` / 启动横幅这类只读探测用）。
+///
+/// 字段直接来自原生 `available` 的返回，不在这里加工：`available=false` 时的
+/// [detail] 就是「没打进 HAP」或「打进去但 dlopen 失败」的原始原因。
+class PythonRuntimeInfo {
+  const PythonRuntimeInfo({
+    required this.available,
+    this.version = '',
+    this.detail = '',
+    this.supportsCancellation = false,
+    this.supportsArtifacts = false,
+    this.transport = '',
+  });
+
+  /// 原生执行模块是否可用。
+  final bool available;
+
+  /// MicroPython 版本，形如 `1.24.1 (ecfdd5d)`；拿不到时为空串。
+  final String version;
+
+  /// 不可用时的原因；可用时为空串。
+  final String detail;
+
+  /// 是否支持运行中取消（决定 Dart 侧走受控还是旧链路）。
+  final bool supportsCancellation;
+
+  /// 是否支持编译产物/字节码（`compile` 与 `.mpy` 执行的前提）。
+  final bool supportsArtifacts;
+
+  /// 实际走的传输：`ffi` 或 `methodChannel`。
+  final String transport;
 }
 
 /// 原生后端的探测结果。

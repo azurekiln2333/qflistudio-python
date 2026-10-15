@@ -161,7 +161,7 @@ void main() {
       write('main.py', 'print(1)');
       final result = await runEntry('main.py');
       expect(result, isNotNull, reason: '运行后端没有接管本语言文件');
-      expect(result!.title, '运行 main.py');
+      expect(result!.title, 'python main.py');
       expect(await result.stdout.toList(), [
         '${_appPrefix}Python 运行组件不可用，请重新安装应用。',
       ]);
@@ -225,19 +225,17 @@ void main() {
 
       final result = await runEntry('main.py');
 
-      // 标题带版本号，所以这里是 'MicroPython 1.24.1 (ecfdd5d)'，
-      // 「内嵌 MicroPython」只是拿不到版本号时的退路。
-      expect(result!.title, contains('MicroPython'));
+      // 命令风格的标题：只有 python 和项目相对路径，不带版本号、不带运行结果散文。
+      expect(result!.title, 'python main.py');
       expect(await result.stdout.toList(), ['hi']);
       expect(await result.exitCode, 0);
       // 先探测、再执行：没有探测结果就不该盲调 run。
       expect(calls.map((call) => call.method), ['available', 'run']);
     });
 
-    test('标题带上从 .so 里问出来的真实版本号', () async {
-      // 版本号是后端身份的自证：它来自 MicroPython 自己的头文件，不是写死的
-      // 常量。显示出来，用户一眼就能判断跑的是不是上游那个实现。
-      write('main.py', 'print(1)');
+    test('标题在受控与旧接线下完全一致（不含版本号）', () async {
+      // 版本号不再进标题：它属于后端自证，不该在每次运行的命令行里重复出现。
+      write('src/main.py', 'print(1)');
       _installNativeHandler((call) async {
         if (call.method == 'available') {
           return _probe(version: '1.24.1 (ecfdd5d)');
@@ -245,12 +243,78 @@ void main() {
         return _outcome();
       });
 
-      final result = await runEntry('main.py');
+      final controlled = await runEntry('src/main.py');
+      expect(controlled!.title, 'python src/main.py');
+      expect(controlled.title, isNot(contains('MicroPython')));
 
-      expect(result!.title, contains('MicroPython 1.24.1 (ecfdd5d)'));
+      // 旧接线（不支持取消）：走 _runNative，标题契约必须相同。
+      _installNativeHandler((call) async {
+        if (call.method == 'available') {
+          return {
+            'available': true,
+            'version': '1.24.1 (ecfdd5d)',
+            'detail': '',
+          };
+        }
+        return _outcome(output: '1\n');
+      });
+      final legacy = await runEntry('src/main.py');
+      expect(legacy!.title, 'python src/main.py');
+      expect(legacy.title, isNot(contains('MicroPython')));
     });
 
-    test('available 只回 bool 的旧接线也能跑（两份 .ets 副本没同步时）', () async {
+    test('标题用项目相对路径，嵌套目录与空格仍然可读', () async {
+      write('pkg/sub dir/my main.py', 'print(1)');
+      _installNativeHandler((call) async {
+        if (call.method == 'available') return _probe();
+        return _outcome();
+      });
+
+      final result = await runEntry('pkg/sub dir/my main.py');
+
+      expect(result!.title, "python 'pkg/sub dir/my main.py'");
+    });
+
+    test('.mpy 入口使用同一条命令风格标题', () async {
+      final artifact = File(p.join(project.path, 'main.mpy'))
+        ..writeAsBytesSync([77, 6, 0, 31]);
+      _installNativeHandler((call) async {
+        if (call.method == 'available') {
+          return {'available': true, 'runControl': true, 'bytecode': true};
+        }
+        if (call.method == 'prepareRun') return 'bytecode-run';
+        expect(call.method, 'run');
+        expect((call.arguments as Map)['bytecodeFile'], artifact.path);
+        return _outcome(output: '42\n');
+      });
+
+      final result = await runEntry('main.mpy');
+
+      expect(result!.title, 'python main.mpy');
+    });
+
+    test('声称支持字节码但没有 runControl 时，.mpy 仍走受控链路', () async {
+      // 不一致的探测结果（bytecode=true, runControl 缺）不能把 .mpy 落到会忽略
+      // bytecodeFile 的旧链路上——那会“成功”打印出源码根本没跑的结果。
+      final artifact = File(p.join(project.path, 'main.mpy'))
+        ..writeAsBytesSync([77, 6, 0, 31]);
+      _installNativeHandler((call) async {
+        if (call.method == 'available') {
+          return {'available': true, 'bytecode': true};
+        }
+        if (call.method == 'prepareRun') return 'mpy-run';
+        expect(call.method, 'run');
+        expect((call.arguments as Map)['bytecodeFile'], artifact.path);
+        return _outcome(output: '42\n');
+      });
+
+      final result = await runEntry('main.mpy');
+
+      expect(await result!.stdout.toList(), ['42']);
+      expect(await result.exitCode, 0);
+    });
+
+    test('只回 bool 的旧接线（两份 .ets 副本没同步时）也能跑', () async {
       write('main.py', 'print("hi")');
       _installNativeHandler((call) async {
         if (call.method == 'available') return true;
@@ -260,8 +324,8 @@ void main() {
       final result = await runEntry('main.py');
 
       expect(await result!.stdout.toList(), ['hi']);
-      // 拿不到版本号就退回泛称，不能因为少了字段就把整次运行判成失败。
-      expect(result.title, contains('内嵌 MicroPython'));
+      // 少了 runControl/bytecode 字段就只能走旧链路，但标题契约不能漂。
+      expect(result.title, 'python main.py');
     });
 
     test('input.txt 整段原样喂给解释器，不按行切', () async {
@@ -389,7 +453,7 @@ void main() {
 
       final result = await runEntry('main.py');
 
-      expect(result!.title, '运行 main.py');
+      expect(result!.title, 'python main.py');
       final lines = await result.stdout.toList();
       // ArkTS 侧给的原因要原样透出来——它比 Dart 侧猜的准。
       expect(
@@ -420,7 +484,7 @@ void main() {
       expect(lines.single, startsWith(_appPrefix));
       expect(lines.single, contains('MUSL-LDSO'));
       // 是「坏了」不是「没有」：标题不能退回「缺少执行后端」。
-      expect(result.title, '运行 main.py');
+      expect(result.title, 'python main.py');
       expect(await result.exitCode, _notRun);
     });
 
@@ -452,6 +516,57 @@ void main() {
     });
   });
 
+  group('运行时信息探测（--version / 启动横幅用）', () {
+    test('原生可用时带回真实版本与能力位', () async {
+      _installNativeHandler((call) async {
+        expect(call.method, 'available');
+        return {
+          'available': true,
+          'version': '1.24.1 (ecfdd5d)',
+          'detail': '',
+          'runControl': true,
+          'bytecode': true,
+        };
+      });
+
+      final info = await _channelRunner.runtimeInfo();
+
+      expect(info.available, isTrue);
+      expect(info.version, '1.24.1 (ecfdd5d)');
+      expect(info.detail, isEmpty);
+      expect(info.supportsCancellation, isTrue);
+      expect(info.supportsArtifacts, isTrue);
+      expect(info.transport, 'methodChannel');
+    });
+
+    test('原生不可用时原样带回原因，不抛异常', () async {
+      _installNativeHandler((call) async {
+        return {
+          'available': false,
+          'version': '',
+          'detail': 'libqfli_py.so 没能加载',
+        };
+      });
+
+      final info = await _channelRunner.runtimeInfo();
+
+      expect(info.available, isFalse);
+      expect(info.detail, contains('libqfli_py.so'));
+      expect(info.version, isEmpty);
+      expect(info.supportsCancellation, isFalse);
+    });
+
+    test('通道缺失时报告不可用而不是抛异常', () async {
+      // 没装 .so 的构建里 invokeMethod 会抛 MissingPluginException。
+      _installNativeHandler(null);
+
+      final info = await _channelRunner.runtimeInfo();
+
+      expect(info.available, isFalse);
+      expect(info.version, isEmpty);
+    });
+  });
+
   group('运行按钮分流', () {
     test('点运行拿到结果，而不是掉进「移动端跑不了」的兜底提示', () async {
       write('main.py', 'print(1)');
@@ -461,7 +576,7 @@ void main() {
       );
       expect(result, isNotNull);
       expect(result!.hint, isNull, reason: '后端接管了就不该走兜底提示');
-      expect(result.title, '运行 main.py');
+      expect(result.title, 'python main.py');
     });
   });
 }
