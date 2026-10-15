@@ -1,0 +1,4 @@
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"Python runner, tools and real project data contracts"}
+{"file":".trellis/spec/backend/native-python-runtime.md","reason":"Native execution, cancellation and bytecode ownership"}
+{"file":".trellis/spec/frontend/content-code-import.md","reason":"Curriculum pipeline and preservation invariants"}
+{"file":".trellis/tasks/10-15-python-release-readiness/design.md","reason":"Explicit workspace and worker boundaries"}

@@ -1,0 +1,5 @@
+{"file":".trellis/spec/backend/native-python-runtime.md","reason":"Real VM and platform verification requirements"}
+{"file":".trellis/spec/backend/android-build.md","reason":"Android build and device evidence gates"}
+{"file":".trellis/spec/backend/python-ffi.md","reason":"Native DLL and isolate/cancellation verification"}
+{"file":".trellis/spec/frontend/content-code-import.md","reason":"Substantive Python curriculum and preservation checks"}
+{"file":".trellis/tasks/10-15-python-release-readiness/prd.md","reason":"Release acceptance criteria and authorized scope"}
