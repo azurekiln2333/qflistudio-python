@@ -33,21 +33,3 @@ Prepare QFLIPyFlow for storefront submission by verifying the complete local Pyt
 ## Scope boundaries
 
 No changes to sibling language apps, no mass deletion, no blanket Git staging, no remote Git push/store publication. Shared-core modifications require exact file/segment ownership and cross-workspace coordination. Existing custom content is retained.
-
-## Goal
-
-Audit standalone and editor terminals, offline storefront capabilities, practical curriculum, shared-core contracts, and Android/OHOS build and device evidence in qfli_python only.
-
-## Requirements
-
-- TBD
-
-## Acceptance Criteria
-
-- [ ] TBD
-
-## Notes
-
-- Keep `prd.md` focused on requirements, constraints, and acceptance criteria.
-- Lightweight tasks can remain PRD-only.
-- For complex tasks, add `design.md` for technical design and `implement.md` for execution planning before `task.py start`.
