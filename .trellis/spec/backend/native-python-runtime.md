@@ -16,11 +16,14 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text,
 void qfli_py_result_free(QfliPyRunResult *result);
 ```
 
-NAPI exports `run(source, stdin, heapKb, projectPath, entryFile, compileOnly)`
-and `version()`. MethodChannel `qfli_py/native` handles `available`, `run`,
-and `checkSyntax`. The latter maps to `compileOnly=true`.
+NAPI exports asynchronous `run(source, stdin, heapKb, projectPath, entryFile,
+compileOnly, token, artifactOutput, bytecodeFile)` plus `version()`,
+`createCancel()`, `cancel(token)` and `freeCancel(token)`. MethodChannel
+`qfli_py/native` handles `available`, `prepareRun`, `cancel`, `run`,
+`checkSyntax` and `compile`. Syntax checking and compilation use compile-only
+execution; only compilation supplies an artifact output path.
 
-The legacy C/NAPI ABI remains available. Controlled callers use
+The legacy C ABI remains available. Controlled callers use
 `qfli_py_execute[_into](..., compile_only, token, artifact_output, bytecode_file)`.
 Create/request/free cancellation tokens through `qfli_py_cancel_*`. The caller
 retains its token until queued or executing work has completed. Native VM state
@@ -33,8 +36,22 @@ Android probe includes `runControl: true` and `bytecode: true`. `prepareRun`
 registers a token and returns an opaque string ID before `run` is submitted.
 `run` accepts `runId`; `cancel(runId)` signals it directly on the platform
 thread. Registry lookup, signaling, removal and token freeing share one lock.
-Completion removes the ID, making late cancellation harmless. OHOS retains its
-legacy channel; these new channel capabilities are not advertised there.
+Completion removes the ID, making late cancellation harmless.
+
+OHOS detects cancellation exports before advertising `runControl`/`bytecode`.
+Its ArkTS registry maps opaque string run IDs to native cancellation tokens.
+A claimed token stays alive until its asynchronous native Promise settles;
+success, rejection and malformed native outcomes release it exactly once.
+Duplicate submission cannot claim an active ID; late cancellation is a no-op.
+NAPI queues VM execution on async work, keeping ArkTS available for stop calls.
+The C runtime mutex serializes concurrent workers. `runNative` normalizes
+legacy synchronous outcomes and converts synchronous native throws to Promise
+rejection; a channel handler must always complete its result.
+
+All NAPI string arguments reject NUL. Supplied optional arguments must match
+their declared types. Heap sizes are finite integral values in `[0, INT32_MAX]`;
+native token values are nonnegative safe integers owned by the trusted registry.
+Numeric shape validation is not a security boundary for arbitrary addresses.
 
 Platform adapters are HarmonyOS ArkTS/NAPI and Android Kotlin/JNI. Android
 calls the same C API on one executor with a 1 MiB stack and returns results
@@ -150,6 +167,13 @@ not an isolation mechanism for untrusted Python code.
   dynamic dependencies are `libace_napi.z.so`, `libhilog_ndk.z.so`, and `libc.so`.
 - Keep semantic generated port/qstr changes; remove incidental line-ending
   and build-date changes before staging.
+- `node native/tests/ohos_channel_test.cjs`: execute the real ArkTS handler
+  with native/platform doubles to verify capabilities, sync/async failure
+  cleanup, cancellation ownership and artifact argument routing. Compiler
+  discovery accepts `QFLI_ARKTS_TYPESCRIPT`; no dependency download occurs.
+  This is channel behavior evidence, separate from actual NAPI/device execution.
+- The Flutter OHOS bridge test checks byte parity of both source copies;
+  do not replace behavior coverage with source-string presence assertions.
 - `test/python_lifecycle_test.dart`: real loop/sleep interruption, pre-start
   and queued stop, token isolation, recovery, early runner result, upstream
   artifacts without entry/imported source and rejected bytecode/path escapes.
