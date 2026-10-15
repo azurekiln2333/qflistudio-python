@@ -82,10 +82,21 @@ Also fixed realm-sensitive error text: `errorText()` duck-types `.message` inste
 
 ## Freeze status (2026-10-15)
 
-Owner scope is frozen. Final: `ohos_channel_test.cjs` **19/19**; Dart focused
+Owner scope is frozen. Final: `ohos_channel_test.cjs` **20/20**; Dart focused
 **56/56**; `flutter analyze` on owner files clean; ArkTS copies identical
-(`640EBFB5...`); NAPI compiles/links with `check_so_deps` OK; shared C untouched.
+(`65FEF0F8...`); NAPI compiles/links with `check_so_deps` OK; shared C untouched.
 Ready for the coordinator's `native/build.ps1` + signed HAP + device self-check.
+
+## Review round 4 (final closure) resolved
+
+- `prepareRun` now gates on the full `nativeRunControlReady()` (create + cancel +
+  free) before allocating a token; it no longer passes with a partial adapter, so it
+  cannot register a session that can never be cancelled or freed.
+- NAPI `Run` holds the not-yet-queued `RunWork` in a `std::unique_ptr`, `release()`d only
+  after a successful `napi_queue_async_work`; `new`/string `std::bad_alloc` is converted
+  to a JS error instead of crossing the NAPI boundary. No shared C/ABI change.
+- Harness gained one case: a partial cancellation module rejects a direct `prepareRun`
+  and performs no allocation/free/cancel. No other refactor.
 
 ## Not verified by me (owner gates)
 

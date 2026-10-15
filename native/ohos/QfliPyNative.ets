@@ -248,6 +248,13 @@ const sessions = new Map<string, PyRunSession>();
 let nextRunId = 0;
 
 function prepareRun(): string {
+  // 必须检完整三项（create/cancel/free）才允许分配：只检 create 的话，
+  // 一个缺 cancel/free 的残缺模块会在分配后无法释放（token 泄漏）或在
+  // 提交时才失败，留下一个已登记的死会话。nativeRunControlReady() 就是
+  // available 广告受控能力时用的同一判据，两处保持一致。
+  if (!nativeRunControlReady()) {
+    throw new Error('原生运行时不支持取消');
+  }
   const create = nativeModule?.createCancel;
   if (typeof create !== 'function') {
     throw new Error('原生运行时不支持取消');

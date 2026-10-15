@@ -29,6 +29,9 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
+#include <new>
+#include <stdexcept>
 #include <string>
 
 #include "qfli_py_bridge.h"
@@ -237,6 +240,94 @@ void Complete(napi_env env, napi_status status, void *data)
 }
 
 /*
+ * 解析并严格校验 run 的 9 个参数。
+ *
+ * 可选参数一旦**给了**就必须合法：给了非字符串/非数字还默默用默认值，
+ * 会让调用方以为参数生效了（比如 artifactOutput 拼错类型→编译产物没写），
+ * 最后以“编译成功但找不到 .mpy”的形式在别处爆。宁可在这里明确报错。
+ * 校验失败时抛出 JS 错误（而不是返回 false），让 Run 里的 RAII 统一收尾。
+ */
+void ApplyArguments(napi_env env, size_t argc, napi_value *argv, RunWork *work)
+{
+    if (argc < 1 || !GetStringArg(env, argv[0], &work->source))
+    {
+        napi_throw_type_error(env, nullptr,
+            "run(): source 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid source");
+    }
+    if (argc >= 2 && !GetStringArg(env, argv[1], &work->stdin_text))
+    {
+        napi_throw_type_error(env, nullptr, "run(): stdin 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid stdin");
+    }
+    if (argc >= 3 && !GetIntArg(env, argv[2], &work->heap_kb))
+    {
+        napi_throw_range_error(env, nullptr, "run(): heapKb 必须是 32 位整数");
+        throw std::runtime_error("invalid heapKb");
+    }
+    if (argc >= 4 && !GetStringArg(env, argv[3], &work->project_path))
+    {
+        napi_throw_type_error(env, nullptr,
+            "run(): projectPath 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid projectPath");
+    }
+    if (argc >= 5 && !GetStringArg(env, argv[4], &work->entry_file))
+    {
+        napi_throw_type_error(env, nullptr,
+            "run(): entryFile 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid entryFile");
+    }
+    if (argc >= 6 && !GetBoolArg(env, argv[5], &work->compile_only))
+    {
+        napi_throw_type_error(env, nullptr, "run(): compileOnly 必须是布尔值");
+        throw std::runtime_error("invalid compileOnly");
+    }
+    if (argc >= 7)
+    {
+        int64_t token = 0;
+        if (!GetInt64Arg(env, argv[6], &token))
+        {
+            napi_throw_type_error(env, nullptr, "run(): token 必须是非负安全整数");
+            throw std::runtime_error("invalid token");
+        }
+        work->token = reinterpret_cast<QfliPyCancel *>(static_cast<intptr_t>(token));
+    }
+    if (argc >= 8 && !GetStringArg(env, argv[7], &work->artifact_output))
+    {
+        napi_throw_type_error(env, nullptr,
+            "run(): artifactOutput 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid artifactOutput");
+    }
+    if (argc >= 9 && !GetStringArg(env, argv[8], &work->bytecode_file))
+    {
+        napi_throw_type_error(env, nullptr,
+            "run(): bytecodeFile 必须是不含 NUL 的字符串");
+        throw std::runtime_error("invalid bytecodeFile");
+    }
+}
+
+/*
+ * 分配 RunWork 并把可能抛出的内存异常转成 JS 错误。
+ *
+ * C++ 异常不能跨越 NAPI 边界：让它冒泡到 ArkTS/native 调用点会直接终止进程，
+ * 而这里能触发的只有 bad_alloc（源码/输入的 std::string 拷贝、napi 内部
+ * 缓冲在内存吃紧时才可能）。所以捕获后报一条可读错误，由 Dart 侧把它当成
+ * 一次失败运行。
+ */
+RunWork *NewWorkOrThrow(napi_env env)
+{
+    try
+    {
+        return new RunWork();
+    }
+    catch (const std::bad_alloc &)
+    {
+        napi_throw_error(env, nullptr, "run(): 内存不足，无法创建执行任务");
+        return nullptr;
+    }
+}
+
+/*
  * run(source, stdin, heapKb, projectPath, entryFile, compileOnly,
  *     token, artifactOutput, bytecodeFile) -> Promise<outcome>
  */
@@ -249,76 +340,28 @@ napi_value Run(napi_env env, napi_callback_info info)
     if (napi_get_cb_info(env, info, &argc, argv, &thisArg, nullptr) != napi_ok)
         return nullptr;
 
-    RunWork *work = new RunWork();
-
-    if (argc < 1 || !GetStringArg(env, argv[0], &work->source))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr,
-            "run(): source 必须是不含 NUL 的字符串");
-        return nullptr;
-    }
     /*
-     * 可选参数一旦**给了**就必须合法：给了非字符串/非数字还默默用默认值，
-     * 会让调用方以为参数生效了（比如 artifactOutput 拼错了类型→编译产物没写），
-     * 最后以“编译成功但找不到 .mpy”的形式在别处爆。宁可在这里明确报错。
+     * unique_ptr 守住尚未入队的 work：下面任何提前 return 或异常都会释放它。
+     * napi_queue_async_work 成功那一刻才 release()，所有权交给 async work，
+     * 之后由 Complete() 释放。这样“已分配但未入队”的 work（含其 std::string）
+     * 不会泄漏。
      */
-    if (argc >= 2 && !GetStringArg(env, argv[1], &work->stdin_text))
+    std::unique_ptr<RunWork> work(NewWorkOrThrow(env));
+    if (work == nullptr)
+        return nullptr;
+
+    try
     {
-        delete work;
-        napi_throw_type_error(env, nullptr, "run(): stdin 必须是不含 NUL 的字符串");
+        ApplyArguments(env, argc, argv, work.get());
+    }
+    catch (const std::bad_alloc &)
+    {
+        napi_throw_error(env, nullptr, "run(): 内存不足，无法读取参数");
         return nullptr;
     }
-    if (argc >= 3 && !GetIntArg(env, argv[2], &work->heap_kb))
+    catch (const std::runtime_error &)
     {
-        delete work;
-        napi_throw_range_error(env, nullptr,
-            "run(): heapKb 必须是 32 位整数");
-        return nullptr;
-    }
-    if (argc >= 4 && !GetStringArg(env, argv[3], &work->project_path))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr,
-            "run(): projectPath 必须是不含 NUL 的字符串");
-        return nullptr;
-    }
-    if (argc >= 5 && !GetStringArg(env, argv[4], &work->entry_file))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr,
-            "run(): entryFile 必须是不含 NUL 的字符串");
-        return nullptr;
-    }
-    if (argc >= 6 && !GetBoolArg(env, argv[5], &work->compile_only))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr, "run(): compileOnly 必须是布尔值");
-        return nullptr;
-    }
-    if (argc >= 7)
-    {
-        int64_t token = 0;
-        if (!GetInt64Arg(env, argv[6], &token))
-        {
-            delete work;
-            napi_throw_type_error(env, nullptr, "run(): token 必须是整数");
-            return nullptr;
-        }
-        work->token = reinterpret_cast<QfliPyCancel *>(static_cast<intptr_t>(token));
-    }
-    if (argc >= 8 && !GetStringArg(env, argv[7], &work->artifact_output))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr,
-            "run(): artifactOutput 必须是不含 NUL 的字符串");
-        return nullptr;
-    }
-    if (argc >= 9 && !GetStringArg(env, argv[8], &work->bytecode_file))
-    {
-        delete work;
-        napi_throw_type_error(env, nullptr,
-            "run(): bytecodeFile 必须是不含 NUL 的字符串");
+        /* ApplyArguments 已经设了具体的 TypeError/RangeError；这里只收尾释放。 */
         return nullptr;
     }
 
@@ -326,7 +369,6 @@ napi_value Run(napi_env env, napi_callback_info info)
     napi_value promise = nullptr;
     if (napi_create_promise(env, &work->deferred, &promise) != napi_ok)
     {
-        delete work;
         napi_throw_error(env, nullptr, "run(): 无法创建 Promise");
         return nullptr;
     }
@@ -334,19 +376,19 @@ napi_value Run(napi_env env, napi_callback_info info)
     napi_value resourceName = nullptr;
     napi_create_string_utf8(env, "qfli_py_run", NAPI_AUTO_LENGTH, &resourceName);
     if (napi_create_async_work(env, nullptr, resourceName, Execute, Complete,
-            work, &work->work) != napi_ok)
+            work.get(), &work->work) != napi_ok)
     {
         napi_reject_deferred(env, work->deferred, MakeString(env, "无法创建执行任务"));
-        delete work;
         return promise;
     }
     if (napi_queue_async_work(env, work->work) != napi_ok)
     {
         napi_delete_async_work(env, work->work);
         napi_reject_deferred(env, work->deferred, MakeString(env, "无法入队执行任务"));
-        delete work;
         return promise;
     }
+    /* 入队成功：所有权交给 async work，Complete() 负责 delete。 */
+    work.release();
     return promise;
 }
 

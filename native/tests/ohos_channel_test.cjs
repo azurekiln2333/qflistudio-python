@@ -156,6 +156,18 @@ test('partial cancellation exports do not advertise controlled execution', () =>
     assert.equal(probe.bytecode, false, `Missing ${missing}`);
   }
 });
+test('partial cancellation module rejects direct prepareRun without allocating', () => {
+  // The probe already hides the capability, but a caller that skips it must not
+  // get a registered session (or a leaked token) from an incomplete adapter.
+  for (const missing of ['createCancel', 'cancel', 'freeCancel']) {
+    const c = controlled(() => Promise.resolve(outcome));
+    delete c.native[missing];
+    const h = harness(c.native);
+    event(h.invoke('prepareRun'), 'error');
+    assert.equal(c.freed.length, 0, `Missing ${missing} must not free`);
+    assert.equal(c.cancelled.length, 0, `Missing ${missing} must not cancel`);
+  }
+});
 test('complete native adapter advertises real version and controlled capabilities', () => {
   const c = controlled(() => Promise.resolve(outcome));
   const probe = event(harness(c.native).invoke('available'), 'success').value;
