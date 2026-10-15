@@ -12,8 +12,8 @@ It does not implement a substitute Python parser or VM.
   compile the tracked embedding package and bundle the resulting DLL/SO through
   Flutter's installer. A desktop test build lives in `native/build/<platform>`.
 - iOS/macOS local pods stage the tracked C inputs in their pod root and compile
-  a static archive. App link flags retain `qfli_py_run_into`,
-  `qfli_py_result_free` and `qfli_py_version`; Dart opens process symbols.
+  a static archive. App link flags retain execution, cancellation,
+  result-freeing and version symbols; Dart opens process symbols.
 
 Windows uses UTF-8 to wide-character path conversion, canonical handle paths,
 case-aware containment, native locking and timers, and a custom module reader.
@@ -57,7 +57,16 @@ output directory when an old CMake cache belongs to another generator/toolchain.
 ## Remaining Limits
 
 MicroPython is not CPython and does not provide pip or CPython extension modules.
-The current C API buffers output and has no running-program cancellation API.
-Infinite loops cannot be stopped through the current runner. Syntax checking
-does not produce a reusable bytecode artifact. These remain explicit runtime
-requirements in the cross-product audit.
+Output is buffered until a run completes, and input comes from the finite
+project `input.txt` buffer rather than an interactive terminal.
+
+The controlled C API supports cooperative cancellation and upstream `.mpy`
+artifacts through `qfli_py_execute[_into]` and `qfli_py_cancel_*`. Desktop/Apple
+FFI and Android JNI expose these operations. The OHOS adapter's capability
+probe is authoritative for its packaged native module; callers must not infer
+support from the presence of a source file or a successful HAP build.
+
+Cancellation interrupts VM loops and supported sleeps; arbitrary blocking
+native I/O is not interruptible. Compilation writes upstream bytecode without
+executing the script, and `.mpy` execution does not require the original source.
+See [lifecycle.md](lifecycle.md) for ownership and verification contracts.
