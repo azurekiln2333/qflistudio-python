@@ -2,11 +2,11 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "QFLIPyFlow 本地 Python 开发环境"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "编辑、编译与运行本地 Python 项目"
     },
     {
       "name": "EntryAbility_label",

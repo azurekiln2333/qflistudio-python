@@ -58,6 +58,13 @@ calls the same C API on one executor with a 1 MiB stack and returns results
 on the main thread. JNI exchanges standard UTF-8 byte arrays and rejects
 embedded NUL in arguments; never pass ordinary UTF-8 to JNI modified-UTF-8 APIs.
 
+Inspect the actual HAP library entries after packaging. A selected Flutter ABI
+needs matching `libapp`, `libflutter` and the current `libqfli_py`; a leftover
+library in ignored `ohos/entry/libs/<abi>` can be packaged even when that ABI
+was not rebuilt. Preserve stale generated libraries outside the packaging tree
+before a single-ABI release build. Do not advertise an ABI with only an old
+backend SO and no matching Flutter runtime. Rebuild that ABI before testing it.
+
 ## 3. Contracts
 
 | Field | Type | Meaning |
