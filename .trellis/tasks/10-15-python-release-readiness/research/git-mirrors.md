@@ -5,7 +5,7 @@ to the five destinations below. This supersedes the audit's earlier no-push
 boundary. Scope is `D:/MyNewProjects/qfli_python` only; no shared-core or sibling
 repository is pushed by this operation.
 
-| Remote | Fetch/push URL |
+| Remote | Requested HTTPS URL (fetch) |
 | --- | --- |
 | `origin` (GitHub) | `https://github.com/azurekiln2333/qflistudio-python.git` |
 | `gitee` | `https://gitee.com/azurekiln/qflistudio-python.git` |
@@ -15,12 +15,19 @@ repository is pushed by this operation.
 
 ## Local configuration
 
-`origin` fetches from GitHub and has all five URLs as explicit push URLs.
+`origin` fetches from GitHub and has all five destinations as explicit push URLs.
 The four named secondary remotes permit independent inspection/retry.
 Repository-local `remote.pushDefault=origin` and `push.default=simple` make
 plain `git push` send the current tracked branch to all five destinations.
 Both `main` and `release/python-storefront-20261015` track the corresponding
 GitHub `origin` branch.
+
+GitLab HTTPS reads succeed but no usable HTTPS write credential was available.
+Existing SSH authentication successfully created both branches, so the GitLab
+push URL (both on `origin` and on `gitlab`) is
+`git@gitlab.com:azurekiln-team/qflistudio-python.git`. Its fetch URL remains
+the requested HTTPS address. All other push URLs use the supplied HTTPS URLs.
+No new credentials or interactive login were needed.
 
 Verify the local, untracked Git configuration with:
 
@@ -37,6 +44,9 @@ All five destinations returned no HEAD or branch refs during the initial
 release HEAD `584ff57` (16 later commits). Fast-forward local `main` to the
 latest release/documentation commit and publish both branches without force,
 then compare both remote branch OIDs with that commit on every platform.
+
+Initial pushes created both branches successfully on all five platforms;
+subsequent pushes propagate this final configuration record as well.
 
 The publication includes this configuration record and its independent review.
 Existing uncommitted OHOS icons/startup/routes/AgreementReader and local agent
