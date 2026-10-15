@@ -1,0 +1,13 @@
+# Preserve local exploratory history without publishing temporary snapshots.
+research/baseline/
+research/advanced/
+research/review-snapshots/
+research/probe-*.py
+research/review-msg-*.txt
+research/review-batch*-runtime.json
+research/review-regress.json
+research/review-audit-final.json
+research/review-final-runtime.json
+research/review-tools/_*.py
+research/review-tools/*.json
+research/review-tools/__pycache__/

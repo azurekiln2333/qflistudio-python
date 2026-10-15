@@ -1,0 +1,638 @@
+{
+  "generatedAt": "2026-10-15T10:04:19.964353Z",
+  "embeddedRuntime": "D:\\MyNewProjects\\qfli_python\\native\\build\\windows\\qfli_py_ffi.dll",
+  "embeddedVersion": "1.24.1 (ecfdd5d)",
+  "cpythonExecutable": "python",
+  "cpythonVersion": "Python 3.13.3",
+  "totalPairs": 120,
+  "embeddedPlanned": 116,
+  "cpythonPlanned": 4,
+  "embeddedPassed": 116,
+  "embeddedFailed": 0,
+  "cpythonPassed": 4,
+  "cpythonFailed": 0,
+  "assetMismatches": 0,
+  "tutorialAsset": {
+    "path": "D:\\MyNewProjects\\qfli_studio_core\\assets/content/tutorials.json",
+    "bytes": 3743502,
+    "schemaVersion": 1,
+    "totalEntries": 1620,
+    "pythonEntries": 120
+  },
+  "exampleAsset": {
+    "path": "D:\\MyNewProjects\\qfli_studio_core\\assets/content/examples.json",
+    "bytes": 1784445,
+    "schemaVersion": 1,
+    "totalEntries": 1620,
+    "pythonEntries": 120
+  },
+  "legacyAsset": {
+    "path": "D:\\MyNewProjects\\qfli_studio_core\\assets/tutorials/python.json",
+    "bytes": 378456,
+    "schemaVersion": 2,
+    "totalEntries": null,
+    "pythonEntries": 0
+  },
+  "results": [
+    {
+      "id": "python-example-001",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-002",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-003",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-004",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-005",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-006",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-007",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-008",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-009",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-010",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-011",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-012",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-013",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-014",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-015",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-016",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-017",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-018",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-019",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-020",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-021",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-022",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-023",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-024",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-025",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-026",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-027",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-028",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-029",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-030",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-031",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-032",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-033",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-034",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-035",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-036",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-037",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-038",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-039",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-040",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-041",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-042",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-043",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-044",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-045",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-046",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-047",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-048",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-049",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-050",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-051",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-052",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-053",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-054",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-055",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-056",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-057",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-058",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-059",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-060",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-061",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-062",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-063",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-064",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-065",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-066",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-067",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-068",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-069",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-070",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-071",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-072",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-073",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-074",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-075",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-076",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-077",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-078",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-079",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-080",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-081",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-082",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-083",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-084",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-085",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-086",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-087",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-088",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-089",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-090",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-091",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-092",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-093",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-094",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-095",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-096",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-097",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-098",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-099",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-100",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-101",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-102",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-103",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-104",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-105",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-106",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-107",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-108",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-109",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-110",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-111",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-112",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-113",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-114",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-115",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-116",
+      "runtime": "embedded",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-117",
+      "runtime": "cpython",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-118",
+      "runtime": "cpython",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-119",
+      "runtime": "cpython",
+      "status": "ok"
+    },
+    {
+      "id": "python-example-120",
+      "runtime": "cpython",
+      "status": "ok"
+    }
+  ]
+}

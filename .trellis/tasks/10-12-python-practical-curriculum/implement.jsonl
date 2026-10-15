@@ -1,0 +1,7 @@
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/content-inventory.md","reason":"Exact content sources (aggregate vs legacy), store/migration contract, and the content validator minimum."}
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/runtime-boundary.md","reason":"Empirically verified embedded MicroPython module/feature/IO boundary every runnable sample must respect."}
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/curriculum-outline.md","reason":"The 120-topic ordered plan with levels, concepts, runtime labels and PRD coverage mapping."}
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/writable-root-and-content-source.md","reason":"Confirmed no app-level asset override; minimal external file list (pending approval) and the provenance-safe refresh design."}
+{"file":".trellis/spec/frontend/content-code-import.md","reason":"Navigation/import/line-break contracts the tutorial and example pages must keep."}
+{"file":".trellis/spec/backend/native-python-runtime.md","reason":"Real runtime contract: MicroPython 1.24.1, exit codes, open()/input() semantics used by verification."}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"App-profile and Python tools/runner conventions for tests and analyzer gates."}

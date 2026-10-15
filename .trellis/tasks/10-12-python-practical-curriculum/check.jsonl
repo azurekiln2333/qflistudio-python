@@ -1,0 +1,6 @@
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/runtime-boundary.md","reason":"Verify every embedded sample truly runs in MicroPython and every CPython-only lesson is labeled, not faked."}
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/curriculum-outline.md","reason":"Verify 120/120 counts, unique topics, 1:1 pairing, progression and PRD coverage."}
+{"file":".trellis/tasks/10-12-python-practical-curriculum/research/writable-root-and-content-source.md","reason":"Verify user data is never deleted (no type==python purge) and the approved external scope is respected."}
+{"file":".trellis/spec/frontend/content-code-import.md","reason":"Check display/copy/import line-break behavior and navigation regression on both pages."}
+{"file":".trellis/spec/backend/native-python-runtime.md","reason":"Check the verifier's runtime claims, exit codes and asset fields against the native contract."}
+{"file":".trellis/spec/frontend/python-workflow.md","reason":"Check analyzer/test gates and file lifecycle for the app side."}
