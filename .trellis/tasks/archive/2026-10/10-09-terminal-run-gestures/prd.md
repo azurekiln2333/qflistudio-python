@@ -55,5 +55,3 @@ This task owns Python runner presentation and focused Python regression coverage
 - Use a command-like title only as presentation; never build or execute a new shell command from it.
 - Keep actual error detail and failure status; suppress only application-generated successful completion chatter.
 - Assigned worker this round: `wA:p5` (Python runner/terminal/native). `pi-python-terminal` in the former `wA:p2` pane was the 2026-10-09 planning assignee. The coordinator serializes commits and reviews; the shared-core terminal/editor owner is the Java workspace coordinator.
-
-

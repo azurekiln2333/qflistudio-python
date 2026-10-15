@@ -46,4 +46,3 @@ If native tests are skipped because a real library is missing, record that expli
 ## Files at Risk
 
 Shared core editor/terminal files are actively modified by another session. Do not edit or commit them in this task. Local primary scope: lib/python_runner.dart, test/python_app_test.dart, test/python_lifecycle_test.dart and narrowly justified integration coverage.
-
