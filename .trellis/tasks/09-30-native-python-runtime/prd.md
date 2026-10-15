@@ -4,6 +4,18 @@
 
 Make QFLIPyFlow a usable Python IDE whose code is compiled and executed by the same ported C runtime on Android and HarmonyOS, with practical project tools and a release-ready interface.
 
+## Current continuation (2026-10-15)
+
+The current user request explicitly authorizes Android/OHOS builds and attempted
+device testing, superseding the earlier session's Android-only instruction
+below. Current implementation/build evidence is in
+`../10-15-python-release-readiness/research/verification.md`. Full app 91/91,
+analyzer clean, Windows FFI34, Linux C65, Android real-device JNI46 and both
+release builds pass. Latest HAP installs but cannot launch while the device is
+locked (10106102); fresh OHOS controlled/bytecode/self-check evidence remains
+pending. Preserve this task as `in_progress`, rather than treating historical
+device checks or a successful build as completion.
+
 ## Confirmed State
 
 - The app uses upstream MicroPython 1.24.1 in `libqfli_py.so`, reached through ArkTS and a Flutter MethodChannel. There is no Dart interpreter.

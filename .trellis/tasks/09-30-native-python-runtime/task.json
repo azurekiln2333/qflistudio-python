@@ -12,7 +12,7 @@
   "assignee": "lichengyu",
   "createdAt": "2026-09-30",
   "completedAt": null,
-  "branch": "main",
+  "branch": "release/python-storefront-20261015",
   "base_branch": "main",
   "worktree_path": null,
   "commit": null,
@@ -21,6 +21,6 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "",
+  "notes": "2026-10-15 continuation authorized Android/OHOS builds and device attempts. Full app91, Windows FFI34, Linux C65, Android JNI46 and release builds pass. Final OHOS install succeeds; locked device prevents launch (10106102). See ../10-15-python-release-readiness/research/verification.md; keep latest hardware gate open.",
   "meta": {}
 }

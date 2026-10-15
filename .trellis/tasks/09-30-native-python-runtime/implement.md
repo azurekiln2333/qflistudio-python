@@ -8,8 +8,9 @@
 - [x] Connect Dart compile/run/probe using the existing FFI/isolate pattern.
 - [x] Windows native build and 34 real FFI cases; Linux SO and 65 real C cases.
 - [x] Rebuild Android x86_64 after shared C changes; Apple target hosts absent.
-- [ ] Install and run the fresh APK; automatic approval review returned HTTP 503.
-- [ ] Perform full-scope review, document platform evidence and commit scoped work.
+- [x] Install and run the fresh APK. Earlier HTTP 503 was superseded by explicit
+  user authorization and successful Android installation/JNI46 on 2026-10-15.
+- [x] Perform full-scope review, document platform evidence and commit scoped work.
 
 Windows has MinGW64 GCC 4.9.2 and SDK CMake/Ninja for native execution tests;
 Visual Studio/MSVC was not found, so complete Flutter Windows builds are not
@@ -48,7 +49,7 @@ default-runner case passed separately. Static analysis was clean.
 - `ohos/entry/src/main/ets/entryability/EntryAbility.ets`, `main_pages.json`, and `AgreementReader.ets` were dirty before this task. Preserve them.
 - The ArkTS bridge has two copies; contract edits must update both.
 
-## Pending Device Gate
+## Historical Pending Device Gate (superseded below)
 
 The signed HAP has been rebuilt with file append and compile-only checks (17 cases).
 The latest installed-device evidence is 14/14 from the earlier file-I/O batch;
@@ -150,3 +151,29 @@ HarmonyOS x86_64 native build and HAP packaging passed earlier in this session,
 before the final shared stdin/stdio/exit fixes. The user then requested Android
 debugging only. No final HarmonyOS installation/runtime check was performed;
 the original task remains in progress pending its separate final gate.
+
+## Latest continuation — 2026-10-15
+
+The user's current release-readiness request explicitly authorizes Android and
+OHOS builds, attempted installation and testing. It supersedes the earlier
+session's Android-only testing instruction. Exact current evidence is recorded
+in `../10-15-python-release-readiness/research/verification.md` and its linked
+reports, rather than inferred from the historical 2026-10-01 artifacts above.
+
+- Full app analyzer is clean; full Flutter suite is 91/91. Real Windows FFI is
+  34/34; real Linux C VM is 65/65; OHOS channel handler harness is 20/20.
+- Current Android debug APK was rebuilt after the terminal project-root fix,
+  installed on an Android 16 arm64 device and passed 46/46 actual JNI cases.
+  Final Android release APK built successfully; final interactive/release
+  verification remains recorded separately by the device owner.
+- OHOS NAPI now runs asynchronously and supports cancellation/bytecode. Final
+  native SO and signed HAP built; matching source/package bridges are identical.
+  Latest HAP installed successfully on `192.168.68.207:46551`.
+- Latest OHOS launch is blocked by locked screen (10106102). Required fresh
+  device evidence is now 17 base cases plus cancellation, bytecode and 6/6
+  argument-validation checks. Do not close the task on older 14/14 evidence.
+- Apple host/Xcode remains unavailable; full Windows Flutter packaging needs
+  MSVC. Neither is claimed tested. Existing debug platform signing also does
+  not establish storefront-distribution signing readiness.
+
+Keep this task in progress until its latest available-device gate is met.

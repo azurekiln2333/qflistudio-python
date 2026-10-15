@@ -6,11 +6,17 @@ Prepare QFLIPyFlow for storefront submission by verifying the complete local Pyt
 
 ## Confirmed facts
 
-- Repository: `D:/MyNewProjects/qfli_python`, branch `main`; adjacent shared dependency: `D:/MyNewProjects/qfli_studio_core`.
+- Repository: `D:/MyNewProjects/qfli_python`, initial branch `main`; working branch
+  `release/python-storefront-20261015`. Adjacent shared dependency:
+  `D:/MyNewProjects/qfli_studio_core`.
 - Verified Herdr workspace: `wA`; coordinator `wA:p1`; Pi workers `wA:p5`, `wA:p6`, `wA:p8`. Inherited `HERDR_WORKSPACE_ID=wY` is stale; never rely on focus or inherited IDs.
 - Initial HEAD: `2f5ed81`; core initially clean at `ad17f35`. Existing uncommitted OHOS icons, native SO, EntryAbility, routes and AgreementReader are not automatically owned by this task.
 - `pythonProfile.isOffline=true` inherits the core offline capability policy. Prove actual entry-point behavior.
-- Existing native/terminal/curriculum tasks are `.trellis/tasks/09-30-native-python-runtime`, `10-09-terminal-run-gestures`, `10-12-python-practical-curriculum`; bootstrap guidelines remain active.
+- Initial native/terminal/curriculum tasks were `09-30-native-python-runtime`,
+  `10-09-terminal-run-gestures`, `10-12-python-practical-curriculum`, with
+  bootstrap guidelines also active. Bootstrap, curriculum and terminal tasks
+  are now archived under `archive/2026-10/`; native runtime remains open for
+  the latest OHOS device gate.
 - Existing Python content contains 120 paired lessons/examples (116 embedded, four explicitly external CPython). Audit live assets before any regeneration.
 - Core editor/terminal work is shared with concurrently running language workspaces. Limit edits to Python-owned behavior; coordinate shared defects before modifying core.
 

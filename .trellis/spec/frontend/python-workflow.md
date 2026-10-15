@@ -54,6 +54,11 @@ both the standalone terminal and editor terminal consume this same callback.
 - Run titles are `python <project-relative path>` for source/bytecode and all
   transports; quote display paths with spaces. Preserve program output and real
   status; runtime version does not belong in the repeated transcript title.
+- Shared About/settings surfaces must identify `StudioProfile.current.appTitle`.
+  Shared offline descriptions follow `offlineOnly`, matching the navigation
+  policy. Keep language editions' identity in the shared profile extension;
+  avoid an app-local duplicate About dialog. Core `settings_about_test.dart`
+  covers offline editions, default identity and explicit online overrides.
 
 ## 4. Validation & Error Matrix
 

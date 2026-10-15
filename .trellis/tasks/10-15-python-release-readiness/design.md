@@ -11,6 +11,20 @@ The app owns Python profile/runner/tools, native bridges, platform packaging, ap
 
 All workers are sharing live files with each other and other workspaces. Never revert others' changes. Git commits are serialized by the coordinator, with explicit paths and independent review of staged diffs.
 
+### Final ownership updates
+
+- After curriculum completion, `wA:p8` also owns Android debug/device evidence
+  (`research/android-device.md`), coordinating foreground access with SQL/Dart.
+- Root owns the final OHOS metadata cleanup in `ohos/AppScope/app.json5` and
+  `ohos/entry/.../element/string.json`. The ignored stale x86_64 SO was preserved
+  in `build/python-release-evidence/initial-stale-x86_64-libqfli_py.so` outside
+  packaging, since the selected release target is arm64 only. Existing dirty
+  icons/startup/routes remain untouched.
+- Shared About identity fix has an explicitly assigned core worker owning only
+  `lib/pages/settings_page.dart` and one focused test. Java retained-editor
+  owner `wE:p8` was notified. Core offline/editor/code-import changes remain
+  with their existing owners; see `research/core-about-identity.md`.
+
 ## Runtime contract
 
 Trace UI command -> ProgramRunner -> channel/FFI -> C VM -> native result -> shared terminal. Actual project/entry paths, finite input.txt, stdout/stderr, exit status, cancellation ownership and upstream bytecode serialization must survive this path. OHOS must not claim a capability absent from its bridge. Shared C API is the implementation authority.

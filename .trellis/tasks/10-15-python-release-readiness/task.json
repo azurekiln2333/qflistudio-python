@@ -21,6 +21,6 @@
   "children": [],
   "parent": null,
   "relatedFiles": [],
-  "notes": "",
+  "notes": "Implementation and host/build checks passed; latest OHOS install succeeded but launch is blocked by locked device (10106102). Android JNI46 passed; interactive/release UI gaps are tracked in research/android-device.md. See research/verification.md. Preserve initial unrelated OHOS/agent configuration changes.",
   "meta": {}
 }

@@ -5,13 +5,52 @@
 - Date: 2026-10-15
 - Repository: `D:/MyNewProjects/qfli_python`; CWD and Git root were verified to match. No sibling workspace was modified. Research only: no builds, installs, launches, device state changes, staging or commits were performed.
 
-## Findings
+## Final artifact verification (2026-10-15 20:09, read-only follow-up)
+
+This section supersedes initial artifact/runtime-gap observations below. The initial survey remains historical. Current OHOS sources now implement asynchronous controlled execution, cancellation and bytecode transport; both final ArkTS copies match SHA256 `65FEF0F8F32677FCBC2363FC6BA6E611A2493C321910310D58216EB67CB70BCF`.
+
+Coordinator identifies the final shared-core snapshot as `8b33443` (About identity correction, four focused checks). Existing final app logs independently show **91 tests passed**, analyzer **No issues found (5.6s)**, Android release build **75.8s**, and OHOS release build **104.6s**. No additional builds or tests were run by this researcher.
+
+| Current final release artifact | Bytes | Modified (Asia/Shanghai) | SHA256 |
+| --- | --- | --- | --- |
+| `build/app/outputs/flutter-apk/app-release.apk` | 72,878,894 | 2026-10-15 20:03:32 | `6549B2DF3125526EB944CC0EB2EF1CA983155BE6933D16C4C71A7F6D8AE46059` |
+| `build/ohos/hap/entry-default-signed.hap` | 38,482,585 | 2026-10-15 20:06:05 | `7917A010E0F577B463009066DD48212E992C60407DC947A45667D3E3FA2B7270` |
+
+The final HAP under `ohos/entry/build/default/outputs/default/entry-default-signed.hap` has the same bytes, time and SHA256 as the Flutter output above. Detailed per-library ELF data and package metadata are saved in ignored `build/python-release-evidence/final-artifacts-platform.json`.
+
+### Previous artifact snapshot (historical; superseded)
+
+| Historical artifact | Bytes | Modified (Asia/Shanghai) | SHA256 |
+| --- | --- | --- | --- |
+| `build/app/outputs/flutter-apk/app-debug.apk` | 154,050,333 | 2026-10-15 19:32:53 | `362BC9269C7404983C555F91FE782C534EE8B28F6D843ECEA072D315BC9E7860` |
+| `build/app/outputs/flutter-apk/app-release.apk` | 72,878,894 | 2026-10-15 19:37:37 | `2F160DB71DB1D824D413610ADE69B7D7C7570A84526B8B143C1FCD5263AB6811` |
+| `ohos/entry/build/default/outputs/default/entry-default-signed.hap` | 39,293,440 | 2026-10-15 19:33:15 | `B99C89C10F7703529DA2371918AF333B2F93218E70FA43B224B80536396DB232` |
+| `ohos/entry/build/default/outputs/default/entry-default-unsigned.hap` | 38,974,673 | 2026-10-15 19:33:12 | `3AD25003E36765E3EB1F1D666C504612B0DEC1ACEFEEA25F6B6915E5108F309F` |
+
+### Checks against the current final releases
+
+Independent final checks used Android build-tools **36.1.0**:
+
+- `aapt2 dump permissions app-release.apk`: **no INTERNET**; only generated `com.azurekiln.qfli.pyflow.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. Packaged ID `com.azurekiln.qfli.pyflow`, version 1.0.0+1, compile/target SDK 36, min SDK 24.
+- `zipalign -c -P 16 4 app-release.apk`: **exit 0**.
+- In-memory ZIP/ELF parsing: all nine Android native libraries across armeabi-v7a, arm64-v8a and x86_64 have LOAD alignment at least `0x4000`; every qfli_py uses `0x4000` and needs exactly `libm.so`, `libdl.so`, `libc.so`. App/engine libraries use `0x4000` or `0x10000` as appropriate.
+- Final signed HAP contains **exactly three** native libraries, all arm64: `libapp.so`, `libflutter.so`, `libqfli_py.so`; no x86_64 library remains. Coordinator preserved the stale ignored x86_64 library at `build/python-release-evidence/initial-stale-x86_64-libqfli_py.so` before rebuilding.
+- Packaged arm64 qfli_py exports `qfli_py_execute` and all cancellation create/request/free symbols; NAPI createCancel/cancel/freeCancel names are present. DT_NEEDED is exactly `libace_napi.z.so`, `libhilog_ndk.z.so`, `libc.so`. OHOS engine/native 4 KiB ELF alignment is separate from Android's 16 KiB requirement.
+- Packaged HAP module confirms bundle/version, corrected vendor **`azurekiln`**, INTERNET and READ_PASTEBOARD permissions; placeholder client_id metadata is absent. Existing offline audit intentionally retained INTERNET for the preserved legal-page webview; Android release has no INTERNET.
+- Android release signing remains configured to debug keys. Earlier 19:37-artifact `apksigner verify` passed with v2 and **`C=US, O=Android, CN=Android Debug`**, certificate SHA256 `3cf19ed8102760001b3d92f3e4f42a6e322a89ba987d93247b5f9d6afebc0b51`. Production Android signing remains an external release gate; the earlier certificate check is not presented as a fresh check of the 20:03 artifact.
+- OHOS signing config still references existing Debug profile/certificate files. Production store-distribution suitability is unverified; no signing credentials were changed or logged by this researcher.
+
+Device evidence remains tied to its actual artifacts: `android-device.md` and raw `native-selfcheck-debug-2.log` prove the earlier **19:32 debug** APK's actual-device **46/46** native checks. Neither that earlier debug result nor historical release SHA256 `C65082...`/`2F160D...` establishes execution of the final 20:03 release APK. Coordinator reports the Android foreground is held by a peer WebForge session, so no final release install was attempted; interactive terminal/editor UI and release-after-shrinking execution remain unverified for the final package. The earlier OHOS build/install record's launch error **10106102** came from a locked device; final HAP installation and runtime evidence belong to the coordinator's verification record.
+
+This follow-up built/installed/launched nothing and changed no product/core/platform source, SDK, Git state or device state. Only this research report and the explicitly authorized ignored final artifact JSON were written.
+
+## Initial survey (historical; superseded by final verification above)
 
 ### Task and specifications
 
 Read this task's `prd.md`, `design.md` and `implement.md`, `.trellis/workflow.md`, backend index, `android-build.md`, `native-python-runtime.md`, `python-ffi.md` and frontend `native-startup.md`. Main-session authorization already covers builds and attempted deployment. The startup spec's earlier standing device restriction is historical; use current authorization and explicit targets, preserving peer sessions.
 
-The task PRD currently contains a second appended scaffold (`Requirements: TBD` / unchecked TBD acceptance) after its substantive requirements. Coordinator should remove that duplicate planning scaffold when reviewing artifacts.
+The initial task PRD contained a second appended scaffold (`Requirements: TBD` / unchecked TBD acceptance) after its substantive requirements; this was reported to the coordinator for planning-artifact cleanup.
 
 ### Installed tools and SDK selection
 
@@ -131,7 +170,7 @@ Get-FileHash native/ohos/QfliPyNative.ets,ohos/entry/src/main/ets/plugins/QfliPy
 - Full Flutter `build hap` compiles current Dart assets before Hvigor. Direct Hvigor alone can reuse stale Flutter assets. If direct repackaging is needed, cwd **must be** `D:/MyNewProjects/qfli_python/ohos`, command `& 'D:/ProgramFiles/Huawei/DevEco Studio/tools/hvigor/bin/hvigorw.bat' assembleHap --mode module -p product=default -p buildMode=release --no-daemon`.
 - Expected HAP outputs: `ohos/entry/build/default/outputs/default/entry-default-signed.hap` and `entry-default-unsigned.hap`. Inspect the final ZIP for packaged arm64 qfli_py and plugin/Flutter libraries, then inspect the packaged stripped SO's DT_NEEDED too.
 - Signing configuration references existing `.p12`, debug `.cer` and `QFLIPyFlow920Debug.p7b` files in `D:/Keystore`. Do not copy passwords into logs/research. File existence was checked; store-distribution suitability and device entitlement were **not** established.
-- Product compatible SDK is 5.1.0(18), target is 26.0.0, bundle `com.azurekiln.qfli.pyflow`; current AppScope vendor is the scaffold `example` (`ohos/AppScope/app.json5:4`). App package descriptions also retain template text. These metadata issues deserve release review independently of compiler success.
+- Product compatible SDK is 5.1.0(18), target is 26.0.0, bundle `com.azurekiln.qfli.pyflow`; at the initial survey AppScope vendor and package descriptions still contained template metadata. The final release corrected vendor to `azurekiln` and replaced the descriptions, as confirmed by the coordinator and final packaged vendor check above.
 - Current OHOS module requests INTERNET and has `REPLACE_WITH_AGC_CLIENT_ID` metadata (`ohos/entry/src/main/module.json5:27,43`); report to offline/profile owner. Runtime UI gating and manifest permission policy are separate concerns.
 
 Read-only `hdc list targets` returned `192.168.68.207:46551`. Requery and use an explicit target on every command. Proposed authorized runtime path, without changing connection/device state:
