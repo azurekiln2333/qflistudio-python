@@ -1,0 +1,22 @@
+SDK TypeScript: D:\ProgramFiles\Huawei\DevEco Studio\sdk\default\openharmony\ets\build-tools\ets-loader\node_modules\typescript
+PASS both ArkTS copies are byte-for-byte identical
+PASS missing module reports unavailable and a specific execution error
+PASS legacy module advertises only capabilities it has
+PASS partial cancellation exports do not advertise controlled execution
+PASS partial cancellation module rejects direct prepareRun without allocating
+PASS complete native adapter advertises real version and controlled capabilities
+PASS legacy synchronous result completes channel without altering native fields
+PASS synchronous native throw completes error and releases claimed token
+PASS asynchronous native rejection completes error and releases token
+PASS malformed native outcomes are transport errors and release claimed tokens
+PASS successful completion retains output/status and late stop is harmless
+PASS duplicate submission cannot claim or free the active token twice
+PASS separate queued sessions preserve cancellation ownership
+PASS pre-submission cancellation targets the token later passed to native
+PASS unknown run handle is rejected without submitting native work
+PASS failed token allocation returns a channel error
+PASS unsupported method completes as not implemented
+PASS source/input/heap/paths arrive unchanged and syntax checking cannot execute
+PASS compile/bytecode routing retains paths after a real fixture source is removed
+PASS native invalid-argument failures always release their claimed sessions
+RESULT 20/20

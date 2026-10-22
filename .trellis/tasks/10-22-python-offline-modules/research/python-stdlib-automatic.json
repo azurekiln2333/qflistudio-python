@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 1,
+  "runtimeVersion": "1.24.1 (ecfdd5d)",
+  "library": "D:\\MyNewProjects\\qfli_python\\native\\build\\windows\\qfli_py_ffi.dll",
+  "librarySha256": "2329ef7d374e35dd5159db0f3f056b094effc9a0372ad29fe704af472a6c309f",
+  "manifestSha256": "44f2308972f90c5e7289fab87edc82e373a8c7bd852d5ffb0fb5d5db8c36cbec",
+  "suiteSha256": "e178295cd87e5bc7a316298b2ccc60ec4473e3266384508a1cfc31fb13c2e7c0",
+  "verifierSha256": "8cdf4d7f9dd06a60a2f3efef9367b74e61e2f095b662a45e783876e9817a85d8",
+  "importMode": "automatic-project-bundle",
+  "deviceVerified": false,
+  "modules": [
+    {
+      "name": "base64",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'base64'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "bisect",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'bisect'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "contextlib",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'contextlib'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "copy",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'copy'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "csv",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'csv'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "functools",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'functools'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "itertools",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'itertools'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "statistics",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'statistics'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "string",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'string'\n",
+        "truncated": false
+      }
+    },
+    {
+      "name": "textwrap",
+      "baselineMissing": true,
+      "baseline": {
+        "exitCode": 1,
+        "output": "",
+        "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\src\\main.py\", line 1, in <module>\nImportError: no module named 'textwrap'\n",
+        "truncated": false
+      }
+    }
+  ],
+  "compile": [
+    {
+      "path": "base64.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "bisect.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "contextlib.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "copy.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "csv.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "functools.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "itertools.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "statistics.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "string.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    {
+      "path": "textwrap.py",
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    }
+  ],
+  "behavior": {
+    "exitCode": 0,
+    "output": "PASS bisect.right.duplicates\nPASS bisect.right.empty\nPASS bisect.right.negative\nPASS bisect.right.duplicates\nPASS bisect.right.empty\nPASS bisect.right.negative\nPASS bisect.left.duplicates\nPASS bisect.left.bounds\nPASS bisect.left.negative\nPASS bisect.insort.order\nPASS bisect.insort.duplicate\nPASS bisect.insort.negative\nPASS bisect.insort.order\nPASS bisect.insort.duplicate\nPASS bisect.insort.negative\nPASS bisect.insort.order\nPASS bisect.insort.duplicate\nPASS bisect.insort.negative\nPASS itertools.count\nPASS itertools.cycle.generator\nPASS itertools.cycle.empty\nPASS itertools.repeat.finite\nPASS itertools.repeat.infinite\nPASS itertools.repeat.negative\nPASS itertools.chain\nPASS itertools.chain.empty\nPASS itertools.islice.open\nPASS itertools.islice.short\nPASS itertools.islice.empty\nPASS itertools.islice.zero-step\nPASS itertools.islice.negative\nPASS itertools.tee.independent-first\nPASS itertools.tee.independent-rest\nPASS itertools.tee.zero\nPASS itertools.tee.negative\nPASS itertools.starmap\nPASS itertools.starmap.empty\nPASS itertools.starmap.arity\nPASS itertools.accumulate\nPASS itertools.accumulate.initial\nPASS itertools.accumulate.empty\nPASS itertools.takewhile\nPASS itertools.dropwhile\nPASS itertools.filterfalse\nPASS itertools.compress\nPASS itertools.product\nPASS itertools.product.zero\nPASS itertools.product.empty\nPASS itertools.product.negative\nPASS itertools.takewhile.empty\nPASS itertools.dropwhile.all\nPASS itertools.filterfalse.empty\nPASS itertools.compress.short\nPASS itertools.accumulate.none-initial\nPASS itertools.takewhile.bad-predicate\nPASS itertools.dropwhile.bad-predicate\nPASS itertools.filterfalse.bad-predicate\nPASS itertools.compress.noniterable\nPASS itertools.chain.noniterable\nPASS itertools.count.non-numeric-step\nPASS itertools.repeat.bad-times\nPASS itertools.product.bad-repeat\nPASS itertools.islice.arity\nPASS itertools.islice.bad-stop\nPASS itertools.tee.bad-count\nPASS itertools.product.repeat\nPASS functools.partial\nPASS functools.partial.override\nPASS functools.partial.noncallable\nPASS functools.reduce\nPASS functools.reduce.empty.initial\nPASS functools.reduce.explicit-none\nPASS functools.reduce.empty\nPASS functools.lru_cache.result\nPASS functools.lru_cache.eviction\nPASS functools.lru_cache.unhashable\nPASS functools.lru_cache.invalid-size\nPASS functools.cache\nPASS functools.cache.hit\nPASS functools.lru_cache.zero\nPASS functools.lru_cache.typed\nPASS functools.cache.keyword-result\nPASS functools.cache.sorted-keywords\nPASS functools.cache.sorted-hit\nPASS functools.cache.unhashable\nPASS functools.lru_cache.reentrant\nPASS functools.lru_cache.reentrant-eviction\nPASS functools.lru_cache.reentrant-recovery\nPASS copy.shallow.identity\nPASS copy.deep.identity\nPASS copy.deep.isolation\nPASS copy.deep.cycle\nPASS copy.deep.shared\nPASS copy.deep.tuple-cycle\nPASS copy.set\nPASS copy.bytearray\nPASS copy.atomic\nPASS copy.protocol.shallow\nPASS copy.protocol.deep\nPASS copy.unsupported.shallow\nPASS copy.unsupported.deep\nPASS copy.shallow.list\nPASS copy.shallow.set\nPASS copy.shallow.bytearray\nPASS copy.deep.empty\nPASS copy.callable.protocol\nPASS copy.function\nPASS contextlib.closing.value\nPASS contextlib.closing.closed\nPASS contextlib.nullcontext\nPASS contextlib.suppress.match\nPASS contextlib.suppress.propagates\nPASS contextlib.contextmanager.value\nPASS contextlib.contextmanager.cleanup\nPASS contextlib.contextmanager.propagates\nPASS contextlib.contextmanager.exception-cleanup\nPASS contextlib.contextmanager.suppression\nPASS contextlib.contextmanager.missing-yield\nPASS contextlib.contextmanager.extra-yield\nPASS contextlib.ExitStack.enter_context\nPASS contextlib.ExitStack.order\nPASS contextlib.ExitStack.pop_all.old-empty\nPASS contextlib.ExitStack.pop_all.moved\nPASS contextlib.ExitStack.suppresses\nPASS contextlib.ExitStack.callback-error\nPASS contextlib.ExitStack.cleanup-after-error\nPASS contextlib.closing.error\nPASS contextlib.closing.exception-cleanup\nPASS contextlib.nullcontext.propagates\nPASS contextlib.closing.invalid-resource\nPASS contextlib.suppress.empty\nPASS contextlib.ExitStack.suppresses-callback-error\nPASS contextlib.ExitStack.repeated-close\nPASS statistics.mean\nPASS statistics.fmean\nPASS statistics.median.odd\nPASS statistics.median.even\nPASS statistics.median_low\nPASS statistics.median_high\nPASS statistics.mode.tie\nPASS statistics.multimode\nPASS statistics.multimode.empty\nPASS statistics.pvariance\nPASS statistics.variance\nPASS statistics.stdev\nPASS statistics.pstdev\nPASS statistics.geometric_mean\nPASS statistics.harmonic_mean\nPASS statistics.harmonic_mean.zero\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.empty\nPASS statistics.sample-too-short\nPASS statistics.non-finite\nPASS statistics.unsupported-type\nPASS statistics.geometric-domain\nPASS statistics.harmonic-domain\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.singleton\nPASS statistics.pvariance.mu\nPASS statistics.variance.xbar\nPASS statistics.mode.unhashable\nPASS statistics.multimode.unhashable\nPASS string.ascii_lowercase\nPASS string.ascii_uppercase\nPASS string.ascii_letters\nPASS string.digits\nPASS string.hexdigits\nPASS string.octdigits\nPASS string.whitespace\nPASS string.punctuation\nPASS string.printable\nPASS string.translate\nPASS string.translate.empty\nPASS string.translate.invalid-codepoint\nPASS textwrap.wrap\nPASS textwrap.fill\nPASS textwrap.empty\nPASS textwrap.long-word\nPASS textwrap.keep-word\nPASS textwrap.hyphen\nPASS textwrap.TextWrapper.wrap\nPASS textwrap.TextWrapper.fill\nPASS textwrap.shorten\nPASS textwrap.shorten.short\nPASS textwrap.dedent\nPASS textwrap.dedent.mixed\nPASS textwrap.indent\nPASS textwrap.indent.predicate\nPASS textwrap.wrap.invalid-width\nPASS textwrap.shorten.invalid-width\nPASS textwrap.shorten.placeholder\nPASS textwrap.dedent.blank\nPASS textwrap.dedent.empty\nPASS textwrap.indent.empty\nPASS textwrap.wrap.no-hyphens\nPASS textwrap.shorten.only-placeholder\nPASS textwrap.fill.invalid-width\nPASS textwrap.wrap.unsupported-option\nPASS base64.b64encode\nPASS base64.b64decode\nPASS base64.standard_b64encode\nPASS base64.standard_b64decode\nPASS base64.b64encode\nPASS base64.b64decode\nPASS base64.standard_b64encode\nPASS base64.standard_b64decode\nPASS base64.b64encode\nPASS base64.b64decode\nPASS base64.standard_b64encode\nPASS base64.standard_b64decode\nPASS base64.b64encode\nPASS base64.b64decode\nPASS base64.standard_b64encode\nPASS base64.standard_b64decode\nPASS base64.b64encode\nPASS base64.b64decode\nPASS base64.standard_b64encode\nPASS base64.standard_b64decode\nPASS base64.urlsafe_b64encode\nPASS base64.urlsafe_b64decode\nPASS base64.b16encode\nPASS base64.b16decode\nPASS base64.b16decode.casefold\nPASS base64.encodebytes\nPASS base64.decodebytes\nPASS base64.encodebytes.empty\nPASS base64.decode.strict\nPASS base64.decode.padding\nPASS base64.decode.trailing-data\nPASS base64.decode.unicode\nPASS base64.encode.text\nPASS base64.altchars.invalid\nPASS base64.b16decode.lowercase\nPASS base64.b16decode.odd\nPASS base64.b64encode.memoryview\nPASS base64.b64decode.bytearray\nPASS base64.b16encode.empty\nPASS base64.b16decode.empty\nPASS base64.decodebytes.empty\nPASS base64.bytes-input-required\nPASS base64.bytes-input-required\nPASS base64.bytes-input-required\nPASS base64.bytes-input-required\nPASS base64.bytes-input-required\nPASS base64.bytes-input-required\nPASS base64.decode-invalid-input\nPASS base64.decode-invalid-input\nPASS base64.decode-invalid-input\nPASS base64.decode-invalid-input\nPASS base64.altchars.decode\nPASS csv.reader.basic\nPASS csv.reader.quoted\nPASS csv.reader.multiline\nPASS csv.reader.empty\nPASS csv.reader.custom\nPASS csv.reader.tab\nPASS csv.reader.escape\nPASS csv.reader.escaped-newline-eof\nPASS csv.reader.strict-escaped-newline-eof\nPASS csv.reader.escaped-newline-eof\nPASS csv.reader.strict-escaped-newline-eof\nPASS csv.reader.literal-after-quote\nPASS csv.reader.strict-after-quote-escape\nPASS csv.reader.no-double-quote-strict\nPASS csv.reader.unclosed\nPASS csv.reader.bad-quote\nPASS csv.reader.binary\nPASS csv.reader.invalid-delimiter\nPASS csv.reader.unsupported-dialect\nPASS csv.reader.unsupported-quoting\nPASS csv.writer.rows\nPASS csv.writer.quote-all\nPASS csv.writer.quote-none\nPASS csv.writer.needs-escape\nPASS csv.DictReader\nPASS csv.DictWriter\nPASS csv.DictWriter.extra-key\nPASS csv.DictWriter.extrasaction\nPASS csv.reader.line-count-row\nPASS csv.reader.line-count\nPASS csv.writer.escape-quote\nPASS csv.writer.quote-without-escape\nPASS csv.writer.empty-without-quote\nPASS csv.writer.invalid-ending\nPASS csv.reader.quote-required\nPASS csv.DictReader.explicit-columns\nPASS csv.DictWriter.ignore-extra\nPASS csv.reader.empty-input\nPASS csv.writer.escaped-multiline\nQFLI_STDLIB_PASS 306\n",
+    "error": null,
+    "truncated": false
+  },
+  "passedAssertions": 306,
+  "missingBeforeBundle": 10,
+  "success": true,
+  "differentialSourceSha256": "255acfe226cfcc567ab4ffe780dc803b4fc3653b83541dfe401604264f5a9c34",
+  "differential": {
+    "exitCode": 0,
+    "output": "QFLI_DIFFERENTIAL_PASS 128 encoding vectors; 256 CSV scenarios\n",
+    "error": null,
+    "truncated": false
+  },
+  "freshVm": {
+    "setup": {
+      "exitCode": 0,
+      "output": "",
+      "error": null,
+      "truncated": false
+    },
+    "next": {
+      "exitCode": 0,
+      "output": "fresh\n",
+      "error": null,
+      "truncated": false
+    }
+  },
+  "automaticIntegration": {
+    "precedence": [
+      {
+        "expected": "entry",
+        "exitCode": 0,
+        "output": "entry\n",
+        "error": null,
+        "truncated": false
+      },
+      {
+        "expected": "root",
+        "exitCode": 0,
+        "output": "root\n",
+        "error": null,
+        "truncated": false
+      },
+      {
+        "expected": "lib",
+        "exitCode": 0,
+        "output": "lib\n",
+        "error": null,
+        "truncated": false
+      },
+      {
+        "expected": "bundle",
+        "exitCode": 0,
+        "output": "bundle\n",
+        "error": null,
+        "truncated": false
+      }
+    ],
+    "packageRefresh": [
+      {
+        "expected": 41,
+        "exitCode": 0,
+        "output": "41\n",
+        "error": null,
+        "truncated": false
+      },
+      {
+        "expected": 42,
+        "exitCode": 0,
+        "output": "42\n",
+        "error": null,
+        "truncated": false
+      }
+    ],
+    "projectIsolation": {
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli-modules-中文-eu9qj0wj\\other_project\\main.py\", line 1, in <module>\nImportError: no module named 'bisect'\n",
+      "truncated": false
+    }
+  }
+}

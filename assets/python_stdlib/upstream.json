@@ -1,0 +1,30 @@
+{
+  "repository": "https://github.com/micropython/micropython-lib",
+  "commit": "90028be0829c6e988b5e239b28f39fb91b6b20e2",
+  "files": [
+    {
+      "asset": "bisect.py",
+      "path": "python-stdlib/bisect/bisect.py",
+      "upstreamSha256": "1b069bef30247a6f0422ec6e117db543f86488f4236a9e1c10f507396e07d636",
+      "changes": "unmodified"
+    },
+    {
+      "asset": "string.py",
+      "path": "python-stdlib/string/string/__init__.py",
+      "upstreamSha256": "4fe6ea7feb724c3cd33d8adb1d559b25b7ef2608b631130b7becc8aa9eb9cfc5",
+      "changes": "unmodified"
+    },
+    {
+      "asset": "itertools.py",
+      "path": "python-stdlib/itertools/itertools.py",
+      "upstreamSha256": "e99961b94864476c163f437e8b9ee45acb532f4eac805befd36b41182879f042",
+      "changes": "adapted; see PROVENANCE.md"
+    },
+    {
+      "asset": "functools.py",
+      "path": "python-stdlib/functools/functools.py",
+      "upstreamSha256": "935a233ae48a23f50b3091272ee853cca49217b06c8a5b714de4d3e20d5c6293",
+      "changes": "adapted; see PROVENANCE.md"
+    }
+  ]
+}

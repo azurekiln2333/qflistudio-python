@@ -38,6 +38,7 @@
  */
 #include "genhdr/mpversion.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -165,6 +166,81 @@ mp_import_stat_t mp_import_stat(const char *path)
  * 执行
  * ------------------------------------------------------------------ */
 
+static void normalize_import_directory(const char *path,
+    char normalized[QFLI_PY_PATH_MAX])
+{
+    size_t length = strlen(path);
+    if (length >= QFLI_PY_PATH_MAX)
+        mp_raise_OSError(ENAMETOOLONG);
+
+    if (qfli_py_realpath(path, normalized, QFLI_PY_PATH_MAX) == NULL)
+    {
+        if (errno == ENAMETOOLONG || errno == ENOMEM)
+            mp_raise_OSError(errno);
+        /* Optional package directories need not exist on a fresh project. */
+        memcpy(normalized, path, length + 1);
+    }
+}
+
+static void append_import_directory(const char *path)
+{
+    char normalized[QFLI_PY_PATH_MAX];
+    normalize_import_directory(path, normalized);
+    mp_obj_list_append(mp_sys_path,
+        mp_obj_new_str(normalized, strlen(normalized)));
+}
+
+static void configure_import_paths(const char *project_dir, const char *entry_file)
+{
+    char directory[QFLI_PY_PATH_MAX];
+
+    mp_sys_path = mp_obj_new_list(0, NULL);
+    if (entry_file != NULL && entry_file[0] != '\0')
+    {
+        size_t entry_length = strlen(entry_file);
+        if (entry_length >= sizeof(directory))
+            mp_raise_OSError(ENAMETOOLONG);
+        const char *slash = qfli_py_path_last_separator(entry_file);
+        if (slash != NULL)
+        {
+            /* Retain the separator so / and C:/ remain valid parent roots. */
+            size_t length = (size_t)(slash - entry_file) + 1;
+            memcpy(directory, entry_file, length);
+            directory[length] = '\0';
+            append_import_directory(directory);
+        }
+        mp_obj_list_append(mp_sys_argv,
+            mp_obj_new_str(entry_file, entry_length));
+        mp_obj_dict_store(MP_OBJ_FROM_PTR(mp_globals_get()),
+            MP_OBJ_NEW_QSTR(MP_QSTR___file__),
+            mp_obj_new_str(entry_file, entry_length));
+    }
+
+    if (project_dir != NULL && project_dir[0] != '\0')
+    {
+        char path[QFLI_PY_PATH_MAX];
+        const char *suffixes[] = {"lib", ".qfli/python/bundled/v1"};
+        normalize_import_directory(project_dir, directory);
+        size_t root_length = strlen(directory);
+        size_t separator_length =
+            qfli_py_path_last_separator(directory) == directory + root_length - 1 ? 0 : 1;
+        mp_obj_list_append(mp_sys_path,
+            mp_obj_new_str(directory, root_length));
+        /* User sources and project packages take precedence over bundled code. */
+        for (size_t i = 0; i < sizeof(suffixes) / sizeof(suffixes[0]); ++i)
+        {
+            size_t suffix_length = strlen(suffixes[i]);
+            size_t length = root_length + separator_length + suffix_length;
+            if (length >= sizeof(path))
+                mp_raise_OSError(ENAMETOOLONG);
+            memcpy(path, directory, root_length);
+            if (separator_length != 0) path[root_length] = '/';
+            memcpy(path + root_length + separator_length, suffixes[i], suffix_length + 1);
+            append_import_directory(path);
+        }
+    }
+}
+
 /*
  * 把东西打到**当前 sink**（调用方负责切到 stderr），并保证「打印过程中又抛
  * 异常」不会逃逸出去。
@@ -218,22 +294,7 @@ static int execute(const char *source, const char *project_dir,
 
         qfli_py_check_cancel();
 
-        mp_sys_path = mp_obj_new_list(0, NULL);
-        if (entry_file != NULL && entry_file[0] != '\0')
-        {
-            const char *slash = qfli_py_path_last_separator(entry_file);
-            if (slash != NULL && slash > entry_file)
-                mp_obj_list_append(mp_sys_path,
-                    mp_obj_new_str(entry_file, (size_t)(slash - entry_file)));
-            mp_obj_list_append(mp_sys_argv,
-                mp_obj_new_str(entry_file, strlen(entry_file)));
-            mp_obj_dict_store(MP_OBJ_FROM_PTR(mp_globals_get()),
-                MP_OBJ_NEW_QSTR(MP_QSTR___file__),
-                mp_obj_new_str(entry_file, strlen(entry_file)));
-        }
-        if (project_dir != NULL && project_dir[0] != '\0')
-            mp_obj_list_append(mp_sys_path,
-                mp_obj_new_str(project_dir, strlen(project_dir)));
+        configure_import_paths(project_dir, entry_file);
 
         /*
          * qstr 可在运行时驻留字符串；用实际入口路径让 traceback 指向文件。

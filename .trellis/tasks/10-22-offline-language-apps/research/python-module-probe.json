@@ -1,0 +1,316 @@
+{
+  "generatedAt": "2026-10-22T02:54:42.328432+00:00",
+  "dll": "D:\\MyNewProjects\\qfli_python\\native\\build\\windows\\qfli_py_ffi.dll",
+  "version": "1.24.1 (ecfdd5d)",
+  "modules": [
+    {
+      "module": "sys",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "math",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "cmath",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "json",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "random",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "time",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "re",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "binascii",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "heapq",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "array",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "collections",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "struct",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "io",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "errno",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "micropython",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "gc",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "builtins",
+      "exitCode": 0,
+      "stdout": "IMPORT_OK\n",
+      "stderr": "",
+      "available": true
+    },
+    {
+      "module": "os",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'os'\n",
+      "available": false
+    },
+    {
+      "module": "pathlib",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'pathlib'\n",
+      "available": false
+    },
+    {
+      "module": "csv",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'csv'\n",
+      "available": false
+    },
+    {
+      "module": "itertools",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'itertools'\n",
+      "available": false
+    },
+    {
+      "module": "functools",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'functools'\n",
+      "available": false
+    },
+    {
+      "module": "statistics",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'statistics'\n",
+      "available": false
+    },
+    {
+      "module": "bisect",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'bisect'\n",
+      "available": false
+    },
+    {
+      "module": "copy",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'copy'\n",
+      "available": false
+    },
+    {
+      "module": "contextlib",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'contextlib'\n",
+      "available": false
+    },
+    {
+      "module": "textwrap",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'textwrap'\n",
+      "available": false
+    },
+    {
+      "module": "dataclasses",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'dataclasses'\n",
+      "available": false
+    },
+    {
+      "module": "decimal",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'decimal'\n",
+      "available": false
+    },
+    {
+      "module": "fractions",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'fractions'\n",
+      "available": false
+    },
+    {
+      "module": "datetime",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'datetime'\n",
+      "available": false
+    },
+    {
+      "module": "typing",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'typing'\n",
+      "available": false
+    },
+    {
+      "module": "unittest",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'unittest'\n",
+      "available": false
+    },
+    {
+      "module": "sysconfig",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'sysconfig'\n",
+      "available": false
+    },
+    {
+      "module": "threading",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'threading'\n",
+      "available": false
+    },
+    {
+      "module": "pip",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'pip'\n",
+      "available": false
+    },
+    {
+      "module": "mip",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'mip'\n",
+      "available": false
+    },
+    {
+      "module": "socket",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'socket'\n",
+      "available": false
+    },
+    {
+      "module": "ssl",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'ssl'\n",
+      "available": false
+    },
+    {
+      "module": "hashlib",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'hashlib'\n",
+      "available": false
+    },
+    {
+      "module": "zlib",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'zlib'\n",
+      "available": false
+    },
+    {
+      "module": "asyncio",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'asyncio'\n",
+      "available": false
+    }
+  ],
+  "localImports": [
+    {
+      "case": "default_lib",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\AppData\\Local\\Temp\\qfli_module_audit_45y3co2g\\main.py\", line 1, in <module>\nImportError: no module named 'audit_helper'\n"
+    },
+    {
+      "case": "explicit_lib",
+      "exitCode": 0,
+      "stdout": "42\n",
+      "stderr": ""
+    }
+  ],
+  "ohosDeviceVerified": false
+}

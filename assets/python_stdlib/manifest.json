@@ -1,0 +1,277 @@
+{
+  "formatVersion": 1,
+  "bundleVersion": "v1",
+  "modules": [
+    {
+      "name": "base64",
+      "version": "1.0.0",
+      "summary": "Base64, URL-safe and Base16 byte encoding with validation",
+      "apis": [
+        "b64encode",
+        "b64decode",
+        "standard_b64encode",
+        "standard_b64decode",
+        "urlsafe_b64encode",
+        "urlsafe_b64decode",
+        "b16encode",
+        "b16decode",
+        "encodebytes",
+        "decodebytes"
+      ],
+      "files": [
+        {
+          "path": "base64.py",
+          "sha256": "f55699fa8b79318c74910747a7d13b88a269bef77910d6637905f4feae289e16"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    },
+    {
+      "name": "bisect",
+      "version": "0.5.0",
+      "summary": "Sorted sequence positions and insertions",
+      "apis": [
+        "bisect",
+        "bisect_left",
+        "bisect_right",
+        "insort",
+        "insort_left",
+        "insort_right"
+      ],
+      "files": [
+        {
+          "path": "bisect.py",
+          "sha256": "b053b85bb99f0dbaddf0fb11d0cc39833785538dd8f6399a874f64ecd9e4b85f"
+        }
+      ],
+      "license": "Python-2.0",
+      "source": "micropython-lib/python-stdlib/bisect @ 90028be0829c6e988b5e239b28f39fb91b6b20e2"
+    },
+    {
+      "name": "contextlib",
+      "version": "1.0.0",
+      "summary": "Synchronous generator contexts and ordered resource cleanup",
+      "apis": [
+        "closing",
+        "nullcontext",
+        "suppress",
+        "contextmanager",
+        "ExitStack"
+      ],
+      "files": [
+        {
+          "path": "contextlib.py",
+          "sha256": "f2c31c7698a9ec82cb654eaf0a81fe2a07f2126a3b1ec6289b8a1a9cdecee4d7"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    },
+    {
+      "name": "copy",
+      "version": "1.0.0",
+      "summary": "Shallow/deep container copying, cycles and explicit copy hooks",
+      "apis": [
+        "copy",
+        "deepcopy",
+        "Error"
+      ],
+      "files": [
+        {
+          "path": "copy.py",
+          "sha256": "bd6754af8843cd9d4ac6b997689a77b669e4916e8f5f03a76101ba92e8ce53cf"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    },
+    {
+      "name": "csv",
+      "version": "1.0.0",
+      "summary": "Quoted multiline CSV and dictionary row readers/writers",
+      "apis": [
+        "reader",
+        "writer",
+        "DictReader",
+        "DictWriter",
+        "QUOTE_MINIMAL",
+        "QUOTE_ALL",
+        "QUOTE_NONE",
+        "Error"
+      ],
+      "files": [
+        {
+          "path": "csv.py",
+          "sha256": "b66d83a9a210ab0a1d89d4239a2f79e49168b85abc058a83e4c86567d87019e3"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    },
+    {
+      "name": "functools",
+      "version": "0.1.0+qfli.1",
+      "summary": "Partial calls, reduction and bounded memoization",
+      "apis": [
+        "partial",
+        "reduce",
+        "lru_cache",
+        "cache"
+      ],
+      "files": [
+        {
+          "path": "functools.py",
+          "sha256": "07e67d0fa1ebcb217540ff18dda99e181ae229ecce86c36c19b70ffdb5d119ec"
+        }
+      ],
+      "license": "MIT",
+      "source": "micropython-lib/python-stdlib/functools + Qfli adaptations @ 90028be0829c6e988b5e239b28f39fb91b6b20e2"
+    },
+    {
+      "name": "itertools",
+      "version": "0.2.3+qfli.1",
+      "summary": "Lazy iteration, independent tee cursors and Cartesian products",
+      "apis": [
+        "count",
+        "cycle",
+        "repeat",
+        "chain",
+        "islice",
+        "tee",
+        "starmap",
+        "accumulate",
+        "takewhile",
+        "dropwhile",
+        "filterfalse",
+        "compress",
+        "product"
+      ],
+      "files": [
+        {
+          "path": "itertools.py",
+          "sha256": "2e522ec61775def58b1ff7100ba50593113a193f1188caa4fa653ad75db319dc"
+        }
+      ],
+      "license": "MIT",
+      "source": "micropython-lib/python-stdlib/itertools + Qfli adaptations @ 90028be0829c6e988b5e239b28f39fb91b6b20e2"
+    },
+    {
+      "name": "statistics",
+      "version": "1.0.0",
+      "summary": "Finite numeric descriptive statistics and categorical modes",
+      "apis": [
+        "mean",
+        "fmean",
+        "median",
+        "median_low",
+        "median_high",
+        "mode",
+        "multimode",
+        "pvariance",
+        "variance",
+        "pstdev",
+        "stdev",
+        "geometric_mean",
+        "harmonic_mean",
+        "StatisticsError"
+      ],
+      "files": [
+        {
+          "path": "statistics.py",
+          "sha256": "5a806524a905ab1d2e343fa454fcd3e64b1706e3e1045bb0b24cde5cf74dfc1d"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    },
+    {
+      "name": "string",
+      "version": "0.2.0",
+      "summary": "ASCII character constants and character mapping",
+      "apis": [
+        "ascii_lowercase",
+        "ascii_uppercase",
+        "ascii_letters",
+        "digits",
+        "hexdigits",
+        "octdigits",
+        "punctuation",
+        "whitespace",
+        "printable",
+        "translate"
+      ],
+      "files": [
+        {
+          "path": "string.py",
+          "sha256": "b172526030d482c6fda2915b7089ae86e38af6c4464d5053c46c6964b0573e02"
+        }
+      ],
+      "license": "MIT",
+      "source": "micropython-lib/python-stdlib/string/string @ 90028be0829c6e988b5e239b28f39fb91b6b20e2"
+    },
+    {
+      "name": "textwrap",
+      "version": "1.0.0",
+      "summary": "Whitespace-collapsing text wrapping, indentation and shortening",
+      "apis": [
+        "TextWrapper",
+        "wrap",
+        "fill",
+        "dedent",
+        "indent",
+        "shorten"
+      ],
+      "files": [
+        {
+          "path": "textwrap.py",
+          "sha256": "81e5dc5d0e832b7ba6b9cda5cea29a3310f4f566c88c3c3c46069436e3c4afa7"
+        }
+      ],
+      "license": "MIT",
+      "source": "Qfli contributors; locally authored"
+    }
+  ],
+  "files": [
+    {
+      "path": "base64.py",
+      "sha256": "f55699fa8b79318c74910747a7d13b88a269bef77910d6637905f4feae289e16"
+    },
+    {
+      "path": "bisect.py",
+      "sha256": "b053b85bb99f0dbaddf0fb11d0cc39833785538dd8f6399a874f64ecd9e4b85f"
+    },
+    {
+      "path": "contextlib.py",
+      "sha256": "f2c31c7698a9ec82cb654eaf0a81fe2a07f2126a3b1ec6289b8a1a9cdecee4d7"
+    },
+    {
+      "path": "copy.py",
+      "sha256": "bd6754af8843cd9d4ac6b997689a77b669e4916e8f5f03a76101ba92e8ce53cf"
+    },
+    {
+      "path": "csv.py",
+      "sha256": "b66d83a9a210ab0a1d89d4239a2f79e49168b85abc058a83e4c86567d87019e3"
+    },
+    {
+      "path": "functools.py",
+      "sha256": "07e67d0fa1ebcb217540ff18dda99e181ae229ecce86c36c19b70ffdb5d119ec"
+    },
+    {
+      "path": "itertools.py",
+      "sha256": "2e522ec61775def58b1ff7100ba50593113a193f1188caa4fa653ad75db319dc"
+    },
+    {
+      "path": "statistics.py",
+      "sha256": "5a806524a905ab1d2e343fa454fcd3e64b1706e3e1045bb0b24cde5cf74dfc1d"
+    },
+    {
+      "path": "string.py",
+      "sha256": "b172526030d482c6fda2915b7089ae86e38af6c4464d5053c46c6964b0573e02"
+    },
+    {
+      "path": "textwrap.py",
+      "sha256": "81e5dc5d0e832b7ba6b9cda5cea29a3310f4f566c88c3c3c46069436e3c4afa7"
+    }
+  ]
+}

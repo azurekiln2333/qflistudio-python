@@ -7,6 +7,7 @@ import 'package:qfli_studio_core/services/file_encoding.dart';
 import 'package:qfli_studio_core/services/studio_profile.dart';
 
 import 'python_ffi.dart';
+import 'python_packages.dart';
 
 enum PythonNativeTransport { automatic, methodChannel, ffi }
 
@@ -31,10 +32,12 @@ class PythonProgramRunner implements ProgramRunner {
     this.heapKb = defaultHeapKb,
     this.transport = PythonNativeTransport.automatic,
     this.libraryPath,
+    this.packageService,
   });
 
   final PythonNativeTransport transport;
   final String? libraryPath;
+  final PythonPackageService? packageService;
 
   bool get _useFfi => switch (transport) {
     PythonNativeTransport.automatic =>
@@ -125,6 +128,27 @@ class PythonProgramRunner implements ProgramRunner {
     if (source == null) {
       return const PythonSyntaxResult(error: '无法读取文件。');
     }
+    return checkSource(
+      projectPath: projectPath,
+      entryFile: entryFile,
+      source: source,
+    );
+  }
+
+  /// Compiles the exact supplied buffer without saving it or executing imports.
+  Future<PythonSyntaxResult> checkSource({
+    required String projectPath,
+    required String entryFile,
+    required String source,
+  }) async {
+    final root = p.normalize(p.absolute(projectPath));
+    final entry = p.normalize(p.absolute(entryFile));
+    if (p.extension(entry).toLowerCase() != '.py') {
+      return const PythonSyntaxResult(error: '请选择 Python 源码文件。');
+    }
+    if (!p.isWithin(root, entry)) {
+      return const PythonSyntaxResult(error: '语法检查文件必须位于当前项目中。');
+    }
     final probe = await _probeNative();
     if (!probe.available) {
       return PythonSyntaxResult(
@@ -204,6 +228,16 @@ class PythonProgramRunner implements ProgramRunner {
     }
     if (isBytecode && !probe.supportsArtifacts) {
       return _failure(label, '$_appPrefix此运行组件不支持 .mpy 文件。');
+    }
+
+    try {
+      final preparation = await (packageService ?? PythonPackageService())
+          .ensureBundledModules(projectPath);
+      if (!preparation.success) {
+        return _failure(label, '$_appPrefix${preparation.message}');
+      }
+    } on Object catch (error) {
+      return _failure(label, '$_appPrefix准备离线模块失败：$error');
     }
 
     if (_useFfi || probe.supportsCancellation || isBytecode) {

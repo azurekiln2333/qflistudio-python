@@ -17,6 +17,8 @@ void main() {
   late ProjectStore store;
 
   setUp(() async {
+    // Asset futures belong to each widget test's async zone.
+    rootBundle.clear();
     directory = Directory.systemTemp.createTempSync('qfli_python_tools');
     final source = File(p.join(directory.path, 'src', 'main.py'));
     source.parent.createSync(recursive: true);
@@ -115,10 +117,13 @@ void main() {
         isTrue,
       );
       await tester.tap(find.widgetWithText(FilledButton, '运行'));
-      await tester.pumpAndSettle();
+      await _pumpUntil(tester, () => calls.any((call) => call.method == 'run'));
       expect(pending.isCompleted, isFalse);
       await tester.tap(find.byTooltip('停止运行'));
-      await tester.pumpAndSettle();
+      await _pumpUntil(
+        tester,
+        () => find.text('运行结束 · 退出码 130').evaluate().isNotEmpty,
+      );
       expect(find.text('运行结束 · 退出码 130'), findsOneWidget);
       expect(find.text('before\nKeyboardInterrupt'), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -180,7 +185,10 @@ void main() {
         p.join(directory.path, 'src', 'main.py'),
       );
       await tester.tap(find.widgetWithText(FilledButton, '运行'));
-      await tester.pumpAndSettle();
+      await _pumpUntil(
+        tester,
+        () => find.text('运行结束 · 退出码 0').evaluate().isNotEmpty,
+      );
       expect(find.text('运行结束 · 退出码 0'), findsOneWidget);
       expect(find.text('42'), findsOneWidget);
       expect(calls.map((call) => call.method), [
@@ -192,4 +200,20 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+}
+
+Future<void> _pumpUntil(WidgetTester tester, bool Function() completed) async {
+  await tester.runAsync(() async {
+    final deadline = DateTime.now().add(const Duration(seconds: 5));
+    while (!completed() && DateTime.now().isBefore(deadline)) {
+      await tester.pump();
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+    }
+  });
+  await tester.pump();
+  expect(
+    completed(),
+    isTrue,
+    reason: 'Timed out waiting for real asset/file I/O.',
+  );
 }

@@ -17,6 +17,8 @@ dependencies:
     path: native
 
   ffi: ^2.1.4
+  archive: ^4.3.0
+  crypto: ^3.0.7
 
   cupertino_icons: ^1.0.8
 
@@ -38,3 +40,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/app_icon.png
+    - assets/python_stdlib/

@@ -1,0 +1,31 @@
+{
+  "id": "offline-language-apps",
+  "name": "offline-language-apps",
+  "title": "Offline standalone language apps completeness",
+  "description": "Audit and run all examples on OHOS; expand examples beyond 100; complete offline editor, workspace, tools, diagnostics and feasible debug features for all standalone apps; validate and publish conventional commits.",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "lichengyu",
+  "assignee": "lichengyu",
+  "createdAt": "2026-10-22",
+  "completedAt": null,
+  "branch": "release/python-storefront-20261015",
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "10-22-python-offline-modules",
+    "10-22-python-content-ohos",
+    "10-22-python-offline-tools",
+    "10-22-python-offline-debugger"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}

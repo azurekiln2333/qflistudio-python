@@ -12,10 +12,11 @@ static int passed;
 static char project[256];
 static char entry[320];
 
-static void check(const char *name, const char *source, const char *input,
-                  int code, const char *output, const char *error, int compile_only)
+static void check_at(const char *name, const char *source, const char *input,
+    int code, const char *output, const char *error, int compile_only,
+    const char *project_dir, const char *entry_file)
 {
-    QfliPyRunResult result = qfli_py_run(source, input, 0, project, entry, compile_only);
+    QfliPyRunResult result = qfli_py_run(source, input, 0, project_dir, entry_file, compile_only);
     int output_ok = output[0] == '\0' ? result.output[0] == '\0' : strstr(result.output, output) != NULL;
     int error_ok = error == NULL ? result.error == NULL :
         result.error != NULL && strstr(result.error, error) != NULL;
@@ -28,6 +29,12 @@ static void check(const char *name, const char *source, const char *input,
     qfli_py_result_free(&result);
 }
 
+static void check(const char *name, const char *source, const char *input,
+    int code, const char *output, const char *error, int compile_only)
+{
+    check_at(name, source, input, code, output, error, compile_only, project, entry);
+}
+
 static void write_file(const char *relative, const char *source)
 {
     char path[512];
@@ -36,6 +43,20 @@ static void write_file(const char *relative, const char *source)
     if (file == NULL) { perror(path); exit(1); }
     fputs(source, file);
     fclose(file);
+}
+
+static void make_directory(const char *relative)
+{
+    char path[512];
+    snprintf(path, sizeof(path), "%s/%s", project, relative);
+    if (mkdir(path, 0700) != 0) { perror(path); exit(1); }
+}
+
+static void remove_file(const char *relative)
+{
+    char path[512];
+    snprintf(path, sizeof(path), "%s/%s", project, relative);
+    if (unlink(path) != 0) { perror(path); exit(1); }
 }
 
 static int fd_count(void)
@@ -96,6 +117,65 @@ int main(void)
     write_file("helper.py", "answer = 43\n");
     check("fresh-import", "import helper\nprint(helper.answer)", "", 0, "43\n", NULL, 0);
     check("package-import", "from samplepkg import answer\nprint(answer)", "", 0, "84\n", NULL, 0);
+    check("absent-package-directories", "import helper\nprint(helper.answer)\ntry:\n import absent_package\nexcept ImportError:\n print('missing')",
+        "", 0, "43\nmissing\n", NULL, 0);
+
+    const char *directories[] = {"lib", "lib/localpkg", "lib/localpkg/nested",
+        ".qfli", ".qfli/python", ".qfli/python/bundled", ".qfli/python/bundled/v1",
+        ".qfli/python/bundled/v1/bundlepkg", "src", "src/\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80"};
+    for (size_t i = 0; i < sizeof(directories) / sizeof(directories[0]); ++i)
+        make_directory(directories[i]);
+    write_file("lib/localpkg/__init__.py", "from .nested.api import total\n");
+    write_file("lib/localpkg/nested/__init__.py", "");
+    write_file("lib/localpkg/nested/api.py", "def total(values):\n return sum(values) * 2\n");
+    write_file(".qfli/python/bundled/v1/bundlepkg/__init__.py", "from .values import answer\n");
+    write_file(".qfli/python/bundled/v1/bundlepkg/values.py", "answer = 17\n");
+    write_file("rank.py", "value = 'project'\n");
+    write_file("lib/rank.py", "value = 'local'\n");
+    write_file(".qfli/python/bundled/v1/rank.py", "value = 'bundled'\n");
+    write_file("src/\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80/rank.py", "value = 'entry'\n");
+    char nested_entry[512];
+    snprintf(nested_entry, sizeof(nested_entry), "%s/src/\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80/main.py", project);
+    check_at("local-package-submodules", "from localpkg import total\nprint(total([3, 4, 5]))",
+        "", 0, "24\n", NULL, 0, project, nested_entry);
+    check_at("bundled-package-submodules", "from bundlepkg import answer\nprint(answer)",
+        "", 0, "17\n", NULL, 0, project, nested_entry);
+    check_at("entry-import-precedence", "import rank\nprint(rank.value)",
+        "", 0, "entry\n", NULL, 0, project, nested_entry);
+    char normalized_entry[512];
+    snprintf(normalized_entry, sizeof(normalized_entry), "%s/src/\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80/../\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80/main.py", project);
+    char normalized_project[512];
+    snprintf(normalized_project, sizeof(normalized_project), "%s/./", project);
+    check_at("normalized-import-directories", "import rank, localpkg, bundlepkg\nprint(rank.value, localpkg.total([2, 3]), bundlepkg.answer)",
+        "", 0, "entry 10 17\n", NULL, 0, normalized_project, normalized_entry);
+    remove_file("src/\xe5\xad\xa6\xe7\x94\x9f\xf0\x9f\x9a\x80/rank.py");
+    check_at("project-import-precedence", "import rank\nprint(rank.value)",
+        "", 0, "project\n", NULL, 0, project, nested_entry);
+    remove_file("rank.py");
+    check_at("local-import-precedence", "import rank\nprint(rank.value)",
+        "", 0, "local\n", NULL, 0, project, nested_entry);
+    remove_file("lib/rank.py");
+    check_at("bundled-import-fallback", "import rank\nprint(rank.value)",
+        "", 0, "bundled\n", NULL, 0, project, nested_entry);
+    write_file("lib/localpkg/nested/api.py", "def total(values):\n return sum(values) * 3\n");
+    check_at("fresh-local-package-submodule", "from localpkg import total\nprint(total([3, 4, 5]))",
+        "", 0, "36\n", NULL, 0, project, nested_entry);
+    remove_file("lib/localpkg/nested/api.py");
+    check_at("removed-local-package-submodule", "from localpkg import total",
+        "", 1, "", "ImportError", 0, project, nested_entry);
+    write_file("lib/localpkg/nested/api.py", "def total(values):\n return sum(values) * 2\n");
+    check_at("local-package-import-recovery", "from localpkg import total\nprint(total([3, 4, 5]))",
+        "", 0, "24\n", NULL, 0, project, nested_entry);
+    char oversized_path[4097];
+    memset(oversized_path, 'x', sizeof(oversized_path) - 1);
+    oversized_path[sizeof(oversized_path) - 1] = '\0';
+    check_at("overlong-import-project", "print('must not run')", "", 1, "", "OSError", 0,
+        oversized_path, entry);
+    check_at("overlong-import-entry", "print('must not run')", "", 1, "", "OSError", 0,
+        project, oversized_path);
+    check("import-path-error-recovery", "from localpkg import total\nprint(total([20, 1]))",
+        "", 0, "42\n", NULL, 0);
+
     check("text-file", "with open('notes.txt', 'w') as f:\n f.write('hello')\nwith open('notes.txt') as f:\n print(f.read())",
         "", 0, "hello\n", NULL, 0);
     check("append-file", "import io\nwith io.open('notes.txt', mode='a') as f:\n f.write('!')\nwith open('notes.txt') as f:\n print(f.read())",
@@ -137,13 +217,35 @@ int main(void)
     if (fd_count() == before) ++passed;
     else fprintf(stderr, "FAIL file descriptors leaked across runs\n");
 
+    write_file("lib/import_file.py", "handle = open('lines.txt')\nvalue = handle.readline().strip()\n");
+    write_file("lib/import_error.py", "handle = open('lines.txt')\nraise ValueError('import failed')\n");
+    before = fd_count();
+    for (int i = 0; i < 10; ++i)
+    {
+        check("imported-unclosed-file", "import import_file\nprint(import_file.value)",
+            "", 0, "first\n", NULL, 0);
+        check("imported-unclosed-file-error", "import import_error", "", 1, "", "ValueError: import failed", 0);
+    }
+    ++total;
+    if (fd_count() == before) ++passed;
+    else fprintf(stderr, "FAIL file descriptors leaked across imported modules\n");
+
     const char *files[] = {"helper.py", "samplepkg/__init__.py", "samplepkg/value.py",
-        "notes.txt", "raw.bin", "lines.txt", "new.txt", "outside-link"};
+        "notes.txt", "raw.bin", "lines.txt", "new.txt", "outside-link",
+        "lib/localpkg/__init__.py", "lib/localpkg/nested/__init__.py", "lib/localpkg/nested/api.py",
+        ".qfli/python/bundled/v1/bundlepkg/__init__.py", ".qfli/python/bundled/v1/bundlepkg/values.py",
+        ".qfli/python/bundled/v1/rank.py", "lib/import_file.py", "lib/import_error.py"};
     for (size_t i = 0; i < sizeof(files) / sizeof(files[0]); ++i)
     {
         char path[512];
         snprintf(path, sizeof(path), "%s/%s", project, files[i]);
         unlink(path);
+    }
+    for (size_t i = sizeof(directories) / sizeof(directories[0]); i > 0; --i)
+    {
+        char path[512];
+        snprintf(path, sizeof(path), "%s/%s", project, directories[i - 1]);
+        rmdir(path);
     }
     rmdir(package);
     rmdir(project);

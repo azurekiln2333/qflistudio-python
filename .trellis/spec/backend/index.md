@@ -10,6 +10,7 @@ app-owned HTTP service or database.
 | --- | --- | --- |
 | [Native Python Runtime](./native-python-runtime.md) | VM, I/O, lifetime, channel and verification | Documented |
 | [Python FFI](./python-ffi.md) | Desktop/Apple packaging, C ownership, Windows reader | Documented |
+| [Offline Python Packages](./python-offline-packages.md) | Bundled modules, local transactions, actual VM compatibility | Documented |
 | [Android Build](./android-build.md) | NDK, JVM budgets, APK and installed-runtime checks | Documented |
 | [Directory Structure](./directory-structure.md) | Native, adapter, generated and shared ownership | Documented |
 | [Local Persistence](./database-guidelines.md) | Shared JSON stores/project files; no ORM/migrations | Documented |

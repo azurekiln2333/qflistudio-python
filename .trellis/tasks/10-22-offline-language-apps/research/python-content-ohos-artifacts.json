@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-22",
+  "note": "Existing artifact inspection only; no rebuild/install/runtime claim",
+  "channelTestExit": 0,
+  "artifacts": [
+    {
+      "path": "native\\build\\cmake-arm64-v8a\\libqfli_py.so",
+      "bytes": 2523880,
+      "modifiedUtc": "2026-10-15T11:26:45.537508+00:00",
+      "sha256": "bac7d337b336992c112722018d59f026dc1ad872e04ae70a132e4b78219e5ee2",
+      "needed": [
+        "libace_napi.z.so",
+        "libhilog_ndk.z.so",
+        "libc.so"
+      ],
+      "elfMachine": 183
+    },
+    {
+      "path": "ohos\\entry\\libs\\arm64-v8a\\libqfli_py.so",
+      "bytes": 2523880,
+      "modifiedUtc": "2026-10-15T11:26:45.537508+00:00",
+      "sha256": "bac7d337b336992c112722018d59f026dc1ad872e04ae70a132e4b78219e5ee2",
+      "needed": [
+        "libace_napi.z.so",
+        "libhilog_ndk.z.so",
+        "libc.so"
+      ],
+      "elfMachine": 183
+    },
+    {
+      "path": "ohos\\entry\\build\\default\\outputs\\default\\entry-default-signed.hap",
+      "bytes": 40546779,
+      "modifiedUtc": "2026-10-18T15:18:20.438111+00:00",
+      "sha256": "29f4ceeb875de7995ba3e61c0c32df19fca3e754843ea8706a932f4343454255",
+      "libraries": [
+        {
+          "path": "libs/arm64-v8a/libapp.so",
+          "bytes": 12944304,
+          "sha256": "0233ce15280e116663ac0dc1adfa3216154997aa7a854248730a57e39569736c"
+        },
+        {
+          "path": "libs/arm64-v8a/libflutter.so",
+          "bytes": 16286544,
+          "sha256": "fbcb8c4a297bbd32fd2300e86406ffe3b4e033dd7b2404a09508a08936a7b14f"
+        },
+        {
+          "path": "libs/arm64-v8a/libqfli_py.so",
+          "bytes": 797336,
+          "sha256": "24bd9a95ebc306b4c2cce7524f4beebf5da7cc0e556fff548f13b799be584b23"
+        }
+      ],
+      "content": [
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/content/examples.json",
+          "bytes": 1904586,
+          "sha256": "8d6b333852871dafc5c3d18a9b9fb22d4dd783a7c8594b8a61e887ca678986c9"
+        },
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/content/tutorials.json",
+          "bytes": 3969122,
+          "sha256": "ead9a068fb5f11f87cbf6d7501756d561aa24680eaf441fe6a3ebdec6afd5672"
+        },
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/tutorials/python.json",
+          "bytes": 378456,
+          "sha256": "8dbcd992c257daed0815dc944fb4aa9cbef82fea13da5f15f50b0753e1bb976a"
+        }
+      ]
+    },
+    {
+      "path": "ohos\\entry\\build\\default\\outputs\\default\\entry-default-unsigned.hap",
+      "bytes": 40239691,
+      "modifiedUtc": "2026-10-18T15:18:20.134294+00:00",
+      "sha256": "419256c1b72e5b1266fcdb1dc22e44c88ba44ece03184ff311f47d6afee37e75",
+      "libraries": [
+        {
+          "path": "libs/arm64-v8a/libapp.so",
+          "bytes": 12944304,
+          "sha256": "0233ce15280e116663ac0dc1adfa3216154997aa7a854248730a57e39569736c"
+        },
+        {
+          "path": "libs/arm64-v8a/libflutter.so",
+          "bytes": 16286544,
+          "sha256": "fbcb8c4a297bbd32fd2300e86406ffe3b4e033dd7b2404a09508a08936a7b14f"
+        },
+        {
+          "path": "libs/arm64-v8a/libqfli_py.so",
+          "bytes": 797336,
+          "sha256": "24bd9a95ebc306b4c2cce7524f4beebf5da7cc0e556fff548f13b799be584b23"
+        }
+      ],
+      "content": [
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/content/examples.json",
+          "bytes": 1904586,
+          "sha256": "8d6b333852871dafc5c3d18a9b9fb22d4dd783a7c8594b8a61e887ca678986c9"
+        },
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/content/tutorials.json",
+          "bytes": 3969122,
+          "sha256": "ead9a068fb5f11f87cbf6d7501756d561aa24680eaf441fe6a3ebdec6afd5672"
+        },
+        {
+          "path": "resources/rawfile/flutter_assets/packages/qfli_studio_core/assets/tutorials/python.json",
+          "bytes": 378456,
+          "sha256": "8dbcd992c257daed0815dc944fb4aa9cbef82fea13da5f15f50b0753e1bb976a"
+        }
+      ]
+    }
+  ]
+}

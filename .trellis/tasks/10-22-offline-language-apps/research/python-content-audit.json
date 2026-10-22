@@ -1,0 +1,3717 @@
+{
+  "date": "2026-10-22",
+  "scope": "Host DLL only; no OHOS execution claim",
+  "assets": [
+    {
+      "path": "D:\\MyNewProjects\\qfli_studio_core\\assets\\content\\tutorials.json",
+      "bytes": 3969122,
+      "sha256": "ead9a068fb5f11f87cbf6d7501756d561aa24680eaf441fe6a3ebdec6afd5672"
+    },
+    {
+      "path": "D:\\MyNewProjects\\qfli_studio_core\\assets\\content\\examples.json",
+      "bytes": 1904586,
+      "sha256": "8d6b333852871dafc5c3d18a9b9fb22d4dd783a7c8594b8a61e887ca678986c9"
+    },
+    {
+      "path": "D:\\MyNewProjects\\qfli_studio_core\\assets\\tutorials\\python.json",
+      "bytes": 378456,
+      "sha256": "8dbcd992c257daed0815dc944fb4aa9cbef82fea13da5f15f50b0753e1bb976a"
+    }
+  ],
+  "nativeLibrary": {
+    "path": "D:\\MyNewProjects\\qfli_python\\native\\build\\windows\\qfli_py_ffi.dll",
+    "bytes": 713342,
+    "sha256": "b477bc176a55d86a58162e9e25a480ece2706643e93334475140453af23f4f2c"
+  },
+  "helper": {
+    "path": "D:\\MyNewProjects\\qfli_studio_core\\tool\\python_content\\run_embedded.py",
+    "bytes": 2701,
+    "sha256": "47d2861c199eddb99c4cc6237fac5f1ac2e75691686cc2c40439ea9afff5e6e8"
+  },
+  "nativeVersion": "1.24.1 (ecfdd5d)",
+  "cpythonVersion": "3.13.3 (tags/v3.13.3:6280bb5, Apr  8 2025, 14:47:33) [MSC v.1943 64 bit (AMD64)]",
+  "tutorialCount": 120,
+  "exampleCount": 120,
+  "legacyLessonCount": 120,
+  "legacyExampleCount": 120,
+  "aggregateTotalCounts": [
+    1640,
+    1640
+  ],
+  "languageCountsTutorials": {
+    "c": 100,
+    "cpp": 100,
+    "lua": 100,
+    "javascript": 100,
+    "typescript": 100,
+    "shell": 100,
+    "rust": 100,
+    "go": 120,
+    "html": 100,
+    "css": 100,
+    "dart": 100,
+    "sql": 100,
+    "json": 100,
+    "markdown": 100,
+    "java": 100,
+    "python": 120
+  },
+  "languageCountsExamples": {
+    "c": 100,
+    "cpp": 100,
+    "lua": 100,
+    "javascript": 100,
+    "typescript": 100,
+    "shell": 100,
+    "rust": 100,
+    "go": 120,
+    "html": 100,
+    "css": 100,
+    "dart": 100,
+    "sql": 100,
+    "json": 100,
+    "markdown": 100,
+    "java": 100,
+    "python": 120
+  },
+  "authoredCount": 120,
+  "declaredRuntimeCounts": {
+    "embedded": 116,
+    "cpython": 4
+  },
+  "duplicateExampleIds": [],
+  "duplicateExampleTitles": [],
+  "duplicateExampleCode": [],
+  "placeholderMainIds": [],
+  "authoredAssetMismatches": [],
+  "imports": {
+    "python-example-001": [],
+    "python-example-002": [],
+    "python-example-003": [],
+    "python-example-004": [],
+    "python-example-005": [],
+    "python-example-006": [],
+    "python-example-007": [],
+    "python-example-008": [],
+    "python-example-009": [],
+    "python-example-010": [],
+    "python-example-011": [],
+    "python-example-012": [],
+    "python-example-013": [],
+    "python-example-014": [],
+    "python-example-015": [],
+    "python-example-016": [
+      "random"
+    ],
+    "python-example-017": [],
+    "python-example-018": [],
+    "python-example-019": [],
+    "python-example-020": [],
+    "python-example-021": [],
+    "python-example-022": [],
+    "python-example-023": [],
+    "python-example-024": [],
+    "python-example-025": [],
+    "python-example-026": [],
+    "python-example-027": [],
+    "python-example-028": [],
+    "python-example-029": [],
+    "python-example-030": [],
+    "python-example-031": [],
+    "python-example-032": [],
+    "python-example-033": [],
+    "python-example-034": [],
+    "python-example-035": [],
+    "python-example-036": [],
+    "python-example-037": [],
+    "python-example-038": [],
+    "python-example-039": [],
+    "python-example-040": [],
+    "python-example-041": [
+      "math"
+    ],
+    "python-example-042": [
+      "sys"
+    ],
+    "python-example-043": [],
+    "python-example-044": [],
+    "python-example-045": [],
+    "python-example-046": [],
+    "python-example-047": [],
+    "python-example-048": [],
+    "python-example-049": [
+      "json"
+    ],
+    "python-example-050": [
+      "json"
+    ],
+    "python-example-051": [
+      "heapq",
+      "math",
+      "random"
+    ],
+    "python-example-052": [
+      "json"
+    ],
+    "python-example-053": [],
+    "python-example-054": [],
+    "python-example-055": [],
+    "python-example-056": [],
+    "python-example-057": [],
+    "python-example-058": [],
+    "python-example-059": [],
+    "python-example-060": [],
+    "python-example-061": [],
+    "python-example-062": [],
+    "python-example-063": [],
+    "python-example-064": [],
+    "python-example-065": [],
+    "python-example-066": [],
+    "python-example-067": [],
+    "python-example-068": [],
+    "python-example-069": [],
+    "python-example-070": [],
+    "python-example-071": [],
+    "python-example-072": [],
+    "python-example-073": [],
+    "python-example-074": [
+      "time"
+    ],
+    "python-example-075": [],
+    "python-example-076": [
+      "time"
+    ],
+    "python-example-077": [],
+    "python-example-078": [],
+    "python-example-079": [],
+    "python-example-080": [],
+    "python-example-081": [],
+    "python-example-082": [],
+    "python-example-083": [],
+    "python-example-084": [],
+    "python-example-085": [],
+    "python-example-086": [
+      "heapq"
+    ],
+    "python-example-087": [],
+    "python-example-088": [
+      "collections"
+    ],
+    "python-example-089": [],
+    "python-example-090": [
+      "collections"
+    ],
+    "python-example-091": [
+      "collections"
+    ],
+    "python-example-092": [],
+    "python-example-093": [],
+    "python-example-094": [],
+    "python-example-095": [],
+    "python-example-096": [
+      "collections"
+    ],
+    "python-example-097": [],
+    "python-example-098": [],
+    "python-example-099": [],
+    "python-example-100": [],
+    "python-example-101": [],
+    "python-example-102": [
+      "json"
+    ],
+    "python-example-103": [],
+    "python-example-104": [],
+    "python-example-105": [],
+    "python-example-106": [],
+    "python-example-107": [],
+    "python-example-108": [],
+    "python-example-109": [
+      "json"
+    ],
+    "python-example-110": [],
+    "python-example-111": [],
+    "python-example-112": [],
+    "python-example-113": [
+      "re"
+    ],
+    "python-example-114": [
+      "random"
+    ],
+    "python-example-115": [
+      "json"
+    ],
+    "python-example-116": [],
+    "python-example-117": [
+      "importlib",
+      "importlib.util",
+      "sys",
+      "sysconfig"
+    ],
+    "python-example-118": [
+      "dataclasses",
+      "typing"
+    ],
+    "python-example-119": [
+      "datetime",
+      "os",
+      "pathlib",
+      "tempfile"
+    ],
+    "python-example-120": [
+      "asyncio",
+      "concurrent.futures",
+      "threading",
+      "time"
+    ]
+  },
+  "nativeResults": [
+    {
+      "id": "python-example-001",
+      "exitCode": 0,
+      "output": "Hello, Python!\n单引号也可以\n第一行\n第二行\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-002",
+      "exitCode": 0,
+      "output": "18 1.75 小明 True\n<class 'int'> <class 'float'> <class 'str'> <class 'bool'>\n十八 <class 'str'>\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-003",
+      "exitCode": 0,
+      "output": "22 12 85\n3.4\n3\n2\n1024\nFalse\n9\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-004",
+      "exitCode": 0,
+      "output": "8\nP n 程\nPython\nPython\n编程\nPython\nababab\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-005",
+      "exitCode": 0,
+      "output": "我叫小明，今年18岁\n合计：16.5 元\n保留两位：16.50\n编号：007\n右对齐：|   18|\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-006",
+      "exitCode": 0,
+      "output": "True\nTrue\nFalse\nFalse\nTrue\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-007",
+      "exitCode": 0,
+      "output": "12.5\n3元\n3\n4\n无法转换\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-008",
+      "exitCode": 0,
+      "output": "22\n85\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-009",
+      "exitCode": 0,
+      "output": "良好\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-010",
+      "exitCode": 0,
+      "output": "5 4 3 2 1 发射！\n5050\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-011",
+      "exitCode": 0,
+      "output": "0 1 2 3 4 \n2 3 4 5 \n1 3 5 7 9 \na-b-c-\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-012",
+      "exitCode": 0,
+      "output": "1x1=1\t\n1x2=2\t2x2=4\t\n1x3=3\t2x3=6\t3x3=9\t\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-013",
+      "exitCode": 0,
+      "output": "1 3 \n没有奇数\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-014",
+      "exitCode": 0,
+      "output": "总分 421，个数 5，平均 84.2\n最高 95，最低 67\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-015",
+      "exitCode": 0,
+      "output": "   *\n  ***\n *****\n*******\n---\n****\n***\n**\n*\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-016",
+      "exitCode": 0,
+      "output": "第 1 次 50：太大\n第 2 次 75：太大\n第 3 次 88：太大\n第 4 次 90：太大\n没猜中\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-017",
+      "exitCode": 0,
+      "output": "['apple', 'banana', 'orange']\napple orange\n['banana', 'orange']\n3\n['apple', 'grape', 'orange']\n14 5 1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-018",
+      "exitCode": 0,
+      "output": "[3, 1, 4, 1]\n[9, 3, 1, 4, 1]\n[9, 3, 1, 4] 1\n[9, 3, 4]\n[3, 4, 9]\n[1, 2, 3]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-019",
+      "exitCode": 0,
+      "output": "[1, 4, 9, 16, 25, 36]\n[2, 4, 6]\n['R1', 'R2', 'R3']\n[(0, 0), (0, 1), (1, 0), (1, 1)]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-020",
+      "exitCode": 0,
+      "output": "3 5\n2 1\n1 [2, 3, 4]\n<class 'tuple'> 1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-021",
+      "exitCode": 0,
+      "output": "Ming\nN/A\n4 True\nage=19\ncity=Hangzhou\nname=Ming\nscore=88\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-022",
+      "exitCode": 0,
+      "output": "a ['apple', 'avocado']\nb ['banana', 'blueberry']\nc ['cherry']\n[('a', 2), ('b', 2), ('c', 1)]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-023",
+      "exitCode": 0,
+      "output": "[3, 4]\n[1, 2, 3, 4, 5, 6]\n[1, 2]\n[1, 2, 5, 6]\n[1, 2, 3]\nTrue False\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-024",
+      "exitCode": 0,
+      "output": "['apple', 'banana ', ' cherry']\n['apple', 'banana', 'cherry']\napple-banana-cherry\n['a', 'b', 'c']\nheLLo\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-025",
+      "exitCode": 0,
+      "output": "['apple', 'banana', 'fig', 'kiwi']\n['fig', 'kiwi', 'apple', 'banana']\n['banana', 'apple', 'kiwi', 'fig']\n[('Hong', 15), ('Gang', 18), ('Ming', 18)]\n[1, 2, 3]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-026",
+      "exitCode": 0,
+      "output": "1. apple\n2. banana\n3. orange\nMing: 90\nHong: 85\n[(1, 'a'), (2, 'b'), (3, 'c')]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-027",
+      "exitCode": 0,
+      "output": "[1, 2, 3]\n[0, 2, 4]\n[5, 4, 3, 2, 1, 0]\n[4, 5]\n0 99\ncba\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-028",
+      "exitCode": 0,
+      "output": "the: 3\ncat: 2\nbird: 1\ndog: 1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-029",
+      "exitCode": 0,
+      "output": "7\n你好，小明\nNone\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-030",
+      "exitCode": 0,
+      "output": "你好，小明！\n早上好，小红！\n晚上好，小刚！\n9\n1024\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-031",
+      "exitCode": 0,
+      "output": "10\nname=小明\nage=18\n6\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-032",
+      "exitCode": 0,
+      "output": "100\n0\n1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-033",
+      "exitCode": 0,
+      "output": "120\n5050\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-034",
+      "exitCode": 0,
+      "output": "7\n['A->C', 'A->B', 'C->B', 'A->C', 'B->A', 'B->C', 'A->C']\n6765\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-035",
+      "exitCode": 0,
+      "output": "[2, 4, 6, 8, 10]\n[1, 3, 5]\n[(2, 'a'), (1, 'b')]\n[0, 1, 4, 9, 16]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-036",
+      "exitCode": 0,
+      "output": "1 2 3\n1\n10 50\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-037",
+      "exitCode": 0,
+      "output": "调用 add\n返回 5\n5\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-038",
+      "exitCode": 0,
+      "output": "hi\nhi\nhi\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-039",
+      "exitCode": 0,
+      "output": "1 2 3 4 \n1\n[2, 3]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-040",
+      "exitCode": 0,
+      "output": "385\n['apple', 'banana', 'kiwi']\n2450\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-041",
+      "exitCode": 0,
+      "output": "3.141592653589793\n4.0\n5.0\n__main__\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-042",
+      "exitCode": 0,
+      "output": "True\nTrue\nTrue\nTrue\nTrue\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-043",
+      "exitCode": 0,
+      "output": "42\nNone\n除零错误： divide by zero\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-044",
+      "exitCode": 0,
+      "output": "70\n余额不足：需要 200，只有 70\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-045",
+      "exitCode": 0,
+      "output": "下标越界 -> IndexError\n键不存在 -> KeyError\n值非法 -> ValueError\n类型不符 -> TypeError\n除零 -> ZeroDivisionError\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-046",
+      "exitCode": 0,
+      "output": "第一行\n第二行\n\n第一行--第二行--第三行\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-047",
+      "exitCode": 0,
+      "output": "60\n['10', '20', '30']\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-048",
+      "exitCode": 0,
+      "output": "'  Hello\\r\\n  World  \\n\\n'\n['Hello', 'World', '']\n['Hello', 'World']\nHello World\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-049",
+      "exitCode": 0,
+      "output": "ming 18\na-b\nTrue True\n{'ok': True, 'n': None}\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-050",
+      "exitCode": 0,
+      "output": "dark 14\na.py-b.py\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-051",
+      "exitCode": 0,
+      "output": "3 4\n256\nTrue\n1 2\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-052",
+      "exitCode": 0,
+      "output": "[ ] learn\n[x] homework\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-053",
+      "exitCode": 0,
+      "output": "旺财 3\n旺财 汪汪叫\n4\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-054",
+      "exitCode": 0,
+      "output": "6 100\n0\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-055",
+      "exitCode": 0,
+      "output": "77.0\n25\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-056",
+      "exitCode": 0,
+      "output": "12.57\n半径不能为负\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-057",
+      "exitCode": 0,
+      "output": "...\n旺财: 汪汪\n小狗: 汪汪（奶声）\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-058",
+      "exitCode": 0,
+      "output": "喵 汪 哔\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-059",
+      "exitCode": 0,
+      "output": "0 0\n5.0\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-060",
+      "exitCode": 0,
+      "output": "10 CNY\n[Money(10, 'CNY')]\nMoney(10, 'CNY')\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-061",
+      "exitCode": 0,
+      "output": "[Version(1, 2), Version(1, 10), Version(2, 0)]\nTrue\nTrue\n[Version(1, 2), Version(1, 10), Version(2, 0)]\nFalse\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-062",
+      "exitCode": 0,
+      "output": "4\nA D\n['B', 'C']\nTrue False\n0 A\n1 B\n2 C\n3 D\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-063",
+      "exitCode": 0,
+      "output": "Vector(4, 6)\nVector(-2, -2)\nVector(3, 6)\nTrue\nrejects int\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-064",
+      "exitCode": 0,
+      "output": "1 2 3\nslotted has __dict__: True\ndeclared slots: ('x', 'y')\nextra allowed: 9\nslotted attrs: ['extra', 'x', 'y']\nflexible attrs: ['x', 'y', 'z']\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-065",
+      "exitCode": 0,
+      "output": "sedan 装配 汽油 发动机，120 马力\nsedan 装配 电动发动机，200 马力\nTrue True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-066",
+      "exitCode": 0,
+      "output": "Point(x=1, y=2)\nTrue\nTrue\n1\n('x', 'y')\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-067",
+      "exitCode": 0,
+      "output": "ok already borrowed ok\nok not borrowed\n[1, 3]\nhottest: (1, 1)\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-068",
+      "exitCode": 0,
+      "output": "140 50\ninsufficient\ninvalid\n80 110\n2 1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-069",
+      "exitCode": 0,
+      "output": "3\n2\n1\nagain: []\nfresh: [3, 2, 1]\n2 1\nstopped\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-070",
+      "exitCode": 0,
+      "output": "['root', 'a', 'a1', 'a2', 'b']\n['root', 'a', 'a1', 'a2', 'b']\n[root, a, a1, a2, b]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-071",
+      "exitCode": 0,
+      "output": "0\n3\n7\n12\ndone\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-072",
+      "exitCode": 0,
+      "output": "10.0\n20.0\n30.0\n0.0\nsum: 125.0\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-073",
+      "exitCode": 0,
+      "output": "app error: NotFound user bob\nalice -> a@x.io\nstill running\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-074",
+      "exitCode": 0,
+      "output": "timing ok: True\ntotal 499500\nelapsed is set: True\nvalue safe\nrecovered from ValueError\nafter with\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-075",
+      "exitCode": 0,
+      "output": "832040\ncache size: 31 calls: 59\n3 7 3\ncalls: 3\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-076",
+      "exitCode": 0,
+      "output": "[INFO] call wrapper(7,)\nattempt 1 failed\nattempt 2 failed\nresult: 70\ntotal calls: 3\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-077",
+      "exitCode": 0,
+      "output": "12\n11\n13\n15 42\n[101, 102, 103]\n[4, 6, 8]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-078",
+      "exitCode": 0,
+      "output": "31\n9\n24\n[9, 1, 16, 1, 25, 81, 4, 36]\npy-is-fun\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-079",
+      "exitCode": 0,
+      "output": "21 0 -6\n25 8\nTrue False True\n[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]\n[10, 20, 30]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-080",
+      "exitCode": 0,
+      "output": "[('/c', 0.85)]\nsum: 0.85\ncount: 1\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-081",
+      "exitCode": 0,
+      "output": "n=10 linear=10 quadratic=100\nn=20 linear=20 quadratic=400\nn=40 linear=40 quadratic=1600\nratio quad 20:10 = 4\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-082",
+      "exitCode": 0,
+      "output": "(32, 33)\n(32, 6)\n(-1, 6)\n(0, 1) (0, 5)\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-083",
+      "exitCode": 0,
+      "output": "([1, 2, 5, 5, 6, 9], 6)\n([1, 2, 5, 5, 6, 9], 4)\n([1, 2, 5, 5, 6, 9], 6)\n0 0\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-084",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 5, 8, 9]\n[]\n[7]\n[1, 1, 2, 2]\n[1, 2, 3, 4]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-085",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 3, 6, 8]\n[5, 5, 5, 5]\n[1, 5, 7, 8, 9, 10]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-086",
+      "exitCode": 0,
+      "output": "['login', 'heartbeat', 'render', 'backup']\n1\n1 2\n0 4\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-087",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 4] 4\nTrue [1, 3, 4]\nFalse\n[4, 3, 1] 3\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-088",
+      "exitCode": 0,
+      "output": "True\nFalse\nFalse\n[2.0, 3.0, 4.0]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-089",
+      "exitCode": 0,
+      "output": "1 2 -1\n100 3\nTrue None 2\nFalse\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-090",
+      "exitCode": 0,
+      "output": "inorder:   [1, 3, 4, 5, 7, 8, 9]\npreorder:  [5, 3, 1, 4, 8, 7, 9]\npostorder: [1, 4, 3, 7, 9, 8, 5]\nlevel:     [5, 3, 8, 1, 4, 7, 9]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-091",
+      "exitCode": 0,
+      "output": "dfs: ['A', 'B', 'D', 'C', 'E']\nbfs dist: [('A', 0), ('B', 1), ('C', 1), ('D', 2), ('E', 3)]\nreachable: 5\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-092",
+      "exitCode": 0,
+      "output": "[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\nTrue\n[1, 2, 3, 5, 8, 13]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-093",
+      "exitCode": 0,
+      "output": "7\n7\n0\n5\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-094",
+      "exitCode": 0,
+      "output": "[(1, 3), (3, 5), (5, 7), (8, 9)]\n4\n([20, 20, 20, 1, 1, 1], 0)\n([40], 0)\n([25, 1, 1, 1, 1, 1], 0)\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-095",
+      "exitCode": 0,
+      "output": "n=4 count=2\nn=5 count=10\nn=6 count=4\nfirst 4-queens: [1, 3, 0, 2]\n6-queens count: 4\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-096",
+      "exitCode": 0,
+      "output": "length: 13\n[(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0), (3, 0), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4)]\nsteps: 12\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-097",
+      "exitCode": 0,
+      "output": "20.0\n2\nassertion: 需要非空列表\nassertion: 元素必须是数字\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-098",
+      "exitCode": 0,
+      "output": "PASS test_add\nPASS test_is_prime\n结果: 2 passed, 0 failed\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-099",
+      "exitCode": 0,
+      "output": "PASS test_boundaries\nPASS test_invalid\n结果: 2 passed, 0 failed\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-100",
+      "exitCode": 0,
+      "output": "buggy: 56.66666666666666\nprobe:\ni=0 value=80 running=80\ni=1 value=90 running=170\nvisited 2 of 3 elements\nfixed: 90.0\nmatch: False\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-101",
+      "exitCode": 0,
+      "output": "[('host', 'localhost'), ('port', 8080)]\nConfigError: 端口不是整数: 'abc'\nConfigError: 端口超出范围: 70000\nConfigError: host 不能为空\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-102",
+      "exitCode": 0,
+      "output": "apple: 10.50\nbanana: 6.00\n[[\"apple\", 10.5], [\"banana\", 6.0]]\nnames: ['apple', 'banana']\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-103",
+      "exitCode": 0,
+      "output": "default retries: 3\ncustom retries: 5\ndefault unchanged: True\nkeys: ['retries', 'timeout_ms', 'verbose']\nweeks left: 3.0\nexpired: 0.0\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-104",
+      "exitCode": 0,
+      "output": "ok: [('age', 30), ('email', 'li@example.com'), ('name', 'Li')]\nerrors: []\nerrors count: 3\n - name: 至少 2 个字符\n - age: 不是整数\n - email: 格式非法\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-105",
+      "exitCode": 0,
+      "output": "[INFO] result=5.0\n[ERROR] divide by zero\nquiet output:\nquiet records: []\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-106",
+      "exitCode": 0,
+      "output": "(3, ['the', 'on', 'the'])\n(3, ['the', 'on', 'the'])\ncache: [(3, 9), (4, 16)]\nsize: 2\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-107",
+      "exitCode": 0,
+      "output": "messy: [4, 36, 64]\nclean: [4, 36, 64]\nsame: True\nclean count: 3\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-108",
+      "exitCode": 0,
+      "output": "8/8 passed\npython-3-13-ready\n[[0, 1, 2], [3, 4, 5]]\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-109",
+      "exitCode": 0,
+      "output": "total: 542300\n food: -7700\n rent: -250000\n salary: 800000\nentries: 4\nrejected: 金额不能为 0\nserialized: True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-110",
+      "exitCode": 0,
+      "output": "mean: 87.00\nmedian: 88.0\ndist [60,80,90]: [0, 2, 2, 3]\nrank 88: 4\nrank 100: 1\nmedian even: 2.5\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-111",
+      "exitCode": 0,
+      "output": "look -> hall: key\ntake key -> took key\ngo north -> moved to library\ntake book -> took book\ngo east -> moved to vault\ntake gold -> took gold\nwin -> YOU WIN\nbag: ['key', 'book', 'gold']\nwon: True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-112",
+      "exitCode": 0,
+      "output": "transpose: [[1, 3], [2, 4]]\nproduct: [[19, 22], [43, 50]]\nidentity: [[1, 2], [3, 4]]\ndet a: -2\nerror: shape 1x3 vs 1x2\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-113",
+      "exitCode": 0,
+      "output": "normalized: 2024-01-03 GET /a 200\nstatus 200: 3\nstatus 404: 1\nstatus 500: 1\npath /a: 3\nbad line: None\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-114",
+      "exitCode": 0,
+      "output": "path: [100.0, 101.74, 101.96, 102.82, 101.28, 103.39, 104.99, 106.74, 108.47, 109.15, 109.19]\nfinal: 109.19\npeak: 109.19\nreturn pct: 9.19\nmax drawdown: 0.0150\nreproducible: True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-115",
+      "exitCode": 0,
+      "output": "(201, {'id': 1, 'name': 'pen'})\n(201, {'id': 2, 'name': 'book'})\n(400, {'error': 'name required'})\n(200, [{'id': 1, 'name': 'pen'}, {'id': 2, 'name': 'book'}])\n(200, {'id': 2, 'name': 'book'})\n(404, {'error': 'missing'})\n(404, {'error': 'not found'})\ncount: 2\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-116",
+      "exitCode": 0,
+      "output": "procedural: 40.0\noop:        40.0\nfunctional: 40.0\nall equal: True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true,
+      "declaredRuntime": "embedded"
+    },
+    {
+      "id": "python-example-117",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-example-117_m00xmdvy\\main.py\", line 2, in <module>\nImportError: no module named 'sysconfig'\n",
+      "exactOutput": false,
+      "normalizedOutput": false,
+      "declaredRuntime": "cpython"
+    },
+    {
+      "id": "python-example-118",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-example-118_9146k_u7\\main.py\", line 1, in <module>\nImportError: no module named 'dataclasses'\n",
+      "exactOutput": false,
+      "normalizedOutput": false,
+      "declaredRuntime": "cpython"
+    },
+    {
+      "id": "python-example-119",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-example-119_8ck43r8j\\main.py\", line 1, in <module>\nImportError: no module named 'os'\n",
+      "exactOutput": false,
+      "normalizedOutput": false,
+      "declaredRuntime": "cpython"
+    },
+    {
+      "id": "python-example-120",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-example-120_4b0fqeip\\main.py\", line 2, in <module>\nImportError: no module named 'threading'\n",
+      "exactOutput": false,
+      "normalizedOutput": false,
+      "declaredRuntime": "cpython"
+    }
+  ],
+  "tutorialNativeResults": [
+    {
+      "id": "python-tutorial-001-lesson",
+      "exitCode": 0,
+      "output": "Hello, Python!\n单引号也可以\n第一行\n第二行\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-002-lesson",
+      "exitCode": 0,
+      "output": "18 1.75 小明 True\n<class 'int'> <class 'float'> <class 'str'> <class 'bool'>\n十八 <class 'str'>\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-003-lesson",
+      "exitCode": 0,
+      "output": "22 12 85\n3.4\n3\n2\n1024\nFalse\n9\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-004-lesson",
+      "exitCode": 0,
+      "output": "8\nP n 程\nPython\nPython\n编程\nPython\nababab\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-005-lesson",
+      "exitCode": 0,
+      "output": "我叫小明，今年18岁\n合计：16.5 元\n保留两位：16.50\n编号：007\n右对齐：|   18|\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-006-lesson",
+      "exitCode": 0,
+      "output": "True\nTrue\nFalse\nFalse\nTrue\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-007-lesson",
+      "exitCode": 0,
+      "output": "12.5\n3元\n3\n4\n无法转换\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-008-lesson",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-tutorial-008-lesson_kgwbb_22\\main.py\", line 1, in <module>\nEOFError: \n",
+      "exactOutput": false
+    },
+    {
+      "id": "python-tutorial-009-lesson",
+      "exitCode": 0,
+      "output": "良好\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-010-lesson",
+      "exitCode": 0,
+      "output": "5 4 3 2 1 发射！\n5050\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-011-lesson",
+      "exitCode": 0,
+      "output": "0 1 2 3 4 \n2 3 4 5 \n1 3 5 7 9 \na-b-c-\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-012-lesson",
+      "exitCode": 0,
+      "output": "1x1=1\t\n1x2=2\t2x2=4\t\n1x3=3\t2x3=6\t3x3=9\t\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-013-lesson",
+      "exitCode": 0,
+      "output": "1 3 \n没有奇数\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-014-lesson",
+      "exitCode": 0,
+      "output": "总分 421，个数 5，平均 84.2\n最高 95，最低 67\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-015-lesson",
+      "exitCode": 0,
+      "output": "   *\n  ***\n *****\n*******\n---\n****\n***\n**\n*\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-016-lesson",
+      "exitCode": 0,
+      "output": "第 1 次 50：太大\n第 2 次 75：太大\n第 3 次 88：太大\n第 4 次 90：太大\n没猜中\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-017-lesson",
+      "exitCode": 0,
+      "output": "['apple', 'banana', 'orange']\napple orange\n['banana', 'orange']\n3\n['apple', 'grape', 'orange']\n14 5 1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-018-lesson",
+      "exitCode": 0,
+      "output": "[3, 1, 4, 1]\n[9, 3, 1, 4, 1]\n[9, 3, 1, 4] 1\n[9, 3, 4]\n[3, 4, 9]\n[1, 2, 3]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-019-lesson",
+      "exitCode": 0,
+      "output": "[1, 4, 9, 16, 25, 36]\n[2, 4, 6]\n['R1', 'R2', 'R3']\n[(0, 0), (0, 1), (1, 0), (1, 1)]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-020-lesson",
+      "exitCode": 0,
+      "output": "3 5\n2 1\n1 [2, 3, 4]\n<class 'tuple'> 1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-021-lesson",
+      "exitCode": 0,
+      "output": "Ming\nN/A\n4 True\nage=19\ncity=Hangzhou\nname=Ming\nscore=88\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-022-lesson",
+      "exitCode": 0,
+      "output": "a ['apple', 'avocado']\nb ['banana', 'blueberry']\nc ['cherry']\n[('a', 2), ('b', 2), ('c', 1)]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-023-lesson",
+      "exitCode": 0,
+      "output": "[3, 4]\n[1, 2, 3, 4, 5, 6]\n[1, 2]\n[1, 2, 5, 6]\n[1, 2, 3]\nTrue False\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-024-lesson",
+      "exitCode": 0,
+      "output": "['apple', 'banana ', ' cherry']\n['apple', 'banana', 'cherry']\napple-banana-cherry\n['a', 'b', 'c']\nheLLo\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-025-lesson",
+      "exitCode": 0,
+      "output": "['apple', 'banana', 'fig', 'kiwi']\n['fig', 'kiwi', 'apple', 'banana']\n['banana', 'apple', 'kiwi', 'fig']\n[('Hong', 15), ('Gang', 18), ('Ming', 18)]\n[1, 2, 3]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-026-lesson",
+      "exitCode": 0,
+      "output": "1. apple\n2. banana\n3. orange\nMing: 90\nHong: 85\n[(1, 'a'), (2, 'b'), (3, 'c')]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-027-lesson",
+      "exitCode": 0,
+      "output": "[1, 2, 3]\n[0, 2, 4]\n[5, 4, 3, 2, 1, 0]\n[4, 5]\n0 99\ncba\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-028-lesson",
+      "exitCode": 0,
+      "output": "the: 3\ncat: 2\nbird: 1\ndog: 1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-029-lesson",
+      "exitCode": 0,
+      "output": "7\n你好，小明\nNone\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-030-lesson",
+      "exitCode": 0,
+      "output": "你好，小明！\n早上好，小红！\n晚上好，小刚！\n9\n1024\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-031-lesson",
+      "exitCode": 0,
+      "output": "10\nname=小明\nage=18\n6\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-032-lesson",
+      "exitCode": 0,
+      "output": "100\n0\n1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-033-lesson",
+      "exitCode": 0,
+      "output": "120\n5050\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-034-lesson",
+      "exitCode": 0,
+      "output": "7\n['A->C', 'A->B', 'C->B', 'A->C', 'B->A', 'B->C', 'A->C']\n6765\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-035-lesson",
+      "exitCode": 0,
+      "output": "[2, 4, 6, 8, 10]\n[1, 3, 5]\n[(2, 'a'), (1, 'b')]\n[0, 1, 4, 9, 16]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-036-lesson",
+      "exitCode": 0,
+      "output": "1 2 3\n1\n10 50\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-037-lesson",
+      "exitCode": 0,
+      "output": "调用 add\n返回 5\n5\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-038-lesson",
+      "exitCode": 0,
+      "output": "hi\nhi\nhi\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-039-lesson",
+      "exitCode": 0,
+      "output": "1 2 3 4 \n1\n[2, 3]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-040-lesson",
+      "exitCode": 0,
+      "output": "385\n['apple', 'banana', 'kiwi']\n2450\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-041-lesson",
+      "exitCode": 0,
+      "output": "3.141592653589793\n4.0\n5.0\n__main__\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-042-lesson",
+      "exitCode": 0,
+      "output": "True\nTrue\nTrue\nTrue\nTrue\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-043-lesson",
+      "exitCode": 0,
+      "output": "42\nNone\n除零错误： divide by zero\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-044-lesson",
+      "exitCode": 0,
+      "output": "70\n余额不足：需要 200，只有 70\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-045-lesson",
+      "exitCode": 0,
+      "output": "下标越界 -> IndexError\n键不存在 -> KeyError\n值非法 -> ValueError\n类型不符 -> TypeError\n除零 -> ZeroDivisionError\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-046-lesson",
+      "exitCode": 0,
+      "output": "第一行\n第二行\n\n第一行--第二行--第三行\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-047-lesson",
+      "exitCode": 0,
+      "output": "60\n['10', '20', '30']\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-048-lesson",
+      "exitCode": 0,
+      "output": "'  Hello\\r\\n  World  \\n\\n'\n['Hello', 'World', '']\n['Hello', 'World']\nHello World\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-049-lesson",
+      "exitCode": 0,
+      "output": "ming 18\na-b\nTrue True\n{'ok': True, 'n': None}\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-050-lesson",
+      "exitCode": 0,
+      "output": "dark 14\na.py-b.py\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-051-lesson",
+      "exitCode": 0,
+      "output": "3 4\n256\nTrue\n1 2\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-052-lesson",
+      "exitCode": 0,
+      "output": "[ ] learn\n[x] homework\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-053-lesson",
+      "exitCode": 0,
+      "output": "旺财 3\n旺财 汪汪叫\n4\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-054-lesson",
+      "exitCode": 0,
+      "output": "6 100\n0\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-055-lesson",
+      "exitCode": 0,
+      "output": "77.0\n25\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-056-lesson",
+      "exitCode": 0,
+      "output": "12.57\n半径不能为负\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-057-lesson",
+      "exitCode": 0,
+      "output": "...\n旺财: 汪汪\n小狗: 汪汪（奶声）\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-058-lesson",
+      "exitCode": 0,
+      "output": "喵 汪 哔\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-059-lesson",
+      "exitCode": 0,
+      "output": "0 0\n5.0\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-060-lesson",
+      "exitCode": 0,
+      "output": "10 CNY\n[Money(10, 'CNY')]\nMoney(10, 'CNY')\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-061-lesson",
+      "exitCode": 0,
+      "output": "[Version(1, 2), Version(1, 10), Version(2, 0)]\nTrue\nTrue\n[Version(1, 2), Version(1, 10), Version(2, 0)]\nFalse\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-062-lesson",
+      "exitCode": 0,
+      "output": "4\nA D\n['B', 'C']\nTrue False\n0 A\n1 B\n2 C\n3 D\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-063-lesson",
+      "exitCode": 0,
+      "output": "Vector(4, 6)\nVector(-2, -2)\nVector(3, 6)\nTrue\nrejects int\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-064-lesson",
+      "exitCode": 0,
+      "output": "1 2 3\nslotted has __dict__: True\ndeclared slots: ('x', 'y')\nextra allowed: 9\nslotted attrs: ['extra', 'x', 'y']\nflexible attrs: ['x', 'y', 'z']\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-065-lesson",
+      "exitCode": 0,
+      "output": "sedan 装配 汽油 发动机，120 马力\nsedan 装配 电动发动机，200 马力\nTrue True\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-066-lesson",
+      "exitCode": 0,
+      "output": "Point(x=1, y=2)\nTrue\nTrue\n1\n('x', 'y')\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-067-lesson",
+      "exitCode": 0,
+      "output": "ok already borrowed ok\nok not borrowed\n[1, 3]\nhottest: (1, 1)\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-068-lesson",
+      "exitCode": 0,
+      "output": "140 50\ninsufficient\ninvalid\n80 110\n2 1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-069-lesson",
+      "exitCode": 0,
+      "output": "3\n2\n1\nagain: []\nfresh: [3, 2, 1]\n2 1\nstopped\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-070-lesson",
+      "exitCode": 0,
+      "output": "['root', 'a', 'a1', 'a2', 'b']\n['root', 'a', 'a1', 'a2', 'b']\n[root, a, a1, a2, b]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-071-lesson",
+      "exitCode": 0,
+      "output": "0\n3\n7\n12\ndone\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-072-lesson",
+      "exitCode": 0,
+      "output": "10.0\n20.0\n30.0\n0.0\nsum: 125.0\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-073-lesson",
+      "exitCode": 0,
+      "output": "app error: NotFound user bob\nalice -> a@x.io\nstill running\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-074-lesson",
+      "exitCode": 0,
+      "output": "timing ok: True\ntotal 499500\nelapsed is set: True\nvalue safe\nrecovered from ValueError\nafter with\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-075-lesson",
+      "exitCode": 0,
+      "output": "832040\ncache size: 31 calls: 59\n3 7 3\ncalls: 3\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-076-lesson",
+      "exitCode": 0,
+      "output": "[INFO] call wrapper(7,)\nattempt 1 failed\nattempt 2 failed\nresult: 70\ntotal calls: 3\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-077-lesson",
+      "exitCode": 0,
+      "output": "12\n11\n13\n15 42\n[101, 102, 103]\n[4, 6, 8]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-078-lesson",
+      "exitCode": 0,
+      "output": "31\n9\n24\n[9, 1, 16, 1, 25, 81, 4, 36]\npy-is-fun\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-079-lesson",
+      "exitCode": 0,
+      "output": "21 0 -6\n25 8\nTrue False True\n[10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]\n[10, 20, 30]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-080-lesson",
+      "exitCode": 0,
+      "output": "[('/c', 0.85)]\nsum: 0.85\ncount: 1\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-081-lesson",
+      "exitCode": 0,
+      "output": "n=10 linear=10 quadratic=100\nn=20 linear=20 quadratic=400\nn=40 linear=40 quadratic=1600\nratio quad 20:10 = 4\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-082-lesson",
+      "exitCode": 0,
+      "output": "(32, 33)\n(32, 6)\n(-1, 6)\n(0, 1) (0, 5)\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-083-lesson",
+      "exitCode": 0,
+      "output": "([1, 2, 5, 5, 6, 9], 6)\n([1, 2, 5, 5, 6, 9], 4)\n([1, 2, 5, 5, 6, 9], 6)\n0 0\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-084-lesson",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 5, 8, 9]\n[]\n[7]\n[1, 1, 2, 2]\n[1, 2, 3, 4]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-085-lesson",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 3, 6, 8]\n[5, 5, 5, 5]\n[1, 5, 7, 8, 9, 10]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-086-lesson",
+      "exitCode": 0,
+      "output": "['login', 'heartbeat', 'render', 'backup']\n1\n1 2\n0 4\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-087-lesson",
+      "exitCode": 0,
+      "output": "[1, 2, 3, 4] 4\nTrue [1, 3, 4]\nFalse\n[4, 3, 1] 3\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-088-lesson",
+      "exitCode": 0,
+      "output": "True\nFalse\nFalse\n[2.0, 3.0, 4.0]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-089-lesson",
+      "exitCode": 0,
+      "output": "1 2 -1\n100 3\nTrue None 2\nFalse\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-090-lesson",
+      "exitCode": 0,
+      "output": "inorder:   [1, 3, 4, 5, 7, 8, 9]\npreorder:  [5, 3, 1, 4, 8, 7, 9]\npostorder: [1, 4, 3, 7, 9, 8, 5]\nlevel:     [5, 3, 8, 1, 4, 7, 9]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-091-lesson",
+      "exitCode": 0,
+      "output": "dfs: ['A', 'B', 'D', 'C', 'E']\nbfs dist: [('A', 0), ('B', 1), ('C', 1), ('D', 2), ('E', 3)]\nreachable: 5\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-092-lesson",
+      "exitCode": 0,
+      "output": "[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\n[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]\nTrue\n[1, 2, 3, 5, 8, 13]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-093-lesson",
+      "exitCode": 0,
+      "output": "7\n7\n0\n5\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-094-lesson",
+      "exitCode": 0,
+      "output": "[(1, 3), (3, 5), (5, 7), (8, 9)]\n4\n([20, 20, 20, 1, 1, 1], 0)\n([40], 0)\n([25, 1, 1, 1, 1, 1], 0)\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-095-lesson",
+      "exitCode": 0,
+      "output": "n=4 count=2\nn=5 count=10\nn=6 count=4\nfirst 4-queens: [1, 3, 0, 2]\n6-queens count: 4\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-096-lesson",
+      "exitCode": 0,
+      "output": "length: 13\n[(0, 0), (0, 1), (0, 2), (1, 2), (2, 2), (2, 1), (2, 0), (3, 0), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4)]\nsteps: 12\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-097-lesson",
+      "exitCode": 0,
+      "output": "20.0\n2\nassertion: 需要非空列表\nassertion: 元素必须是数字\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-098-lesson",
+      "exitCode": 0,
+      "output": "PASS test_add\nPASS test_is_prime\n结果: 2 passed, 0 failed\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-099-lesson",
+      "exitCode": 0,
+      "output": "PASS test_boundaries\nPASS test_invalid\n结果: 2 passed, 0 failed\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-100-lesson",
+      "exitCode": 0,
+      "output": "buggy: 56.66666666666666\nprobe:\ni=0 value=80 running=80\ni=1 value=90 running=170\nvisited 2 of 3 elements\nfixed: 90.0\nmatch: False\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-101-lesson",
+      "exitCode": 0,
+      "output": "[('host', 'localhost'), ('port', 8080)]\nConfigError: 端口不是整数: 'abc'\nConfigError: 端口超出范围: 70000\nConfigError: host 不能为空\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-102-lesson",
+      "exitCode": 0,
+      "output": "apple: 10.50\nbanana: 6.00\n[[\"apple\", 10.5], [\"banana\", 6.0]]\nnames: ['apple', 'banana']\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-103-lesson",
+      "exitCode": 0,
+      "output": "default retries: 3\ncustom retries: 5\ndefault unchanged: True\nkeys: ['retries', 'timeout_ms', 'verbose']\nweeks left: 3.0\nexpired: 0.0\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-104-lesson",
+      "exitCode": 0,
+      "output": "ok: [('age', 30), ('email', 'li@example.com'), ('name', 'Li')]\nerrors: []\nerrors count: 3\n - name: 至少 2 个字符\n - age: 不是整数\n - email: 格式非法\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-105-lesson",
+      "exitCode": 0,
+      "output": "[INFO] result=5.0\n[ERROR] divide by zero\nquiet output:\nquiet records: []\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-106-lesson",
+      "exitCode": 0,
+      "output": "(3, ['the', 'on', 'the'])\n(3, ['the', 'on', 'the'])\ncache: [(3, 9), (4, 16)]\nsize: 2\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-107-lesson",
+      "exitCode": 0,
+      "output": "messy: [4, 36, 64]\nclean: [4, 36, 64]\nsame: True\nclean count: 3\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-108-lesson",
+      "exitCode": 0,
+      "output": "8/8 passed\npython-3-13-ready\n[[0, 1, 2], [3, 4, 5]]\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-109-lesson",
+      "exitCode": 0,
+      "output": "total: 542300\n food: -7700\n rent: -250000\n salary: 800000\nentries: 4\nrejected: 金额不能为 0\nserialized: True\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-110-lesson",
+      "exitCode": 0,
+      "output": "mean: 87.00\nmedian: 88.0\ndist [60,80,90]: [0, 2, 2, 3]\nrank 88: 4\nrank 100: 1\nmedian even: 2.5\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-111-lesson",
+      "exitCode": 0,
+      "output": "look -> hall: key\ntake key -> took key\ngo north -> moved to library\ntake book -> took book\ngo east -> moved to vault\ntake gold -> took gold\nwin -> YOU WIN\nbag: ['key', 'book', 'gold']\nwon: True\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-112-lesson",
+      "exitCode": 0,
+      "output": "transpose: [[1, 3], [2, 4]]\nproduct: [[19, 22], [43, 50]]\nidentity: [[1, 2], [3, 4]]\ndet a: -2\nerror: shape 1x3 vs 1x2\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-113-lesson",
+      "exitCode": 0,
+      "output": "normalized: 2024-01-03 GET /a 200\nstatus 200: 3\nstatus 404: 1\nstatus 500: 1\npath /a: 3\nbad line: None\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-114-lesson",
+      "exitCode": 0,
+      "output": "path: [100.0, 101.74, 101.96, 102.82, 101.28, 103.39, 104.99, 106.74, 108.47, 109.15, 109.19]\nfinal: 109.19\npeak: 109.19\nreturn pct: 9.19\nmax drawdown: 0.0150\nreproducible: True\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-115-lesson",
+      "exitCode": 0,
+      "output": "(201, {'id': 1, 'name': 'pen'})\n(201, {'id': 2, 'name': 'book'})\n(400, {'error': 'name required'})\n(200, [{'id': 1, 'name': 'pen'}, {'id': 2, 'name': 'book'}])\n(200, {'id': 2, 'name': 'book'})\n(404, {'error': 'missing'})\n(404, {'error': 'not found'})\ncount: 2\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-116-lesson",
+      "exitCode": 0,
+      "output": "procedural: 40.0\noop:        40.0\nfunctional: 40.0\nall equal: True\n",
+      "error": "",
+      "exactOutput": true
+    },
+    {
+      "id": "python-tutorial-117-lesson",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-tutorial-117-lesson_siihi11x\\main.py\", line 2, in <module>\nImportError: no module named 'sysconfig'\n",
+      "exactOutput": false
+    },
+    {
+      "id": "python-tutorial-118-lesson",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-tutorial-118-lesson_imdimjdw\\main.py\", line 1, in <module>\nImportError: no module named 'dataclasses'\n",
+      "exactOutput": false
+    },
+    {
+      "id": "python-tutorial-119-lesson",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-tutorial-119-lesson_znk960qq\\main.py\", line 1, in <module>\nImportError: no module named 'os'\n",
+      "exactOutput": false
+    },
+    {
+      "id": "python-tutorial-120-lesson",
+      "exitCode": 1,
+      "output": "",
+      "error": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\python-tutorial-120-lesson__1qk9aiz\\main.py\", line 2, in <module>\nImportError: no module named 'threading'\n",
+      "exactOutput": false
+    }
+  ],
+  "cpythonResults": [
+    {
+      "id": "python-example-117",
+      "exitCode": 0,
+      "output": "executable kind: python.exe\nversion: 3.13.3\nis_cpython: True\nstdlib os           -> True\nstdlib datetime     -> True\nstdlib threading    -> True\nstdlib asyncio      -> True\nstdlib dataclasses  -> True\nall stdlib present: True\ndynamic import: 2024-01-01\nsearch paths > 0: True\nplatform tag: win-amd64\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true
+    },
+    {
+      "id": "python-example-118",
+      "exitCode": 0,
+      "output": "Order(order_id=1, items=[Item(name='pen', price=2.5, qty=3), Item(name='book', price=12.0, qty=1)])\ntotal: 19.5\neq: True\nsorted: [Item(name='a', price=5, qty=1), Item(name='b', price=5, qty=1), Item(name='c', price=1, qty=1)]\ntwo orders isolated: True\nfrozen test:\nPoint(x=1, y=2) True\nimmutable: FrozenInstanceError\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true
+    },
+    {
+      "id": "python-example-119",
+      "exitCode": 0,
+      "output": "exists: True\nname: app.log suffix: .log\nparent name: logs\nread: ['line1', 'line2']\nfiles: ['app.log']\nsize: 12\nplus 30d: 2024-01-31\ndiff days: 60\niso: 2024-06-15T10:30:00\nformatted: 2024/06/15 10:30\njoined: a\\b\\c.txt\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true
+    },
+    {
+      "id": "python-example-120",
+      "exitCode": 0,
+      "output": "thread results: ['a done', 'b done', 'c done']\ncounter: 3\nasync results: ['fetched x', 'fetched y', 'fetched z']\nhas_asyncio: True\nthread ident positive: True\n",
+      "error": "",
+      "exactOutput": true,
+      "normalizedOutput": true
+    }
+  ],
+  "exerciseAnswerCount": 186,
+  "exerciseAnswerCompilePassed": 176,
+  "exerciseAnswerCompileResults": [
+    {
+      "topic": 1,
+      "exercise": 1,
+      "prompt": "打印三行，分别是你的名字、年龄和所在城市。",
+      "answer": "print(\"小明\")\nprint(18)\nprint(\"杭州\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 1,
+      "exercise": 2,
+      "prompt": "用一行 print 输出带换行的两句话。",
+      "answer": "print(\"你好\\n世界\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 2,
+      "exercise": 1,
+      "prompt": "把 age 重新赋成字符串，再打印它的类型。",
+      "answer": "age = \"十八\"\nprint(type(age))  # <class 'str'>",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 2,
+      "exercise": 2,
+      "prompt": "创建两个变量并交换它们的值，打印交换前后的结果。",
+      "answer": "a, b = 1, 2\nprint(a, b)\na, b = b, a\nprint(a, b)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 3,
+      "exercise": 1,
+      "prompt": "输入秒数 3661，换算成「时:分:秒」。",
+      "answer": "s = 3661\nh = s // 3600\nm = s % 3600 // 60\nsec = s % 60\nprint(f\"{h}:{m}:{sec}\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 3,
+      "exercise": 2,
+      "prompt": "判断一个数是奇数还是偶数。",
+      "answer": "n = 7\nprint(\"奇数\" if n % 2 else \"偶数\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 4,
+      "exercise": 1,
+      "prompt": "取字符串 \"abcdef\" 的中间两个字符 \"cd\"。",
+      "answer": "s = \"abcdef\"\nprint(s[2:4])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 4,
+      "exercise": 2,
+      "prompt": "把字符串 \"hello\" 反转成 \"olleh\"。",
+      "answer": "s = \"hello\"\nprint(\"\".join(reversed(s)))  # olleh",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 5,
+      "exercise": 1,
+      "prompt": "用 f-string 打印「商品：苹果，单价 5.5 元，数量 3，合计 16.50 元」。",
+      "answer": "print(f\"商品：苹果，单价 5.5 元，数量 3，合计 {5.5 * 3:.2f} 元\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 5,
+      "exercise": 2,
+      "prompt": "把 3.14159 打印成保留 3 位小数。",
+      "answer": "print(f\"{3.14159:.3f}\")  # 3.142",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 6,
+      "exercise": 1,
+      "prompt": "判断一年是否为闰年（能被 4 整除且不能被 100 整除，或能被 400 整除）。",
+      "answer": "y = 2024\nleap = (y % 4 == 0 and y % 100 != 0) or y % 400 == 0\nprint(leap)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 7,
+      "exercise": 1,
+      "prompt": "把字符串 \"3.14\" 转成浮点数并乘 2。",
+      "answer": "x = float(\"3.14\")\nprint(x * 2)  # 6.28",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 8,
+      "exercise": 1,
+      "prompt": "一行读入两个空格分隔的数，输出它们的乘积。",
+      "answer": "x, y = map(int, input().split())\nprint(x * y)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 9,
+      "exercise": 1,
+      "prompt": "加入「90 以上优秀、80 以上良好、60 以上及格、其余不及格」。",
+      "answer": "if score >= 90:\n    print(\"优秀\")\nelif score >= 80:\n    print(\"良好\")\nelif score >= 60:\n    print(\"及格\")\nelse:\n    print(\"不及格\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 10,
+      "exercise": 1,
+      "prompt": "用 while 求 1 到 n 的乘积（阶乘）。",
+      "answer": "n = 5\nresult = 1\ni = 1\nwhile i <= n:\n    result *= i\n    i += 1\nprint(result)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 11,
+      "exercise": 1,
+      "prompt": "打印 1 到 20 之间所有 3 的倍数。",
+      "answer": "for i in range(3, 21, 3):\n    print(i, end=\" \")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 12,
+      "exercise": 1,
+      "prompt": "打印一个 5 行的直角三角形，第 n 行有 n 个星号。",
+      "answer": "for row in range(1, 6):\n    print(\"*\" * row)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 13,
+      "exercise": 1,
+      "prompt": "在 1..20 中找第一个能被 7 整除的数，找不到就提示。",
+      "answer": "for n in range(1, 21):\n    if n % 7 == 0:\n        print(n)\n        break\nelse:\n    print(\"没找到\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 14,
+      "exercise": 1,
+      "prompt": "统计一组分数里及格（>=60）的人数。",
+      "answer": "scores = [55, 90, 72, 40]\npass_count = 0\nfor s in scores:\n    if s >= 60:\n        pass_count += 1\nprint(pass_count)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 15,
+      "exercise": 1,
+      "prompt": "打印一个 n 行的倒置三角形（第 1 行 n 个星号）。",
+      "answer": "n = 4\nfor i in range(n, 0, -1):\n    print(\"*\" * i)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 16,
+      "exercise": 1,
+      "prompt": "改成先猜中再停，并统计用了多少次。",
+      "answer": "import random\nrandom.seed(1)\ntarget = random.randint(1, 100)\ncount = 0\nwhile True:\n    count += 1\n    g = random.randint(1, 100)\n    if g == target:\n        print(count)\n        break",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 17,
+      "exercise": 1,
+      "prompt": "把列表倒序打印出来（不修改原列表）。",
+      "answer": "fruits = [1, 2, 3]\nprint(fruits[::-1])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 18,
+      "exercise": 1,
+      "prompt": "向列表插入元素并保持有序，再删除指定值。",
+      "answer": "a = [1, 3, 5]\na.append(4)\na.sort()\nprint(a)\na.remove(3)\nprint(a)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 19,
+      "exercise": 1,
+      "prompt": "用推导式取出字符串列表中长度大于 3 的项。",
+      "answer": "words = [\"a\", \"hello\", \"hi\", \"world\"]\nprint([w for w in words if len(w) > 3])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 20,
+      "exercise": 1,
+      "prompt": "用元组解包一次性给三个变量赋值。",
+      "answer": "a, b, c = (1, 2, 3)\nprint(a, b, c)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 21,
+      "exercise": 1,
+      "prompt": "统计一句话里每个字出现的次数。",
+      "answer": "text = \"你好世界你好\"\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 22,
+      "exercise": 1,
+      "prompt": "按成绩等级把学生名字分组。",
+      "answer": "data = [(\"A\", \"小明\"), (\"B\", \"小红\"), (\"A\", \"小刚\")]\ngroups = {}\nfor level, name in data:\n    groups.setdefault(level, []).append(name)\nprint(groups)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 23,
+      "exercise": 1,
+      "prompt": "找出两个列表的共同元素。",
+      "answer": "a = [1, 2, 3]\nb = [2, 3, 4]\nprint(set(a) & set(b))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 24,
+      "exercise": 1,
+      "prompt": "把一行逗号分隔的分数解析成整数列表并求和。",
+      "answer": "line = \"80, 90, 100\"\nnums = [int(x) for x in line.split(\",\")]\nprint(sum(nums))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 25,
+      "exercise": 1,
+      "prompt": "按字符串长度降序排列一组单词。",
+      "answer": "words = [\"a\", \"ccc\", \"bb\"]\nprint(sorted(words, key=len, reverse=True))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 26,
+      "exercise": 1,
+      "prompt": "用 enumerate 打印列表中偶数元素的下标。",
+      "answer": "nums = [3, 4, 7, 8]\nfor i, n in enumerate(nums):\n    if n % 2 == 0:\n        print(i)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 27,
+      "exercise": 1,
+      "prompt": "取列表的奇数位元素（下标 1、3、5...）。",
+      "answer": "s = [0, 1, 2, 3, 4, 5]\nprint(s[1::2])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 28,
+      "exercise": 1,
+      "prompt": "只输出出现次数最多的一個单词。",
+      "answer": "text = \"a b a c a b\"\ncounts = {}\nfor w in text.split():\n    counts[w] = counts.get(w, 0) + 1\nprint(max(counts, key=counts.get))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 29,
+      "exercise": 1,
+      "prompt": "写一个函数求矩形面积。",
+      "answer": "def area(w, h):\n    return w * h\nprint(area(3, 4))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 30,
+      "exercise": 1,
+      "prompt": "写一个带默认税率 0.1 的算价函数。",
+      "answer": "def price(x, rate=0.1):\n    return x * (1 + rate)\nprint(price(100))\nprint(price(100, 0.2))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 31,
+      "exercise": 1,
+      "prompt": "写一个函数接受任意个数字并返回最大值。",
+      "answer": "def biggest(*nums):\n    return max(nums)\nprint(biggest(3, 9, 1))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 32,
+      "exercise": 1,
+      "prompt": "写一个用 global 累加计数器的函数并调用三次。",
+      "answer": "n = 0\ndef inc():\n    global n\n    n += 1\nfor _ in range(3):\n    inc()\nprint(n)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 33,
+      "exercise": 1,
+      "prompt": "用递归求斐波那契数列第 n 项。",
+      "answer": "def fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\nprint(fib(10))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 34,
+      "exercise": 1,
+      "prompt": "求 n 层汉诺塔的最少移动次数（用公式或递归）。",
+      "answer": "n = 4\nprint(2 ** n - 1)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 35,
+      "exercise": 1,
+      "prompt": "用 map 把温度列表从摄氏度转成华氏度。",
+      "answer": "c = [0, 25, 100]\nprint(list(map(lambda x: x * 9 / 5 + 32, c)))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 36,
+      "exercise": 1,
+      "prompt": "写一个 countdown 工厂，返回一个每次调用减一的函数。",
+      "answer": "def countdown(start):\n    n = start\n    def step():\n        nonlocal n\n        n -= 1\n        return n\n    return step\nc = countdown(3)\nprint(c(), c(), c())",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 37,
+      "exercise": 1,
+      "prompt": "写一个装饰器，在函数执行前打印它的名字。",
+      "answer": "def name_log(func):\n    def w(*a, **k):\n        print(func.__name__)\n        return func(*a, **k)\n    return w\n@name_log\ndef hi():\n    return 1\nhi()",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 38,
+      "exercise": 1,
+      "prompt": "写一个装饰器让函数至少重复两次并返回最后一次结果。",
+      "answer": "def twice(func):\n    def w(*a, **k):\n        func(*a, **k)\n        return func(*a, **k)\n    return w\n@twice\ndef f():\n    print(\"x\")\nf()",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 39,
+      "exercise": 1,
+      "prompt": "写一个生成器产出前 n 个偶数。",
+      "answer": "def evens(n):\n    for i in range(n):\n        yield i * 2\nprint(list(evens(5)))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 40,
+      "exercise": 1,
+      "prompt": "用生成器表达式求 1..n 中所有奇数的平方和。",
+      "answer": "print(sum(n * n for n in range(1, 11) if n % 2 == 1))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 41,
+      "exercise": 1,
+      "prompt": "用 math 模块计算 2 的平方根并保留两位小数。",
+      "answer": "import math\nprint(f\"{math.sqrt(2):.2f}\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 42,
+      "exercise": 1,
+      "prompt": "打印 sys.path 的第一个目录，判断它是否指向当前项目。",
+      "answer": "import sys\nprint(sys.path[0])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 43,
+      "exercise": 1,
+      "prompt": "写一个安全除法函数，被除数为 0 时返回 None。",
+      "answer": "def safe_div(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\nprint(safe_div(1, 0))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 44,
+      "exercise": 1,
+      "prompt": "定义一个 AgeError，年龄为负时抛出。",
+      "answer": "class AgeError(Exception):\n    pass\ndef check(age):\n    if age < 0:\n        raise AgeError(\"年龄不能为负\")\n    return age\ntry:\n    check(-1)\nexcept AgeError as e:\n    print(e)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 45,
+      "exercise": 1,
+      "prompt": "分别触发 IndexError 和 KeyError 并打印它们的类型名。",
+      "answer": "for f in [lambda: [][0], lambda: {}[\"k\"]]:\n    try:\n        f()\n    except Exception as e:\n        print(type(e).__name__)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 46,
+      "exercise": 1,
+      "prompt": "把一个列表的每项写入文件，再读回来。",
+      "answer": "lines = [\"a\", \"b\", \"c\"]\nwith open(\"out.txt\", \"w\") as f:\n    for x in lines:\n        f.write(x + \"\\n\")\nwith open(\"out.txt\") as f:\n    print(f.read().splitlines())",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 47,
+      "exercise": 1,
+      "prompt": "统计文件里非空行的数量。",
+      "answer": "with open(\"data.txt\", \"w\") as f:\n    f.write(\"a\\n\\nb\\n\")\ncount = 0\nwith open(\"data.txt\") as f:\n    for line in f:\n        if line.strip():\n            count += 1\nprint(count)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 48,
+      "exercise": 1,
+      "prompt": "把多行文本清洗成非空行的列表。",
+      "answer": "text = \" a \\n\\n b \\n\"\nprint([l.strip() for l in text.splitlines() if l.strip()])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 49,
+      "exercise": 1,
+      "prompt": "把嵌套字典转成 JSON 字符串再解析回来。",
+      "answer": "import json\nd = {\"a\": {\"b\": [1, 2]}}\ns = json.dumps(d)\nprint(json.loads(s)[\"a\"][\"b\"])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 50,
+      "exercise": 1,
+      "prompt": "把字典写入 settings.json 再读出来打印某个键。",
+      "answer": "import json\nwith open(\"settings.json\", \"w\") as f:\n    f.write(json.dumps({\"x\": 1}))\nwith open(\"settings.json\") as f:\n    print(json.load(f)[\"x\"])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 51,
+      "exercise": 1,
+      "prompt": "用 random.seed 固定后生成三个 1..100 的整数。",
+      "answer": "import random\nrandom.seed(1)\nprint([random.randint(1, 100) for _ in range(3)])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 52,
+      "exercise": 1,
+      "prompt": "给上面的程序加一个统计「已完成数量」的输出。",
+      "answer": "todos = [{\"text\": \"a\", \"done\": True}, {\"text\": \"b\", \"done\": False}]\nprint(sum(1 for t in todos if t[\"done\"]))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 53,
+      "exercise": 1,
+      "prompt": "定义一个 Rectangle 类，含宽高和面积方法。",
+      "answer": "class Rectangle:\n    def __init__(self, w, h):\n        self.w = w\n        self.h = h\n    def area(self):\n        return self.w * self.h\nprint(Rectangle(3, 4).area())",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 54,
+      "exercise": 1,
+      "prompt": "写一个 BankAccount 类，支持存款并返回余额。",
+      "answer": "class BankAccount:\n    def __init__(self):\n        self.balance = 0\n    def deposit(self, x):\n        self.balance += x\n        return self.balance\na = BankAccount()\nprint(a.deposit(50))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 55,
+      "exercise": 1,
+      "prompt": "给 Temperature 加一个华氏度转摄氏度的 property。",
+      "answer": "class T:\n    def __init__(self, c):\n        self._c = c\n    @property\n    def f(self):\n        return self._c * 9 / 5 + 32\nprint(T(0).f)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 56,
+      "exercise": 1,
+      "prompt": "给一个类加 property 校验分数必须在 0..100。",
+      "answer": "class S:\n    def __init__(self, v):\n        self.score = v\n    @property\n    def score(self):\n        return self._s\n    @score.setter\n    def score(self, v):\n        if not 0 <= v <= 100:\n            raise ValueError(\"越界\")\n        self._s = v\nprint(S(90).score)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 57,
+      "exercise": 1,
+      "prompt": "定义 Shape 基类和 Circle 子类，子类重写 area。",
+      "answer": "class Shape:\n    def area(self):\n        return 0\nclass Circle(Shape):\n    def __init__(self, r):\n        self.r = r\n    def area(self):\n        return 3.14 * self.r ** 2\nprint(Circle(1).area())",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 58,
+      "exercise": 1,
+      "prompt": "写一个 summarize 函数，对任意含 name 属性、describe 方法的对象工作。",
+      "answer": "def summarize(objs):\n    return [o.describe() for o in objs]\nclass A:\n    def describe(self):\n        return \"A\"\nprint(summarize([A()]))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 59,
+      "exercise": 1,
+      "prompt": "给 Point 加一个 from_tuple 的类方法。",
+      "answer": "class P:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    @classmethod\n    def from_tuple(cls, t):\n        return cls(t[0], t[1])\nprint(P.from_tuple((1, 2)).x)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 60,
+      "exercise": 1,
+      "prompt": "给 Money 加 __eq__ 让相同金额视为相等。",
+      "answer": "class M:\n    def __init__(self, a):\n        self.a = a\n    def __eq__(self, o):\n        return isinstance(o, M) and o.a == self.a\nprint(M(1) == M(1))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 61,
+      "exercise": 1,
+      "prompt": "让 Version 支持 >= 比较。",
+      "answer": "def __ge__(self, other):\n    return not self < other",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 61,
+      "exercise": 2,
+      "prompt": "为 Version 添加 __le__ 与 __gt__，使四种比较在 CPython 与内置解释器上都可用。",
+      "answer": "def __le__(self, other):\n    return self._key() <= other._key()\n\ndef __gt__(self, other):\n    return self._key() > other._key()",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 61,
+      "exercise": 3,
+      "prompt": "按 minor 升序给一组 Version 排序。",
+      "answer": "print(sorted(vs, key=lambda v: v.minor))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 62,
+      "exercise": 1,
+      "prompt": "实现 append 方法向播放列表追加歌曲。",
+      "answer": "def append(self, song):\n    self._songs.append(song)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 62,
+      "exercise": 2,
+      "prompt": "实现 reversed 支持，让 reversed(pl) 可用。",
+      "answer": "def __reversed__(self):\n    return reversed(self._songs)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 63,
+      "exercise": 1,
+      "prompt": "实现 __abs__，返回向量长度。",
+      "answer": "import math\n\ndef __abs__(self):\n    return math.sqrt(self.x ** 2 + self.y ** 2)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 63,
+      "exercise": 2,
+      "prompt": "实现点积 dot(other)。",
+      "answer": "def dot(self, other):\n    return self.x * other.x + self.y * other.y",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 64,
+      "exercise": 1,
+      "prompt": "写一段代码判断某实例是否拥有 __dict__。",
+      "answer": "print(hasattr(obj, \"__dict__\"))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 64,
+      "exercise": 2,
+      "prompt": "列出实例 __dict__ 中所有属性名。",
+      "answer": "print(list(s.__dict__.keys()))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 65,
+      "exercise": 1,
+      "prompt": "定义 HybridEngine，组合一个电动与一个汽油发动机，power 为两者之和。",
+      "answer": "class HybridEngine:\n    def __init__(self, electric, petrol):\n        self.electric = electric\n        self.petrol = petrol\n        self.power = electric.power + petrol.power",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 65,
+      "exercise": 2,
+      "prompt": "为 Car 增加 fuel_cost(km)，委托给 engine.fuel。",
+      "answer": "def fuel_cost(self, km):\n    rate = 0.1 if self.engine.fuel == \"电动\" else 0.7\n    return km * rate",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 66,
+      "exercise": 1,
+      "prompt": "给 make_dataclass 增加默认值支持：字段可写成 (\"x\", 0) 形式。",
+      "answer": "def make_dataclass2(*fields):\n    names = []\n    defaults = {}\n    for f in fields:\n        if isinstance(f, tuple):\n            names.append(f[0])\n            defaults[f[0]] = f[1]\n        else:\n            names.append(f)\n\n    def decorate(cls):\n        params = []\n        for n in names:\n            params.append(n if n not in defaults else \"%s=%r\" % (n, defaults[n]))\n        body = \"\\n    \".join(\"self.%s = %s\" % (n, n) for n in names)\n        ns = {}\n        exec(\"def __init__(self, \" + \", \".join(params) + \"):\\n    \" + body, ns)\n        cls.__init__ = ns[\"__init__\"]\n        cls.__fields = tuple(names)\n        return cls\n    return decorate",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 66,
+      "exercise": 2,
+      "prompt": "为生成的对象实现 __lt__，按字段顺序比较。",
+      "answer": "cls.__lt__ = lambda self, o: tuple(getattr(self, n) for n in names) < tuple(getattr(o, n) for n in names)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 67,
+      "exercise": 1,
+      "prompt": "实现 search(keyword)，按标题子串查书。",
+      "answer": "def search(self, kw):\n    return [b.book_id for b in self.books.values() if kw in b.title]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 67,
+      "exercise": 2,
+      "prompt": "实现排行榜前十 hottest_n(n)。",
+      "answer": "def hottest_n(self, n):\n    return sorted(self.borrow_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:n]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 68,
+      "exercise": 1,
+      "prompt": "为 withdraw 增加手续费 1 元，但仍保证余额不为负。",
+      "answer": "def withdraw(self, amount):\n    self._check(amount + 1)\n    self._balance -= amount + 1\n    return self._balance",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 68,
+      "exercise": 2,
+      "prompt": "实现 summary() 返回成功操作笔数与期末余额。",
+      "answer": "def summary(self):\n    return (len(self.history), self._balance)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 69,
+      "exercise": 1,
+      "prompt": "写一个只产出偶数的迭代器 EvenNumbers(limit)。",
+      "answer": "class EvenNumbers:\n    def __init__(self, limit):\n        self.n = 0\n        self.limit = limit\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if self.n > self.limit:\n            raise StopIteration\n        v = self.n\n        self.n += 2\n        return v",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 69,
+      "exercise": 2,
+      "prompt": "用 for + 手动 next 演示迭代器被提前消耗。",
+      "answer": "it = iter(Countdown(4))\nprint(next(it))\nfor n in it:\n    print(n)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 70,
+      "exercise": 1,
+      "prompt": "实现广度优先迭代器，用队列按层遍历。",
+      "answer": "import collections\n\nclass BFS:\n    def __init__(self, root):\n        self.q = collections.deque((root,), 1000)\n    def __iter__(self):\n        return self\n    def __next__(self):\n        if not self.q:\n            raise StopIteration\n        n = self.q.popleft()\n        self.q.extend(n.children)\n        return n.name",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 70,
+      "exercise": 2,
+      "prompt": "给 Tree 增加 leaves()，只产出叶子节点名。",
+      "answer": "def leaves(self):\n    return [n.name for n in DepthFirst(self.root)\n            if not n.children]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 71,
+      "exercise": 1,
+      "prompt": "写一个平均器，每次 send 一个数，吐回当前均值。",
+      "answer": "def averager():\n    total = 0\n    count = 0\n    while True:\n        x = yield 0 if count == 0 else total / count\n        total += x\n        count += 1",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 71,
+      "exercise": 2,
+      "prompt": "写一个过滤器生成器，每次 send 字母，只吐回元音字母。",
+      "answer": "def vowels():\n    while True:\n        ch = yield\n        if ch in \"aeiou\":\n            yield ch",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 72,
+      "exercise": 1,
+      "prompt": "加一层 to_int 把有效值取整。",
+      "answer": "def to_int(values):\n    for v in values:\n        if v >= 0:\n            yield int(v)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 72,
+      "exercise": 2,
+      "prompt": "手写 zip 合并两个惰性源 merge(a, b)。",
+      "answer": "def merge(a, b):\n    for x, y in zip(a, b):\n        yield x\n        yield y",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 73,
+      "exercise": 1,
+      "prompt": "新增子类 RateLimited(AppError)，并在循环中单独处理。",
+      "answer": "class RateLimited(AppError):\n    pass\n\nexcept RateLimited as e:\n    print(\"retry later\")",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 4\nSyntaxError: invalid syntax\n"
+    },
+    {
+      "topic": 73,
+      "exercise": 2,
+      "prompt": "为 AppError 添加 code 属性供上层映射。",
+      "answer": "class AppError(Exception):\n    def __init__(self, message, code=\"E_APP\"):\n        Exception.__init__(self, message)\n        self.code = code",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 74,
+      "exercise": 1,
+      "prompt": "写一个上下文管理器，进入时打开一个列表作为日志，退出时打印日志条数。",
+      "answer": "class Journal:\n    def __enter__(self):\n        self.items = []\n        return self.items\n    def __exit__(self, *a):\n        print(len(self.items))\n        return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 74,
+      "exercise": 2,
+      "prompt": "写一个 transaction 上下文，退出时若有异常就回滚字典。",
+      "answer": "class Transaction:\n    def __init__(self, data):\n        self.data = data\n    def __enter__(self):\n        self.backup = dict(self.data)\n        return self.data\n    def __exit__(self, et, e, tb):\n        if et is not None:\n            self.data.clear()\n            self.data.update(self.backup)\n        return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 75,
+      "exercise": 1,
+      "prompt": "给 Memoized 加 clear() 方法清空缓存。",
+      "answer": "def clear(self):\n    self.cache.clear()",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 75,
+      "exercise": 2,
+      "prompt": "写一个 timer 装饰器，打印函数耗时（可用 ticks_ms）。",
+      "answer": "import time\n\ndef timer(func):\n    def wrapper(*a, **k):\n        t = time.ticks_ms()\n        r = func(*a, **k)\n        print(time.ticks_diff(time.ticks_ms(), t))\n        return r\n    return wrapper",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 76,
+      "exercise": 1,
+      "prompt": "写 validate_non_negative 装饰器，参数为负时抛 ValueError。",
+      "answer": "def validate_non_negative(func):\n    def wrapper(x):\n        if x < 0:\n            raise ValueError(\"negative\")\n        return func(x)\n    return wrapper",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 76,
+      "exercise": 2,
+      "prompt": "把 retry 改成只捕获指定异常类型。",
+      "answer": "def retry(times, exc_type=ValueError):\n    def decorate(func):\n        def wrapper(*a, **k):\n            for _ in range(times):\n                try:\n                    return func(*a, **k)\n                except exc_type:\n                    pass\n        return wrapper\n    return decorate",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 77,
+      "exercise": 1,
+      "prompt": "用 compose 构造 square_then_inc(x)。",
+      "answer": "def square(x):\n    return x * x\n\nsquare_then_inc = compose(inc, square)\nprint(square_then_inc(4))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 77,
+      "exercise": 2,
+      "prompt": "让 partial 也支持关键字参数。",
+      "answer": "def partial(func, *bound, **bound_kw):\n    def wrapper(*args, **kwargs):\n        merged = dict(bound_kw)\n        merged.update(kwargs)\n        return func(*(bound + args), **merged)\n    return wrapper",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 78,
+      "exercise": 1,
+      "prompt": "用 reduce 把一组字典合并成一个（后者覆盖前者）。",
+      "answer": "def merge(a, b):\n    r = dict(a)\n    r.update(b)\n    return r\nprint(reduce(merge, [{\"a\":1},{\"b\":2},{\"a\":3}], {}))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 78,
+      "exercise": 2,
+      "prompt": "用 reduce 实现 all/any。",
+      "answer": "print(reduce(lambda a, b: a and b, [1, 1, 0], True))\nprint(reduce(lambda a, b: a or b, [0, 0, 1], False))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 79,
+      "exercise": 1,
+      "prompt": "写一个 make_formatter(prefix)，返回把字符串加上前缀的函数。",
+      "answer": "def make_formatter(prefix):\n    def fmt(s):\n        return prefix + s\n    return fmt\nprint(make_formatter(\"> \")(\"done\"))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 79,
+      "exercise": 2,
+      "prompt": "写 curried_add(a) 返回 add_b(b)，支持 curried_add(2)(3)。",
+      "answer": "def curried_add(a):\n    def add_b(b):\n        return a + b\n    return add_b\nprint(curried_add(2)(3))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 80,
+      "exercise": 1,
+      "prompt": "增加一个按状态码分组的聚合器。",
+      "answer": "def count_by(seq):\n    def step(acc, row):\n        acc[row[1]] = acc.get(row[1], 0) + 1\n        return acc\n    return reduce(step, seq, {})",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 80,
+      "exercise": 2,
+      "prompt": "把 slow 阈值参数化，写成 make_threshold(min_cost)。",
+      "answer": "def make_threshold(min_cost):\n    return filter_by(lambda row: row[2] > min_cost)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 81,
+      "exercise": 1,
+      "prompt": "写一个 O(n²) 的重复检测 has_duplicate。",
+      "answer": "def has_duplicate(xs):\n    for i in range(len(xs)):\n        for j in range(i + 1, len(xs)):\n            if xs[i] == xs[j]:\n                return True\n    return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 81,
+      "exercise": 2,
+      "prompt": "把重复检测改成 O(n) 版本。",
+      "answer": "def has_duplicate_fast(xs):\n    seen = set()\n    for x in xs:\n        if x in seen:\n            return True\n        seen.add(x)\n    return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 82,
+      "exercise": 1,
+      "prompt": "用二分找到 target 应插入的位置（保持有序）。",
+      "answer": "def bisect_left(data, target):\n    lo, hi = 0, len(data)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if data[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid\n    return lo",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 82,
+      "exercise": 2,
+      "prompt": "写一个在已排序列表里找第一个 >= target 的函数。",
+      "answer": "lower_bound = bisect_left",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 83,
+      "exercise": 1,
+      "prompt": "给冒泡加「本轮无交换就提前退出」的优化。",
+      "answer": "def bubble_sort_early(a):\n    a = list(a)\n    for i in range(len(a) - 1):\n        swapped = False\n        for j in range(len(a) - 1 - i):\n            if a[j] > a[j + 1]:\n                a[j], a[j + 1] = a[j + 1], a[j]\n                swapped = True\n        if not swapped:\n            break\n    return a",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 83,
+      "exercise": 2,
+      "prompt": "验证插入排序对近乎有序数据的比较次数远少于冒泡。",
+      "answer": "data = list(range(1, 50)) + [0]\nprint(bubble_sort(data)[1], insertion_sort(data)[1])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 84,
+      "exercise": 1,
+      "prompt": "统计 merge_sort 总共执行多少次元素比较。",
+      "answer": "def merge_counted(left, right):\n    result = []\n    i = j = 0\n    count = 0\n    while i < len(left) and j < len(right):\n        count += 1\n        if left[i] <= right[j]:\n            result.append(left[i]); i += 1\n        else:\n            result.append(right[j]); j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result, count\n\ndef merge_sort_counted(data):\n    if len(data) <= 1:\n        return list(data), 0\n    mid = len(data) // 2\n    left, cl = merge_sort_counted(data[:mid])\n    right, cr = merge_sort_counted(data[mid:])\n    merged, cm = merge_counted(left, right)\n    return merged, cl + cr + cm\n\nprint(merge_sort_counted([4, 1, 3, 2]))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 84,
+      "exercise": 2,
+      "prompt": "用归并思想统计一个数组的逆序对数量。",
+      "answer": "def count_inv(a):\n    if len(a) <= 1:\n        return a, 0\n    m = len(a) // 2\n    l, cl = count_inv(a[:m])\n    r, cr = count_inv(a[m:])\n    out, i, j, c = [], 0, 0, cl + cr\n    while i < len(l) and j < len(r):\n        if l[i] <= r[j]:\n            out.append(l[i]); i += 1\n        else:\n            out.append(r[j]); j += 1; c += len(l) - i\n    return out + l[i:] + r[j:], c",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 85,
+      "exercise": 1,
+      "prompt": "比较三路分区快排与原生 sorted 在重复元素很多时的行为。",
+      "answer": "print(quicksort([1] * 5 + [2] * 5))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 85,
+      "exercise": 2,
+      "prompt": "用随机枢轴避免已排序输入的最坏情况。",
+      "answer": "import random\n\ndef pick(a, lo, hi):\n    i = random.randint(lo, hi)\n    a[i], a[hi] = a[hi], a[i]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 86,
+      "exercise": 1,
+      "prompt": "写一个 top_k(nums, k)，返回最大的 k 个数（可用 heapq）。",
+      "answer": "def top_k(nums, k):\n    h = []\n    for x in nums:\n        heapq.heappush(h, x)\n        if len(h) > k:\n            heapq.heappop(h)\n    return h",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 86,
+      "exercise": 2,
+      "prompt": "实现一个简单定时器：每次 pop 最早到期的任务时间。",
+      "answer": "def next_deadline(h):\n    return heapq.heappop(h)[0]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 87,
+      "exercise": 1,
+      "prompt": "实现 prepend(value) 在头部插入，O(1)。",
+      "answer": "def prepend(self, value):\n    self.head = Node(value, self.head)\n    self.size += 1",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 87,
+      "exercise": 2,
+      "prompt": "实现 has_cycle 检测链表是否有环（快慢指针）。",
+      "answer": "def has_cycle(self):\n    slow = fast = self.head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 88,
+      "exercise": 1,
+      "prompt": "用栈实现简单的四则表达式逆波兰求值。",
+      "answer": "def eval_rpn(tokens):\n    stack = []\n    for t in tokens:\n        if t in \"+-*/\":\n            b = stack.pop(); a = stack.pop()\n            if t == \"+\": stack.append(a + b)\n            elif t == \"-\": stack.append(a - b)\n            elif t == \"*\": stack.append(a * b)\n            else: stack.append(a / b)\n        else:\n            stack.append(int(t))\n    return stack[0]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 88,
+      "exercise": 2,
+      "prompt": "用两个栈实现队列。",
+      "answer": "class Queue:\n    def __init__(self):\n        self.inn = []\n        self.out = []\n    def push(self, x):\n        self.inn.append(x)\n    def pop(self):\n        if not self.out:\n            while self.inn:\n                self.out.append(self.inn.pop())\n        return self.out.pop()",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 89,
+      "exercise": 1,
+      "prompt": "给 HashTable 加 keys() 遍历所有键。",
+      "answer": "def keys(self):\n    out = []\n    for chain in self.buckets:\n        if chain:\n            for k, v in chain:\n                out.append(k)\n    return out",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 89,
+      "exercise": 2,
+      "prompt": "实现负载因子并在超过 0.75 时翻倍桶数重建。",
+      "answer": "def maybe_resize(self):\n    if self.size / len(self.buckets) > 0.75:\n        items = [(k, v) for c in self.buckets if c for k, v in c]\n        self.buckets = [None] * (len(self.buckets) * 2)\n        self.size = 0\n        for k, v in items:\n            self.put(k, v)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 90,
+      "exercise": 1,
+      "prompt": "实现 search(value) 在 BST 中查找。",
+      "answer": "def search(self, value):\n    cur = self.root\n    while cur:\n        if value == cur.value:\n            return True\n        cur = cur.left if value < cur.value else cur.right\n    return False",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 90,
+      "exercise": 2,
+      "prompt": "实现树高 height()。",
+      "answer": "def height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 91,
+      "exercise": 1,
+      "prompt": "写一个 shortest_path(graph, a, b) 返回路径节点序列。",
+      "answer": "def shortest_path(graph, a, b):\n    import collections\n    q = collections.deque((a,), 100)\n    parent = {a: None}\n    while q:\n        node = q.popleft()\n        if node == b:\n            break\n        for nb in graph[node]:\n            if nb not in parent:\n                parent[nb] = node\n                q.append(nb)\n    if b not in parent:\n        return None\n    path = []\n    cur = b\n    while cur is not None:\n        path.append(cur)\n        cur = parent[cur]\n    return path[::-1]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 91,
+      "exercise": 2,
+      "prompt": "统计无向图中连通分量的个数。",
+      "answer": "def components(graph):\n    seen = set()\n    count = 0\n    for node in graph:\n        if node not in seen:\n            count += 1\n            for v in dfs(graph, node):\n                seen.add(v)\n    return count",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 92,
+      "exercise": 1,
+      "prompt": "每次可爬 1/2/3 阶，求到 n 阶的方法数。",
+      "answer": "def climb3(n):\n    dp = [0, 1, 2, 4]\n    for i in range(4, n + 1):\n        dp.append(dp[i-1] + dp[i-2] + dp[i-3])\n    return dp[n]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 92,
+      "exercise": 2,
+      "prompt": "求最小花费爬楼梯（每阶有花费，每次可走 1 或 2 阶）。",
+      "answer": "def min_cost(cost):\n    n = len(cost)\n    a = b = 0\n    for c in cost:\n        a, b = b, min(a, b) + c\n    return min(a, b)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 93,
+      "exercise": 1,
+      "prompt": "回溯出取得最大价值时选了哪些下标的物品。",
+      "answer": "def chosen(weights, values, capacity):\n    n = len(weights)\n    dp = [[0]*(capacity+1) for _ in range(n+1)]\n    for i in range(1, n+1):\n        w, v = weights[i-1], values[i-1]\n        for c in range(capacity+1):\n            dp[i][c] = dp[i-1][c]\n            if c >= w and dp[i-1][c-w]+v > dp[i][c]:\n                dp[i][c] = dp[i-1][c-w]+v\n    out, c = [], capacity\n    for i in range(n, 0, -1):\n        if dp[i][c] != dp[i-1][c]:\n            out.append(i-1)\n            c -= weights[i-1]\n    return out[::-1]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 93,
+      "exercise": 2,
+      "prompt": "把问题改成完全背包（每件可选无限次），如何改一维循环？",
+      "answer": "def unbounded(w, v, C):\n    dp = [0]*(C+1)\n    for c in range(1, C+1):\n        for i in range(len(w)):\n            if c >= w[i]:\n                dp[c] = max(dp[c], dp[c-w[i]]+v[i])\n    return dp[C]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 94,
+      "exercise": 1,
+      "prompt": "用暴力枚举验证区间调度贪心确实给出最优解。",
+      "answer": "用组合枚举所有不重叠子集取最大个数对比。",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 94,
+      "exercise": 2,
+      "prompt": "对 coins=[1,15,25] 写一个不贪心的反例，显示 30 需要几枚最优。",
+      "answer": "print(greedy_coins(30, [1, 15, 25]))  # 贪心 25+5*1\n# 最优 15+15 => 2 枚",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 95,
+      "exercise": 1,
+      "prompt": "只求 8 皇后的解数量。",
+      "answer": "print(len(solve_n_queens(8)))  # 92",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 95,
+      "exercise": 2,
+      "prompt": "把解打印成棋盘（Q 与 .）。",
+      "answer": "def show(sol):\n    for col in sol:\n        print(\".\" * col + \"Q\" + \".\" * (len(sol) - col - 1))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 96,
+      "exercise": 1,
+      "prompt": "统计迷宫可达的格子数。",
+      "answer": "print(len(bfs_all(maze, (0, 0))))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 96,
+      "exercise": 2,
+      "prompt": "把 maze 里 2 视为可走的捷径，观察路径是否变短。",
+      "answer": "将条件 grid[nr][nc] == 0 改为 grid[nr][nc] != 1",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1\nSyntaxError: invalid syntax\n"
+    },
+    {
+      "topic": 97,
+      "exercise": 1,
+      "prompt": "为一个返回两数相除的函数写下前置条件。",
+      "answer": "def divide(a, b):\n    assert b != 0, \"除数不能为 0\"\n    return a / b",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 97,
+      "exercise": 2,
+      "prompt": "为排序函数的后置条件写断言。",
+      "answer": "def my_sort(a):\n    r = sorted(a)\n    assert all(r[i] <= r[i+1] for i in range(len(r)-1))\n    return r",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 98,
+      "exercise": 1,
+      "prompt": "增加一个故意失败的用例，确认汇总正确计数。",
+      "answer": "def test_fail():\n    assert_equal(1, 2, \"故意失败\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 98,
+      "exercise": 2,
+      "prompt": "让 run_tests 返回 (passed, failed) 供上层组装。",
+      "answer": "return passed, failed",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1, in <module>\nSyntaxError: 'return' outside function\n"
+    },
+    {
+      "topic": 99,
+      "exercise": 1,
+      "prompt": "为 classify_score 增加 59.9 与 60.0 的边界用例。",
+      "answer": "assert_equal(classify_score(59.9), \"C\")\nassert_equal(classify_score(60.0), \"B\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 99,
+      "exercise": 2,
+      "prompt": "写 assert_raises 的变体，同时返回异常对象供检查消息。",
+      "answer": "def raises_and_return(exc_type, func, *args):\n    try:\n        func(*args)\n    except exc_type as e:\n        return e\n    return None",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 100,
+      "exercise": 1,
+      "prompt": "写一个函数 find_first_bug，用二分思路在大量数据中定位首个异常值。",
+      "answer": "def find_first_bad(data):\n    lo, hi = 0, len(data) - 1\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if has_bug(data[mid]):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 100,
+      "exercise": 2,
+      "prompt": "修复 buggy_average 并重新验证。",
+      "answer": "def fixed_average(scores):\n    total = 0\n    for s in scores:\n        total += s\n    return total / len(scores)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 101,
+      "exercise": 1,
+      "prompt": "为 parse_port 加一个「端口被占用」的领域异常。",
+      "answer": "class PortInUse(ConfigError):\n    pass",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 101,
+      "exercise": 2,
+      "prompt": "让 load_config 遇到未知键时引发 ConfigError。",
+      "answer": "else:\n    raise ConfigError(\"未知配置项: %s\" % key)",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1\nSyntaxError: invalid syntax\n"
+    },
+    {
+      "topic": 102,
+      "exercise": 1,
+      "prompt": "新增 render_csv(totals) 展示层函数。",
+      "answer": "def render_csv(totals):\n    return \"\\n\".join(\"%s,%s\" % (k, totals[k]) for k in sorted(totals))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 102,
+      "exercise": 2,
+      "prompt": "为 aggregate 写单元测试。",
+      "answer": "def test_aggregate():\n    rs = parse_records([\"a,2,3\"])\n    assert aggregate(rs) == {\"a\": 6.0}",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 103,
+      "exercise": 1,
+      "prompt": "加一个配置键 max_items 并在 make_client 中提供默认值。",
+      "answer": "DEFAULT_CONFIG[\"max_items\"] = 100",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 103,
+      "exercise": 2,
+      "prompt": "写 config_value(config, key, fallback) 安全取值。",
+      "answer": "def config_value(config, key, fallback):\n    return config.get(key, fallback)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 104,
+      "exercise": 1,
+      "prompt": "为 validate_user 增加手机号可选校验（以 1 开头的 11 位数字）。",
+      "answer": "phone = raw.get(\"phone\")\nif phone:\n    if not (len(phone) == 11 and phone[0] == \"1\" and phone.isdigit()):\n        errors.append(\"phone: 格式非法\")\n    data[\"phone\"] = phone",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 104,
+      "exercise": 2,
+      "prompt": "写一个通用 require_fields(raw, names) 检查必填字段。",
+      "answer": "def require_fields(raw, names):\n    return [\"%s: 必填\" % n for n in names if not raw.get(n)]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 105,
+      "exercise": 1,
+      "prompt": "给 Logger 增加 FATAL 级别（比 ERROR 高）。",
+      "answer": "LEVELS[\"FATAL\"] = 50",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 105,
+      "exercise": 2,
+      "prompt": "把 sink 换成收集列表，验证测试时不输出。",
+      "answer": "collected = []\nlog = Logger(\"INFO\", sink=collected.append)\nlog.info(\"hi\")\nprint(collected)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 106,
+      "exercise": 1,
+      "prompt": "把慢版和快版各跑 1000 次，比较循环次数差异。",
+      "answer": "给 count_hits_slow 加计数器即可观察差异。",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1\nSyntaxError: invalid syntax\n"
+    },
+    {
+      "topic": 106,
+      "exercise": 2,
+      "prompt": "用预计算优化「每个数乘同一系数」的循环。",
+      "answer": "coefficient = base * 2\nresult = [x * coefficient for x in data]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 107,
+      "exercise": 1,
+      "prompt": "为 cool 版本写一行文档串并在任务答案里说明用途。",
+      "answer": "def clean(numbers):\n    \"\"\"返回所有正偶数的平方。\"\"\"",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 107,
+      "exercise": 2,
+      "prompt": "把 clean 拆成 is_positive_even 与 square 两个小函数。",
+      "answer": "def is_positive_even(n):\n    return n is not None and n > 0 and n % 2 == 0\n\ndef square(n):\n    return n * n",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 108,
+      "exercise": 1,
+      "prompt": "为 slugify 增加「保留下划线」的选项。",
+      "answer": "if ch.isalpha() or ch.isdigit() or ch == \"_\":\n    safe.append(ch)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 108,
+      "exercise": 2,
+      "prompt": "为 chunk 增加 size 大于长度时的测试。",
+      "answer": "print(chunk([1, 2], 5))  # [[1, 2]]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 109,
+      "exercise": 1,
+      "prompt": "实现 filter_by_category(name) 返回某类别的所有交易。",
+      "answer": "def filter_by_category(self, name):\n    return [e for e in self.entries if e[\"category\"] == name]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 109,
+      "exercise": 2,
+      "prompt": "把总额格式化成「12.34」字符串（分为单位）。",
+      "answer": "def pretty_total(self):\n    c = self.total()\n    return \"%d.%02d\" % (c // 100, abs(c) % 100)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 110,
+      "exercise": 1,
+      "prompt": "实现标准差（总体）。",
+      "answer": "import math\n\ndef stdev(xs):\n    m = mean(xs)\n    return math.sqrt(sum((x - m) ** 2 for x in xs) / len(xs))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 110,
+      "exercise": 2,
+      "prompt": "统计各分数段的人数占总人数比例。",
+      "answer": "def ratios(scores, edges):\n    d = distribution(scores, edges)\n    return [round(x / len(scores), 3) for x in d]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 111,
+      "exercise": 1,
+      "prompt": "增加一个「drop」命令，把物品放回当前房间。",
+      "answer": "if verb == \"drop\" and len(parts) == 2:\n    item = parts[1]\n    if item in self.bag:\n        self.bag.remove(item)\n        room[\"items\"].append(item)\n        return \"dropped \" + item\n    return \"not carried\"",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 6, in <module>\nSyntaxError: 'return' outside function\n"
+    },
+    {
+      "topic": 111,
+      "exercise": 2,
+      "prompt": "实现 inventory 命令列出背包。",
+      "answer": "if verb == \"inventory\":\n    return \",\".join(self.bag) or \"empty\"",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 2, in <module>\nSyntaxError: 'return' outside function\n"
+    },
+    {
+      "topic": 112,
+      "exercise": 1,
+      "prompt": "实现矩阵加法（同维度）。",
+      "answer": "def matadd(a, b):\n    if len(a) != len(b) or len(a[0]) != len(b[0]):\n        raise ValueError(\"shape mismatch\")\n    return [[a[i][j] + b[i][j] for j in range(len(a[0]))]\n            for i in range(len(a))]",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 112,
+      "exercise": 2,
+      "prompt": "用递归实现任意阶行列式。",
+      "answer": "def det(m):\n    n = len(m)\n    if n == 1:\n        return m[0][0]\n    if n == 2:\n        return det2(m)\n    total = 0\n    for j in range(n):\n        minor = [row[:j] + row[j+1:] for row in m[1:]]\n        total += ((-1) ** j) * m[0][j] * det(minor)\n    return total",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 113,
+      "exercise": 1,
+      "prompt": "统计每个方法的请求数。",
+      "answer": "def method_hits(records):\n    hits = {}\n    for r in records:\n        if r:\n            hits[r[\"method\"]] = hits.get(r[\"method\"], 0) + 1\n    return hits",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 113,
+      "exercise": 2,
+      "prompt": "用 re.sub 把日期中的 - 替换为 /。",
+      "answer": "import re\nprint(re.compile(\"-\").sub(\"/\", \"2024-01-03\"))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 114,
+      "exercise": 1,
+      "prompt": "统计路径中上涨的天数。",
+      "answer": "def up_days(prices):\n    return sum(1 for i in range(1, len(prices))\n               if prices[i] > prices[i-1])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 114,
+      "exercise": 2,
+      "prompt": "用 random.gauss 代替 uniform 生成波动。",
+      "answer": "change = random.gauss(0, vol) + drift",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 115,
+      "exercise": 1,
+      "prompt": "新增 DELETE /item 路由删除指定 id。",
+      "answer": "def delete_item(self, body):\n    item_id = body.get(\"id\")\n    if item_id not in self.store:\n        return 404, {\"error\": \"missing\"}\n    removed = self.store.pop(item_id)\n    return 200, removed",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 115,
+      "exercise": 2,
+      "prompt": "让 list_items 支持按 name 排序。",
+      "answer": "return 200, sorted((self.store[i] for i in ids), key=lambda x: x[\"name\"])",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1, in <module>\nSyntaxError: 'return' outside function\n"
+    },
+    {
+      "topic": 116,
+      "exercise": 1,
+      "prompt": "用生成器表达式重写 total_functional。",
+      "answer": "def total_gen(items):\n    return sum(o[\"price\"] * o[\"qty\"] for o in items if o[\"paid\"])",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 116,
+      "exercise": 2,
+      "prompt": "为 Cart 增加 discount_by_category(rate_by_category) 方法：按每笔订单的 category 应用对应比例，返回折后总额。",
+      "answer": "class Order:\n    def __init__(self, price, qty, paid, category=\"misc\"):\n        self.price = price\n        self.qty = qty\n        self.paid = paid\n        self.category = category\n\n    def amount(self):\n        return self.price * self.qty if self.paid else 0.0\n\n\nclass Cart:\n    def __init__(self, orders):\n        self.orders = orders\n\n    def total(self):\n        return sum(o.amount() for o in self.orders)\n\n    def discount_by_category(self, rate_by_category):\n        total = 0.0\n        for o in self.orders:\n            rate = rate_by_category.get(o.category, 0.0)\n            total += o.amount() * (1 - rate)\n        return total\n\n\ncart = Cart([Order(10.0, 2, True, \"book\"),\n             Order(5.5, 4, True, \"food\")])\nprint(cart.discount_by_category({\"book\": 0.5}))  # food 无折扣",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 117,
+      "exercise": 1,
+      "prompt": "描述创建一个隔离环境并安装依赖的两条命令。",
+      "answer": "python -m venv .venv\n# 激活后： pip install requests",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1\nSyntaxError: invalid syntax\n"
+    },
+    {
+      "topic": 117,
+      "exercise": 2,
+      "prompt": "写一段代码打印当前解释器支持的所有内置模块数量。",
+      "answer": "import sys\nprint(len(sys.builtin_module_names))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 118,
+      "exercise": 1,
+      "prompt": "给 Item 加一个 __post_init__，价格非正时抛 ValueError。",
+      "answer": "def __post_init__(self):\n    if self.price <= 0:\n        raise ValueError(\"price must be positive\")",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 118,
+      "exercise": 2,
+      "prompt": "用 replace() 生成一个修改了 qty 的 Item。",
+      "answer": "from dataclasses import replace\nprint(replace(Item(\"pen\", 2.5), qty=10))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 119,
+      "exercise": 1,
+      "prompt": "计算你出生日期到今天的天数。",
+      "answer": "from datetime import date\nb = date(2000, 1, 1)\nprint((date.today() - b).days)",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 119,
+      "exercise": 2,
+      "prompt": "列出当前目录下所有 .py 文件的文件名。",
+      "answer": "from pathlib import Path\nprint(sorted(p.name for p in Path(\".\").glob(\"*.py\")))",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 120,
+      "exercise": 1,
+      "prompt": "用 asyncio 写一个带超时的 fetch。",
+      "answer": "async def timed():\n    try:\n        return await asyncio.wait_for(fetch(\"x\", 0.5), timeout=0.01)\n    except asyncio.TimeoutError:\n        return \"timeout\"",
+      "compileExit": 0,
+      "compileError": ""
+    },
+    {
+      "topic": 120,
+      "exercise": 2,
+      "prompt": "解释为什么 CPU 密集任务不用多线程。",
+      "answer": "GIL 使多线程无法并行执行 Python 字节码，CPU 密集应改用 multiprocessing。",
+      "compileExit": 1,
+      "compileError": "Traceback (most recent call last):\n  File \"D:\\MyNewProjects\\qfli_python\\.trellis\\tasks\\10-22-offline-language-apps\\research\\python-content-temp\\main__gagy0j1\\answer.py\", line 1\nSyntaxError: invalid syntax\n"
+    }
+  ]
+}

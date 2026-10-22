@@ -1,0 +1,8 @@
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "Keep generic editor/content in C-owned core and product code in Python."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Run meaningful real runtime/UI checks and preserve unrelated WIP."}
+{"file": ".trellis/spec/backend/native-python-runtime.md", "reason": "MicroPython ABI, compile-only, import, lifetime, platform and device evidence contracts."}
+{"file": ".trellis/spec/backend/quality-guidelines.md", "reason": "Native build and installed-device proof are separate; explicit staged ownership."}
+{"file": ".trellis/tasks/10-22-offline-language-apps/research/unified-requirements-ledger.md", "reason": "Fresh task-specific ownership, behavior gaps, evidence and integration contracts."}
+{"file": ".trellis/tasks/10-22-offline-language-apps/research/python-modules-runtime.md", "reason": "Fresh task-specific ownership, behavior gaps, evidence and integration contracts."}
+{"file": ".trellis/tasks/10-22-offline-language-apps/research/python-content-ohos.md", "reason": "Fresh task-specific ownership, behavior gaps, evidence and integration contracts."}
+{"file": ".trellis/tasks/10-22-offline-language-apps/research/python-tools-contracts-summary.md", "reason": "Fresh task-specific ownership, behavior gaps, evidence and integration contracts."}
