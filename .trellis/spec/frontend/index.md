@@ -9,6 +9,7 @@ theme and curriculum assets belong to that package.
 | Guide | Description | Status |
 | --- | --- | --- |
 | [Python Workflow](./python-workflow.md) | Project/file selection, Python tools and checks | Documented |
+| [Standalone OHOS Policy](./python-offline-host.md) | Native offline refusals, local platform handlers and package evidence | Documented |
 | [Native Startup](./native-startup.md) | Progress, deferred frame and platform handoff | Documented |
 | [Content Code Import](./content-code-import.md) | Shared catalogs/imports and authored curriculum | Documented |
 | [Directory Structure](./directory-structure.md) | Language app versus shared-core ownership | Documented |

@@ -17,6 +17,8 @@ import { handlePickerCall, isPickerMethod } from './PickerBridge';
 
 const CHANNEL_PLATFORM = 'qflistudio/platform';
 const CHANNEL_HUAWEI = 'qflistudio/huawei_account';
+// Standalone Python has no account, remote agreement, or browser workflow.
+const OFFLINE_ONLY = true;
 const EVENT_STARTUP_PROGRESS = 'EVENT_STARTUP_PROGRESS';
 const STARTUP_PROGRESS_KEY = 'pyflowStartupProgress';
 
@@ -48,13 +50,17 @@ export default class EntryAbility extends FlutterAbility {
     const abilityContext = this.context as common.UIAbilityContext;
     AppStorage.setOrCreate(STARTUP_PROGRESS_KEY, 0);
 
-    // 通用平台能力：打开系统浏览器（HTML 预览用）。
+    // Local platform capabilities; reject remote entry points in this edition.
     const platformChannel = new MethodChannel(
       flutterEngine.dartExecutor.getBinaryMessenger(),
       CHANNEL_PLATFORM,
     );
     platformChannel.setMethodCallHandler({
       onMethodCall(call: MethodCall, result: MethodResult): void {
+        if (OFFLINE_ONLY && (call.method === 'openAgreement' || call.method === 'openUrl')) {
+          result.error('OFFLINE_ONLY', '独立离线版不提供远程协议或浏览器入口', null);
+          return;
+        }
         if (call.method === 'startupProgress') {
           const progress = call.argument('progress') as number;
           if (typeof progress === 'number' && Number.isFinite(progress)) {
@@ -115,6 +121,10 @@ export default class EntryAbility extends FlutterAbility {
     huaweiChannel.setMethodCallHandler({
       onMethodCall(call: MethodCall, result: MethodResult): void {
         if (call.method === 'login') {
+          if (OFFLINE_ONLY) {
+            result.error('OFFLINE_ONLY', '独立离线版不提供账号登录', null);
+            return;
+          }
           try {
             const provider = new authentication.HuaweiIDProvider();
             const request: authentication.AuthorizationWithHuaweiIDRequest =
