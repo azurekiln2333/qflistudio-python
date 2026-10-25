@@ -47,6 +47,7 @@ products. Python completion alone cannot close the unified goal.
 | R10 | Provide usable offline Python module management and common bundled modules; evaluate pip within the actual sandbox without adding online flows. | Python modules child. |
 | R11 | Standalone apps stay offline. Network-dependent tools, package downloads, remote debugging, cloud and port-forwarding flows are excluded. | Every product; Python package/manifest audit. |
 | R12 | Run relevant tests, preserve evidence and commit with Conventional Commits; attempt authorized non-force push and verify remote OIDs. | Each repository coordinator; this parent owns Python integration/release. |
+| R13 | Rewrite the Python README in Simplified Chinese, Traditional Chinese and English. Apply controlled Chinese, preserve modality, run the Chinese linter first, review factual parity and links, then commit and push the reviewed documentation. | Python documentation Pi w1S:p5; root reviews and publishes. |
 
 ## Python acceptance criteria
 
@@ -85,6 +86,13 @@ products. Python completion alone cannot close the unified goal.
 - [ ] P11 / R12: App analyzer/tests, real native regressions, OHOS library
   dependency/ABI inspection, ArkTS parity and signed HAP pass. Record distinct
   host/build/device results, focused reviewed commits and actual push outcomes.
+
+- [ ] P12 / R13: `README.md`, `README.zh-TW.md` and `README.en.md` describe
+  actual offline behavior with reciprocal language links. Chinese follows the
+  user's controlled-language rules and passes `scripts/ste-lint-zh.py`.
+  Manual review confirms modality, Traditional Chinese usage, command/link
+  correctness and three-language factual parity. Reviewed docs are committed
+  with a Conventional Commit and verified on authorized remote mirrors.
 
 ## Task map and dependencies
 
