@@ -87,7 +87,7 @@ products. Python completion alone cannot close the unified goal.
   dependency/ABI inspection, ArkTS parity and signed HAP pass. Record distinct
   host/build/device results, focused reviewed commits and actual push outcomes.
 
-- [ ] P12 / R13: `README.md`, `README.zh-TW.md` and `README.en.md` describe
+- [x] P12 / R13: `README.md`, `README.zh-TW.md` and `README.en.md` describe
   actual offline behavior with reciprocal language links. Chinese follows the
   user's controlled-language rules and passes `scripts/ste-lint-zh.py`.
   Manual review confirms modality, Traditional Chinese usage, command/link

@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-25T18:47:18.673650+00:00",
+  "commit": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521",
+  "branch": "release/python-storefront-20261015",
+  "commitSubject": "docs(python): rewrite readmes in three languages",
+  "pushMode": "ordinary non-force, one explicit URL per remote",
+  "remoteBranchOids": {
+    "GitHub": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521",
+    "Gitee": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521",
+    "GitLab": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521",
+    "GitCode": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521",
+    "CNB": "5a7cc8ca7b27ad36d6c589351fde5e2369d9a521"
+  },
+  "verification": "Each git push returned exit0. Each independent git ls-remote returned the exact commit OID.",
+  "readmeReview": "research/readme-independent-pi-review.md",
+  "checks": {
+    "ChineseLinterFindings": 0,
+    "ChineseFiles": 2,
+    "matchingCommandBlocksPerLanguage": 7,
+    "languageLinksPerVersion": 3
+  },
+  "noRuntimeAcceptanceClaim": true
+}
