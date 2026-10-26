@@ -13,9 +13,10 @@ app-owned HTTP service or database.
 | [Offline Python Packages](./python-offline-packages.md) | Bundled modules, local transactions, actual VM compatibility | Documented |
 | [Android Build](./android-build.md) | NDK, JVM budgets, APK and installed-runtime checks | Documented |
 | [Directory Structure](./directory-structure.md) | Native, adapter, generated and shared ownership | Documented |
-| [Local Persistence](./database-guidelines.md) | Shared JSON stores/project files; no ORM/migrations | Documented |
+| [Local Persistence](./database-guidelines.md) | Shared JSON stores/project files without ORM or migrations | Documented |
 | [Error Handling](./error-handling.md) | Program failures, unavailable backends and cleanup | Documented |
 | [Quality Guidelines](./quality-guidelines.md) | Real native evidence and review/commit boundaries | Documented |
+| [Windows HDC Delivery](./windows-hdc-delivery.md) | Exact-target file identity, bounded transfer and evidence | Documented |
 | [Logging Guidelines](./logging-guidelines.md) | Program streams, platform tags and evidence | Documented |
 
 Status describes documentation, not a claim that every target device passed
@@ -40,6 +41,6 @@ current release validation. Record actual outcomes in the task.
 
 Run focused regressions, full Flutter analyzer/tests and applicable real native
 checks. Packaging additionally requires dependency/ABI inspection and separate
-installed-device evidence. Compare ArkTS hashes. Record unavailable hosts/devices;
-a successful build does not close their runtime gates. Maintain English docs
+installed-device evidence. Compare ArkTS hashes. Record unavailable hosts/devices.
+A successful build does not close their runtime gates. Maintain English docs
 with concrete source/test references.
