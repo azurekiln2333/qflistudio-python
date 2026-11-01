@@ -57,6 +57,8 @@ import shutil
 import subprocess
 import sys
 
+from debug_overlay import apply_debug_overlay
+
 # ---------------------------------------------------------------------------
 # 要额外编进来的 extmod 模块
 # ---------------------------------------------------------------------------
@@ -580,7 +582,16 @@ def _assemble_package(mp_dir: str, package_dir: str, genhdr: str, port_dir: str)
     for name in os.listdir(os.path.join(mp_dir, "py")):
         if not name.endswith((".c", ".h")):
             continue
-        _copy(os.path.join(mp_dir, "py", name), os.path.join(package_dir, "py", name))
+        source_path = os.path.join(mp_dir, "py", name)
+        target_path = os.path.join(package_dir, "py", name)
+        with open(source_path, "rb") as handle:
+            source_data = handle.read()
+        try:
+            package_data = apply_debug_overlay(name, source_data)
+        except ValueError as error:
+            raise BuildError(str(error)) from error
+        with open(target_path, "wb") as handle:
+            handle.write(package_data)
         count += 1
 
     # extmod/：只有挑中的模块和 modplatform.h。
@@ -603,7 +614,12 @@ def _assemble_package(mp_dir: str, package_dir: str, genhdr: str, port_dir: str)
 
     # genhdr/：四个生成出来的头文件。
     for name in ("mpversion.h", "qstrdefs.generated.h", "moduledefs.h", "root_pointers.h"):
-        _copy(os.path.join(genhdr, name), os.path.join(package_dir, "genhdr", name))
+        # Python's stdout/text newline differs between Windows and POSIX.
+        # These generated text inputs must have identical LF bytes on either.
+        with open(os.path.join(genhdr, name), "rb") as handle:
+            generated = handle.read().replace(b"\r\n", b"\n")
+        with open(os.path.join(package_dir, "genhdr", name), "wb") as handle:
+            handle.write(generated)
         count += 1
 
     # port/：**只有我们自己的头文件**。

@@ -50,6 +50,34 @@ static SRWLOCK runtime_lock = SRWLOCK_INIT;
 void qfli_py_runtime_lock(void) { AcquireSRWLockExclusive(&runtime_lock); }
 void qfli_py_runtime_unlock(void) { ReleaseSRWLockExclusive(&runtime_lock); }
 
+struct qfli_py_condition {
+    SRWLOCK mutex;
+    CONDITION_VARIABLE ready;
+};
+
+QfliPyCondition *qfli_py_condition_create(void)
+{
+    QfliPyCondition *condition = malloc(sizeof(*condition));
+    if (condition != NULL) {
+        InitializeSRWLock(&condition->mutex);
+        InitializeConditionVariable(&condition->ready);
+    }
+    return condition;
+}
+void qfli_py_condition_free(QfliPyCondition *condition) { free(condition); }
+void qfli_py_condition_lock(QfliPyCondition *condition) { AcquireSRWLockExclusive(&condition->mutex); }
+void qfli_py_condition_unlock(QfliPyCondition *condition) { ReleaseSRWLockExclusive(&condition->mutex); }
+void qfli_py_condition_wait(QfliPyCondition *condition)
+{
+    SleepConditionVariableSRW(&condition->ready, &condition->mutex, INFINITE, 0);
+}
+void qfli_py_condition_signal(QfliPyCondition *condition) { WakeAllConditionVariable(&condition->ready); }
+uint64_t qfli_py_next_session_id(void)
+{
+    static volatile LONG64 next_id = 0;
+    return (uint64_t)InterlockedIncrement64(&next_id);
+}
+
 static void set_windows_errno(DWORD error)
 {
     switch (error)
@@ -380,6 +408,45 @@ static pthread_mutex_t runtime_lock = PTHREAD_MUTEX_INITIALIZER;
 
 void qfli_py_runtime_lock(void) { pthread_mutex_lock(&runtime_lock); }
 void qfli_py_runtime_unlock(void) { pthread_mutex_unlock(&runtime_lock); }
+
+struct qfli_py_condition {
+    pthread_mutex_t mutex;
+    pthread_cond_t ready;
+};
+QfliPyCondition *qfli_py_condition_create(void)
+{
+    QfliPyCondition *condition = malloc(sizeof(*condition));
+    if (condition == NULL) return NULL;
+    if (pthread_mutex_init(&condition->mutex, NULL) != 0) {
+        free(condition);
+        return NULL;
+    }
+    if (pthread_cond_init(&condition->ready, NULL) != 0) {
+        pthread_mutex_destroy(&condition->mutex);
+        free(condition);
+        return NULL;
+    }
+    return condition;
+}
+void qfli_py_condition_free(QfliPyCondition *condition)
+{
+    if (condition == NULL) return;
+    pthread_cond_destroy(&condition->ready);
+    pthread_mutex_destroy(&condition->mutex);
+    free(condition);
+}
+void qfli_py_condition_lock(QfliPyCondition *condition) { pthread_mutex_lock(&condition->mutex); }
+void qfli_py_condition_unlock(QfliPyCondition *condition) { pthread_mutex_unlock(&condition->mutex); }
+void qfli_py_condition_wait(QfliPyCondition *condition)
+{
+    pthread_cond_wait(&condition->ready, &condition->mutex);
+}
+void qfli_py_condition_signal(QfliPyCondition *condition) { pthread_cond_broadcast(&condition->ready); }
+uint64_t qfli_py_next_session_id(void)
+{
+    static uint64_t next_id = 0;
+    return __atomic_add_fetch(&next_id, 1, __ATOMIC_RELAXED);
+}
 
 char *qfli_py_realpath(const char *path, char *resolved, size_t capacity)
 {

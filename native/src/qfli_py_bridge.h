@@ -106,4 +106,7 @@ QFLI_PY_API const char *qfli_py_version(void);
 }
 #endif
 
+/* Optional additive native debugger ABI, independent of legacy execution. */
+#include "qfli_py_debug.h"
+
 #endif /* QFLI_PY_BRIDGE_H */

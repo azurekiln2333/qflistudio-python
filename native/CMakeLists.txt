@@ -206,6 +206,7 @@ add_library(qfli_py SHARED
     src/qfli_py_stdio.c
     src/qfli_py_file.c
     src/qfli_py_bridge.c
+    src/qfli_py_debug.c
     src/qfli_py_napi.cpp)
 
 target_include_directories(qfli_py PRIVATE

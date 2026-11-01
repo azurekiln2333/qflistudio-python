@@ -281,7 +281,8 @@ static void print_safely(mp_obj_t obj, int as_exception)
  */
 static int execute(const char *source, const char *project_dir,
                    const char *entry_file, int compile_only, int *exit_code,
-                   const char *artifact_output, const char *bytecode_file)
+                   const char *artifact_output, const char *bytecode_file,
+                   QfliPyDebugSession *debug_session)
 {
     nlr_buf_t nlr;
 
@@ -331,6 +332,9 @@ static int execute(const char *source, const char *project_dir,
     {
         mp_obj_t exc = (mp_obj_t)nlr.ret_val;
         int cancelled = qfli_py_cancel_requested(g_active_cancel);
+        /* User exception formatting can call Python. It is diagnostic cleanup,
+         * not another debuggable execution after the program has unwound. */
+        qfli_py_debug_vm_end(debug_session);
         /* Exception printing must not trigger another cancellation exception. */
         g_active_cancel = NULL;
         if (cancelled)
@@ -433,9 +437,10 @@ QfliPyRunResult qfli_py_run(const char *source, const char *stdin_text, int heap
         compile_only, NULL, NULL, NULL);
 }
 
-QfliPyRunResult qfli_py_execute(const char *source, const char *stdin_text, int heap_kb,
+static QfliPyRunResult execute_with_debug(const char *source, const char *stdin_text, int heap_kb,
     const char *project_dir, const char *entry_file, int compile_only,
-    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file)
+    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file,
+    QfliPyDebugSession *debug_session)
 {
     QfliPyRunResult result;
     int exit_code = 0;
@@ -494,12 +499,14 @@ QfliPyRunResult qfli_py_execute(const char *source, const char *stdin_text, int 
     qfli_py_hal_reset(stdin_text);
     qfli_py_file_begin(project_dir);
     g_active_cancel = token;
+    qfli_py_debug_vm_begin(debug_session);
 
     if (execute(source, project_dir, entry_file, compile_only, &exit_code,
-        artifact_output, bytecode_file) != 0)
+        artifact_output, bytecode_file, debug_session) != 0)
     {
         result = make_result(1, qfli_py_hal_stdout(), qfli_py_hal_stderr());
         g_active_cancel = NULL;
+        qfli_py_debug_vm_end(debug_session);
         qfli_py_file_end();
         mp_deinit();
         qfli_py_runtime_unlock();
@@ -509,11 +516,28 @@ QfliPyRunResult qfli_py_execute(const char *source, const char *stdin_text, int 
     result = make_result(exit_code, qfli_py_hal_stdout(), qfli_py_hal_stderr());
     result.truncated = qfli_py_hal_truncated();
     g_active_cancel = NULL;
+    qfli_py_debug_vm_end(debug_session);
 
     qfli_py_file_end();
     mp_deinit();
     qfli_py_runtime_unlock();
     return result;
+}
+
+QfliPyRunResult qfli_py_execute(const char *source, const char *stdin_text, int heap_kb,
+    const char *project_dir, const char *entry_file, int compile_only,
+    QfliPyCancel *token, const char *artifact_output, const char *bytecode_file)
+{
+    return execute_with_debug(source, stdin_text, heap_kb, project_dir, entry_file,
+        compile_only, token, artifact_output, bytecode_file, NULL);
+}
+
+QfliPyRunResult qfli_py_execute_debug_internal(const char *source,
+    const char *stdin_text, int heap_kb, const char *project_dir,
+    const char *entry_file, QfliPyCancel *token, QfliPyDebugSession *session)
+{
+    return execute_with_debug(source, stdin_text, heap_kb, project_dir, entry_file,
+        0, token, NULL, NULL, session);
 }
 
 void qfli_py_result_free(QfliPyRunResult *result)

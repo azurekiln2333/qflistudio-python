@@ -21,6 +21,15 @@ typedef enum {
 
 void qfli_py_runtime_lock(void);
 void qfli_py_runtime_unlock(void);
+/* A session condition never shares the global VM mutex. */
+typedef struct qfli_py_condition QfliPyCondition;
+QfliPyCondition *qfli_py_condition_create(void);
+void qfli_py_condition_free(QfliPyCondition *condition);
+void qfli_py_condition_lock(QfliPyCondition *condition);
+void qfli_py_condition_unlock(QfliPyCondition *condition);
+void qfli_py_condition_wait(QfliPyCondition *condition);
+void qfli_py_condition_signal(QfliPyCondition *condition);
+uint64_t qfli_py_next_session_id(void);
 uint64_t qfli_py_monotonic_ns(void);
 uint64_t qfli_py_realtime_ns(void);
 void qfli_py_sleep_us(uint64_t us);

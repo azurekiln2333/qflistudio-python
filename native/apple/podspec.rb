@@ -6,6 +6,7 @@ module QfliPythonNative
     qfli_py_stdio.c
     qfli_py_file.c
     qfli_py_bridge.c
+    qfli_py_debug.c
     qfli_py_platform.c
     qfli_py_reader.c
     qfli_py_ffi.c
@@ -69,7 +70,7 @@ module QfliPythonNative
     }
     # These flags belong on the app link, where static archive dead stripping occurs.
     spec.user_target_xcconfig = {
-      'OTHER_LDFLAGS' => '$(inherited) -Wl,-u,_qfli_py_run_into -Wl,-u,_qfli_py_execute_into -Wl,-u,_qfli_py_cancel_create -Wl,-u,_qfli_py_cancel_request -Wl,-u,_qfli_py_cancel_free -Wl,-u,_qfli_py_result_free -Wl,-u,_qfli_py_version'
+      'OTHER_LDFLAGS' => '$(inherited) -Wl,-u,_qfli_py_run_into -Wl,-u,_qfli_py_execute_into -Wl,-u,_qfli_py_cancel_create -Wl,-u,_qfli_py_cancel_request -Wl,-u,_qfli_py_cancel_free -Wl,-u,_qfli_py_result_free -Wl,-u,_qfli_py_version -Wl,-u,_qfli_py_debug_capabilities -Wl,-u,_qfli_py_debug_create -Wl,-u,_qfli_py_debug_retain -Wl,-u,_qfli_py_debug_release -Wl,-u,_qfli_py_debug_set_breakpoints -Wl,-u,_qfli_py_debug_execute_into -Wl,-u,_qfli_py_debug_command -Wl,-u,_qfli_py_debug_poll_json -Wl,-u,_qfli_py_debug_json_free'
     }
 
     case platform

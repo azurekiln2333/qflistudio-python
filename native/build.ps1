@@ -272,6 +272,7 @@ $configureArgs = @(
     "-DCMAKE_TOOLCHAIN_FILE=$Toolchain",
     "-DOHOS_ARCH=$Abi",
     "-DCMAKE_BUILD_TYPE=$BuildType",
+    '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
     "-DCMAKE_MAKE_PROGRAM=$Ninja",
     "-DQFLI_PY_PYTHON=$Python"
 )
@@ -301,8 +302,27 @@ $($configure.ErrLog)
 Write-Step "编译 libqfli_py.so"
 Write-Host "  第一次要编一百多个 MicroPython 源文件，大约一两分钟；之后增量只要几秒。"
 
+# Acceptance provenance requires content-current generated inputs and a fresh
+# compilation, including checkouts whose file timestamps were preserved.
+$regenerated = Invoke-Tool -Exe $Cmake -Arguments @('--build', $BuildDir, '--target', 'qfli_py_regen') `
+    -LogPath (Join-Path $BuildDir 'provenance-regenerate.log') -What 'regenerate current native inputs'
+if ($regenerated.ExitCode -ne 0) { Fail 'Current native input regeneration failed.' }
+$reconfigured = Invoke-Tool -Exe $Cmake -Arguments $configureArgs `
+    -LogPath (Join-Path $BuildDir 'provenance-reconfigure.log') -What 'configure regenerated source inventory'
+if ($reconfigured.ExitCode -ne 0) { Fail 'Regenerated native source inventory configuration failed.' }
 $buildLog = Join-Path $BuildDir 'build.log'
-$build = Invoke-Tool -Exe $Cmake -Arguments @('--build', $BuildDir, '--target', 'qfli_py') `
+$provenanceTool = Join-Path $AppDir 'tool/python_native_provenance.py'
+$provenancePath = Join-Path $BuildDir 'native-build-evidence.json'
+# Capture also fingerprints the configured C/C++ drivers, linker, archiver and
+# host Python by role, plus the implicit SDK include/link inputs, so a swapped
+# compiler or SDK header is visible even when the source snapshot is stable.
+$capture = Invoke-Tool -Exe $Python -Arguments @($provenanceTool, 'capture',
+    '--build-directory', $BuildDir, '--abi', $Abi, '--build-type', $BuildType,
+    '--manifest', $provenancePath, '--python', $Python,
+    '--tool', $Cmake, '--tool', $Ninja, '--tool', $Toolchain) `
+    -LogPath (Join-Path $BuildDir 'provenance-capture.log') -What 'native input capture'
+if ($capture.ExitCode -ne 0) { Fail 'Native build input capture failed; no provenance may be published.' }
+$build = Invoke-Tool -Exe $Cmake -Arguments @('--build', $BuildDir, '--clean-first', '--target', 'qfli_py') `
     -LogPath $buildLog -What 'cmake build'
 
 $BuiltSo = Join-Path $BuildDir 'libqfli_py.so'
@@ -333,6 +353,11 @@ if ($check.ExitCode -ne 0) {
   target_link_libraries(qfli_py PUBLIC -static-libstdc++)
 "@
 }
+
+$completedEvidence = Invoke-Tool -Exe $Python -Arguments @($provenanceTool, 'finish',
+    '--manifest', $provenancePath, '--library', $BuiltSo) `
+    -LogPath (Join-Path $BuildDir 'provenance-finish.log') -What 'native build provenance'
+if ($completedEvidence.ExitCode -ne 0) { Fail 'Native inputs changed or output provenance failed; do not stage this SO.' }
 
 # ---------------------------------------------------------------------------
 # 6. 拷进构建路径

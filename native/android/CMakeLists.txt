@@ -26,6 +26,7 @@ add_library(qfli_py SHARED
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_stdio.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_file.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_bridge.c"
+    "${QFLI_PY_NATIVE_DIR}/src/qfli_py_debug.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_jni.cpp")
 target_include_directories(qfli_py PRIVATE
     "${QFLI_PY_EMBED_DIR}"

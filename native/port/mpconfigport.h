@@ -57,6 +57,8 @@
 
 #define MICROPY_PERSISTENT_CODE_LOAD (1)
 #define MICROPY_PERSISTENT_CODE_SAVE (1)
+#define MICROPY_PY_SYS_SETTRACE (1)
+#define QFLI_PY_DEBUG_METADATA (1)
 void qfli_py_check_cancel(void);
 #define MICROPY_VM_HOOK_INIT qfli_py_check_cancel();
 #define MICROPY_VM_HOOK_LOOP qfli_py_check_cancel();

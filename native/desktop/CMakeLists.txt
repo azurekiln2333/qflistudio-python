@@ -22,6 +22,7 @@ add_library(qfli_py_ffi SHARED
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_stdio.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_file.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_bridge.c"
+    "${QFLI_PY_NATIVE_DIR}/src/qfli_py_debug.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_platform.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_reader.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_ffi.c")
