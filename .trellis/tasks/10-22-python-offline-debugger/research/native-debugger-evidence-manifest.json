@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "recordedDate": "2026-10-23",
+  "timezone": "Asia/Shanghai",
+  "kind": "native-debugger-host-handoff",
+  "deviceVerified": false,
+  "reports": [
+    {
+      "path": ".trellis/tasks/10-22-python-offline-debugger/research/python-native-debugger.json",
+      "source": "build/reports/python-native-debugger.json",
+      "sha256": "fefbf4fce513b737fd653654ff584006ce85a0169e096bb2796c433a456063bd",
+      "bytes": 2735
+    },
+    {
+      "path": ".trellis/tasks/10-22-python-offline-debugger/research/python-native-debugger-posix.json",
+      "source": "build/reports/python-native-debugger-posix.json",
+      "sha256": "225cd5251bce5a794328a10a30197452dfef54c0872bb1d67f068db8a3345f07",
+      "bytes": 2698
+    },
+    {
+      "path": ".trellis/tasks/10-22-python-offline-debugger/research/python-debugger-cost.json",
+      "source": "build/reports/python-debugger-cost.json",
+      "sha256": "963d126f62f35ba6d428b1bbbd9b3980a1411b219152160ead5a8a9a18e28166",
+      "bytes": 2305
+    },
+    {
+      "path": ".trellis/tasks/10-22-python-offline-debugger/research/python-stdlib-with-debugger.json",
+      "source": "build/reports/python-stdlib-with-debugger.json",
+      "sha256": "94c3419b4f55b98054ea6e369ce0846732947c1ddc3d851e203931363a5b7520",
+      "bytes": 16780
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "native/build/windows/qfli_py_ffi.dll",
+      "sha256": "52e7400fdcd50cb03d94026ad6331c3b27770e2795e3418259d54e4d3a79a54e",
+      "bytes": 745758
+    },
+    {
+      "path": "build/qfli_py_ffi-debugger-stable.dll",
+      "sha256": "52e7400fdcd50cb03d94026ad6331c3b27770e2795e3418259d54e4d3a79a54e",
+      "bytes": 745758
+    },
+    {
+      "path": "native/build/host/libqfli_py_debug_test.so",
+      "sha256": "e77addddd488c8a49dc8f47edfb63b221c4c74e7a5682a7883341d34eb27da4f",
+      "bytes": 557432
+    },
+    {
+      "path": "build/qfli_py_ffi-module-foundation-2329ef7d.dll",
+      "sha256": "2329ef7d374e35dd5159db0f3f056b094effc9a0372ad29fe704af472a6c309f",
+      "bytes": 714418
+    }
+  ],
+  "openGates": [
+    "D1 strict ordinary cost preservation",
+    "parent actual FFI/product checks",
+    "both OHOS ABI debugger builds",
+    "installed OHOS debugger verification",
+    "Android/Apple target build and run"
+  ]
+}

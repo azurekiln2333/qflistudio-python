@@ -28,6 +28,9 @@ EVENT_STARTUP_PROGRESS and caches the latest value in pyflowStartupProgress.
 - Defer the first engine frame before runApp on Android/OHOS, then wait for
   framework layout before beginning the three existing store loads.
 - AppBootstrap reports actual completion as 1/3, 2/3, 1; no synthetic progress.
+- AppBootstrap checks pending backup restoration before loading stores. Keep
+  this real file I/O behind the native startup surface too. A restored or
+  damaged backup can select the existing restart/recovery page instead of home.
 - Keep the reference waits: initial 160 ms, minimum native display 1100 ms,
   post-load 320 ms. Await the ready home frame's endOfFrame before allowing
   the first engine frame. Release the gate in finally.
@@ -52,8 +55,11 @@ EVENT_STARTUP_PROGRESS and caches the latest value in pyflowStartupProgress.
   embedding removes it on its actual renderer first-frame event. Subscribe
   with the same function used for unsubscribe, and replay AppStorage's latest
   progress to cover events sent before aboutToAppear.
-- Product icon is 96 logical units; bar is 4, horizontal margin 32, maximum
-  width 420, bottom margin 48. Startup backgrounds are #F8F9FF / #111418.
+- Product icon is 96 logical units, clipped to a 24-unit corner radius on OHOS
+  like JVMX; bar is 4, horizontal margin 32, maximum width 420, bottom margin 48.
+  Startup backgrounds are #F8F9FF / #111418. Keep the Flutter fallback asset
+  `assets/app_icon.png` consistent with the OHOS product icon, so a nonnative
+  entry shell does not display the old Quick branding.
 - Other platforms retain the Flutter fallback. Shared core/reference remain
   separate packages; this startup implementation requires no core API change.
 
@@ -84,6 +90,14 @@ EVENT_STARTUP_PROGRESS and caches the latest value in pyflowStartupProgress.
   layout before load, real completion progress, and ready layout while deferred.
 - Verify minimum display/post-load waits, failed loads/channels, pending native
   responses, finally release and nonnative fallback.
+- Isolate `AppBackupService.rootOverride` in a temporary directory, reset
+  `AppRestoreGate.status`, and wait for restoration probes with bounded
+  `tester.runAsync` polling. Fake-clock pumps alone cannot complete file I/O;
+  do not bypass restoration in production to satisfy old timing assertions.
+- Exercise the real `QfliApp` on OHOS with and without the progress handler.
+  Its Flutter fallback may exist in the layout while frames are deferred, but
+  home must replace it before the first engine frame is allowed. A widget-tree
+  match for `SplashScreen` alone does not prove it was visible on the device.
 - Run full flutter test/analyze and build/install a fresh APK. Record repeated
   light/dark cold starts, inspect actual decoded frames and foreground package,
   and verify native Python self-check plus a real editor run.

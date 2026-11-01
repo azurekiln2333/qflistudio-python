@@ -11,6 +11,7 @@ before changing the runner or MethodChannel fields.
 
 ```dart
 Widget buildPythonToolsPage(ProjectStore store);
+Widget buildPythonToolsTab(ProjectStore store, VoidCallback onOpenTerminal);
 Future<PythonSyntaxResult> checkSyntax({
   required String projectPath, required String entryFile,
 });
@@ -23,7 +24,14 @@ Future<bool> pythonTerminalDelegate(SandboxShellBackend backend, String command,
 ```
 
 Register the tool through `StudioProfile.toolsPageBuilder`.
-`PythonSyntaxResult` contains `success`, `error`, and `version`.
+Register `PythonToolsBody` directly through `StudioProfile.toolsTabBuilder`.
+It exposes project/file selection, check/run/compile/stop and local package
+operations in one scroll view, retaining shared `ToolsGridSliver` cards and
+the terminal callback. `PythonToolsPage` remains a compatible separate route.
+The tab builder returns a body, not another Scaffold/AppBar or feature menu.
+`PythonSyntaxResult` contains `success`, `error`, `version` and an optional
+`unavailableReason`; unavailable or busy is never a clean syntax result.
+Register `const PythonCodeAnalyzer()` through `StudioProfile.codeAnalyzer`.
 Register interpreter commands through `StudioProfile.terminalCommandDelegate`;
 both the standalone terminal and editor terminal consume this same callback.
 
@@ -41,6 +49,18 @@ both the standalone terminal and editor terminal consume this same callback.
   Python stdout in the editor terminal (`[qfli] ` prefix).
 - Syntax checks use `checkSyntax`, and execution uses `run`; both first probe
   `available` and pass source, stdin, heap size and real paths.
+- Editor checks use `checkSource` with exact captured unsaved text. They never
+  save buffers, run imports/programs or infer token columns from native lines.
+  Valid native SyntaxError/IndentationError locations map to full-line UTF-16
+  half-open ranges; operational/malformed/unlocated responses are unavailable.
+- Default runner instances share `PythonRuntimeActivity.shared`. Acquire before
+  asynchronous probe/preparation; reject busy work immediately. A run/debug
+  lease lasts until actual native exit, including after a cancellation request
+  or an early controlled result handle. This gate covers the app Dart isolate;
+  native mutex ownership still governs direct calls from other isolates.
+- Package callbacks capture the project used to begin the operation, then call
+  the same real compile-only checker. Selection changes/disposal invalidate late
+  results and request cancellation without mutating another project's UI state.
 - Terminal aliases `python`, `python3` and `micropython` use the same runner.
   Simple script commands support `.py`/`.mpy`; interpreter options, extra script
   arguments and interactive REPL are explicitly refused when unsupported.
@@ -59,6 +79,12 @@ both the standalone terminal and editor terminal consume this same callback.
   policy. Keep language editions' identity in the shared profile extension;
   avoid an app-local duplicate About dialog. Core `settings_about_test.dart`
   covers offline editions, default identity and explicit online overrides.
+- The OHOS standalone host also enforces `OFFLINE_ONLY` at its native channel
+  boundary. `openAgreement`, `openUrl` and Huawei `login` return that error before
+  invoking remote providers, including for localhost/file/custom URLs. Local
+  startup progress, document picking and text sharing remain available. Verify
+  actual EntryAbility handler behavior with `node tool/test_python_offline_platform.cjs`;
+  this host-double check is separate from ArkTS/HAP/device verification.
 
 ## 4. Validation & Error Matrix
 
@@ -86,9 +112,17 @@ both the standalone terminal and editor terminal consume this same callback.
   project root and entry path, and returns native errors.
 - Widget tests discover files from a real temporary project and exercise
   syntax checking and running at 360x800 and 1200x800 without layout exceptions.
+- Tools-tab regressions use the real Python profile and cover navigation to the
+  project tools, terminal callback and a shared offline tool at both sizes.
 - Real filesystem scans must run with `tester.runAsync`; pump the scheduled
   loading frame before waiting for it to disappear. Use bounded real-time
   polling instead of waiting for I/O under the test's fake clock.
+- Keep ExpansionTile bool persistence separate from descendant text-field
+  scroll offsets. Widget tests cover expanding sections after editing fields.
+- Real provider integration in `python_editor_analysis_test.dart` verifies
+  unsaved diagnostics through the shared scheduler/Problems navigation and
+  repair without disk writes or program side effects. Provider-only range and
+  busy/cancellation regressions remain in the focused analyzer/activity suites.
 - Run `flutter test` and `flutter analyze`; channel mocks do not establish
   native runtime correctness.
 - Terminal channel tests inject a method-channel runner. On Windows the default

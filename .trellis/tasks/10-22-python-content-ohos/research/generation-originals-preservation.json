@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "checkedAtUtc": "2026-10-22T16:46:20.946974+00:00",
+  "representations": 1158,
+  "assetMismatches": [],
+  "foreign": {
+    "tutorials": {
+      "count": 1700,
+      "preserved": true,
+      "beforeAssetSha256": "5d1e6342519fcc646e8e63c724e3787dc4c8677279acc0fb8a0a0be9eb64192e",
+      "afterAssetSha256": "055f0eb3d7415b5037ae02d6d0aa994a532280b9fd847203d44ccf9f2b0ca5ec"
+    },
+    "examples": {
+      "count": 1700,
+      "preserved": true,
+      "beforeAssetSha256": "d0241afee654ec0da38a92861cf551765f92704939930ea84ffa92fd7375aec2",
+      "afterAssetSha256": "df0555c005d4230ad8248fc0d0a44073d393e60fc3ae152254be3ca20f4306b6"
+    }
+  },
+  "inventorySha256": "f1d891de16360a587e205a945e0a015c90040a267a68e5b7acfd614fa8838ec4",
+  "deviceGatePassed": false
+}

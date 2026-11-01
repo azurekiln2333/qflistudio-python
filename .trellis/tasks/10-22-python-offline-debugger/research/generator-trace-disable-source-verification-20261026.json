@@ -1,0 +1,58 @@
+{
+  "recordedAt": "2026-10-25T23:17:11.044864+00:00",
+  "kind": "source-only generator trace-disable regression preparation",
+  "defect": "retained generator frame callback survived resume after global trace disable",
+  "fix": "(global callback || existing frame) && !trace recursion before FRAME_ENTER",
+  "checks": [
+    {
+      "command": "python -B native/tests/debug_overlay_test.py",
+      "tests": 4,
+      "exitCode": 0
+    },
+    {
+      "command": "ast.parse on overlay, native debugger tests and overlay tests",
+      "files": 3,
+      "result": "PASS"
+    }
+  ],
+  "sourceIdentities": {
+    "native/tools/debug_overlay.py": {
+      "bytes": 5424,
+      "sha256": "7bb9b1ab724958dc7ed1e1e0dd732bb9f60e4b7b00e49d669b66e3c7d90beb39"
+    },
+    "native/micropython_embed/py/vm.c": {
+      "bytes": 64543,
+      "sha256": "bef4d4b5f2d334e21a8e76a834e4f3f0bb1a1f2382d6f08c8bc4ced43d05a589"
+    },
+    "native/tests/debugger.py": {
+      "bytes": 32891,
+      "sha256": "86a6e8d82b957eb75d53d6e9c5026cef80dd33771bfe9d3b47c92d70b5f833c7"
+    },
+    "native/tests/debug_overlay_test.py": {
+      "bytes": 2230,
+      "sha256": "b70e0eeb3aa25493218f7f9ffa579530784bda44e2b90ac742ee6e6df3ea52d0"
+    }
+  },
+  "nativeRegressionCasesAuthored": 30,
+  "newNativeCasesExecuted": 0,
+  "stableDll": {
+    "path": "native/build/windows/qfli_py_ffi.dll",
+    "bytes": 745758,
+    "sha256": "52e7400fdcd50cb03d94026ad6331c3b27770e2795e3418259d54e4d3a79a54e",
+    "currentSourceBuild": false
+  },
+  "readiness": {
+    "oldHostReady704": "RETIRED global732; never accepted",
+    "newHostGrantAccepted": false
+  },
+  "openGates": [
+    "current-source native Windows/POSIX rebuild and all30 debugger cases",
+    "ordinary100 and representative balanced cost checks",
+    "both OHOS ABI builds, signed HAP and installed debugging/content/modules/tools/workspace"
+  ],
+  "independentSourceReview": {
+    "result": "PASS; no source blocker",
+    "path": ".trellis/tasks/10-22-python-offline-debugger/research/generator-trace-disable-independent-review-20261026.md",
+    "runtimeExecuted": false
+  }
+}

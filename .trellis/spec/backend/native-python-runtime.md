@@ -121,6 +121,70 @@ Descriptors stay tracked until run cleanup even when the Python object is
 collected. The upstream module reader is outside this path check; this is
 not an isolation mechanism for untrusted Python code.
 
+### Native debugger overlays and ordinary-run cost
+
+Maintain debugger changes through `native/tools/debug_overlay.py` and the
+matching tracked `micropython_embed/py` sources; leave the pinned vendor tree
+unchanged. `build_embed.py` consumes this overlay. A source-only handoff must
+keep its generated blocks synchronized without representing that as executed
+regeneration or a successful build.
+
+Keep both raw-code common layouts identical. With SETTRACE enabled,
+`line_of_definition` follows the four flag/header bytes, before pointer fields;
+the first two proto-function indicator bytes stay at offset zero. Preserve the
+prelude, GC-owned locals-metadata pointer, persistent fields and explicit
+upstream bytecode serializer. This internal C layout requires a consistent
+rebuild of all translation units; it does not change the exported debugger ABI.
+
+Ordinary entry re-enters the profiler when the global callback is set **or**
+the code state still holds a frame, and it tests that pair before the recursion
+flag:
+
+```c
+if ((MP_STATE_THREAD(prof_trace_callback) || code_state->frame) && !mp_prof_is_executing) {
+    mp_prof_frame_enter(code_state);
+}
+```
+
+A resumed generator still holds its previous frame. Testing only the global
+callback skips the upstream re-entry that replaces that frame and resets its
+per-frame callback. The stale callback then stays live, and the live tick keeps
+delivering events after `sys.settrace(None)`. A fresh ordinary call has no frame
+and no global callback, so it still skips frame allocation; keep both operands to
+retain that win.
+
+Frame update and live tick check `code_state->frame` first, retaining recursion
+and per-frame callback conditions, for example:
+
+```c
+if (code_state->frame && !mp_prof_is_executing && code_state->frame->callback) {
+    mp_prof_instr_tick(code_state, is_exception);
+}
+```
+
+Keep the frame-chain setup/restoration. A global callback is distinct from an
+existing frame callback; do not cache it across user `sys.settrace` calls or
+replace the live tick condition with native-session presence. The live tick uses
+the frame callback, as upstream does, so the frame that is currently executing
+keeps ticking until it returns; only resume-time frame re-entry resets the
+callback. Compiler locals payload is created only during a debug session, but
+trace fields and branches
+still affect ordinary runs. Do not claim zero overhead from absent per-call
+frame allocation.
+
+Regressions for this contract: an ordinary run must raise no generator line or
+return event after `sys.settrace(None)` followed by a resume, and a debug session
+with a breakpoint inside a suspended generator must not pause on that resume while
+still reporting `traceDisabled`.
+
+The October 24 A+B source changes are unbuilt and untested at their source-only
+handoff. The frozen Windows DLL with SHA256 `52e7400f…` and its prior 28-case
+reports describe the earlier captured source. Predicted 64-bit raw-code sizes
+of 104 → 96 C bytes / 128 → 96 GC bytes are source calculations, not measured
+results. D1 remains open pending layout/overlay checks, real debugger/ordinary
+regressions and balanced representative cost measurements in a granted host
+window. Task evidence must identify the actual source and artifact tested.
+
 ## 4. Validation & Error Matrix
 
 | Condition | Result |
@@ -207,3 +271,40 @@ read size even after `mp_hal_stdin_rx_chr()` returns -1. Correct: return the
 actual count and zero at EOF. Wrong: convert a `SystemExit` integer after the
 exception guard unwinds without a new guard. Correct: catch conversion errors
 and finish the same cleanup path.
+
+
+## 8. Windows OHOS build shell and delivery evidence
+
+The maintained `native/build.ps1` is UTF-8 without a BOM. Run it with
+PowerShell7 (`pwsh.exe -NoProfile -File native/build.ps1 ...`) on this Windows
+host. Windows PowerShell5 can decode this script with a legacy code page and
+fail during parsing before any compiler starts. Such an exit is a script-entry
+failure, not native compilation evidence. Keep the source encoding and existing
+signing identity intact when selecting a working installed shell.
+
+Before a new real build, parse the script with PowerShell7's
+`System.Management.Automation.Language.Parser.ParseFile`; require an empty
+error list. This source check starts no SDK/compiler and does not prove a build.
+For bounded builds, retain the existing owned-process helper's exact original
+root/creation/Job evidence. A terminal nonzero entry plus Job0 and closed handles
+releases resources but cannot become a successful build.
+
+Build current ARM64 native source and verify its provenance before staging the
+SO for a physical-device HAP. Invoke the normal app target with
+`flutter build hap --release --no-pub --target-platform ohos-arm64`. Check the
+new output identity and actual packaged native library before delivery. A stale
+same-name HAP is not a successful new build. Verify the signature independently
+when claiming a signed artifact.
+
+Use HDC for OHOS transfer to the user-designated target. Keep transfer evidence
+separate from installation, launch and runtime acceptance. ADB is the Android
+transport and must not be substituted for an OHOS delivery request.
+
+Good: PowerShell7 parses the script, current native provenance verifies, a fresh
+HAP contains the verified native library, and exact-target HDC reports transfer
+success. Bad: retry the same Windows PowerShell5 parser failure as if the
+compiler ran, or deliver the previous HAP because its filename matches.
+
+Observed failure reference: Python native claim937, original exec691bcf, report
+`build/python-ohos-delivery-20261026/native/process.json`; exit1 before compiler,
+root terminal/Job0/closed. Its release949/951 does not authorize a retry.

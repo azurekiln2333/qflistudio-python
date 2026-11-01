@@ -1,0 +1,76 @@
+{
+  "recordedAt": "2026-10-26T01:54:07.110511+00:00",
+  "kind": "source-only freeze of the current native debugger source identities",
+  "task": ".trellis/tasks/10-22-python-offline-debugger",
+  "scope": "Read-only identity capture. No build, regeneration, compiler, native library, SDK, harness, publisher, device or channel was invoked or imported. Hashing and source counting only. No production, spec or test file was modified; this record is the only file authored.",
+  "sourceIdentities": [
+    {
+      "role": "maintained overlay",
+      "path": "native/tools/debug_overlay.py",
+      "bytes": 5424,
+      "sha256": "7bb9b1ab724958dc7ed1e1e0dd732bb9f60e4b7b00e49d669b66e3c7d90beb39"
+    },
+    {
+      "role": "generated vm.c",
+      "path": "native/micropython_embed/py/vm.c",
+      "bytes": 64543,
+      "sha256": "bef4d4b5f2d334e21a8e76a834e4f3f0bb1a1f2382d6f08c8bc4ced43d05a589"
+    },
+    {
+      "role": "native debugger authored tests",
+      "path": "native/tests/debugger.py",
+      "bytes": 32891,
+      "sha256": "86a6e8d82b957eb75d53d6e9c5026cef80dd33771bfe9d3b47c92d70b5f833c7"
+    },
+    {
+      "role": "source overlay test",
+      "path": "native/tests/debug_overlay_test.py",
+      "bytes": 2230,
+      "sha256": "b70e0eeb3aa25493218f7f9ffa579530784bda44e2b90ac742ee6e6df3ea52d0"
+    },
+    {
+      "role": "old frozen Windows DLL (pre-fix source)",
+      "path": "native/build/windows/qfli_py_ffi.dll",
+      "mirrorPath": "build/qfli_py_ffi-debugger-stable.dll",
+      "bytes": 745758,
+      "sha256": "52e7400fdcd50cb03d94026ad6331c3b27770e2795e3418259d54e4d3a79a54e",
+      "builtAt": "2026-10-23T01:12:11",
+      "currentSourceBuild": false,
+      "note": "Both paths hash identically. This DLL predates the generator trace-disable fix, so running the authored cases against it does not exercise that fix."
+    }
+  ],
+  "authoredCaseCount": {
+    "value": 30,
+    "previousReported": 28,
+    "delta": 2,
+    "method": "count of lines matching the test method prefix in native/tests/debugger.py",
+    "sourcePath": "native/tests/debugger.py",
+    "newCaseLines": {
+      "569": "test_ordinary_trace_disable_does_not_retrace_resumed_generator",
+      "585": "test_debugger_trace_disable_suppresses_resumed_generator_pause"
+    }
+  },
+  "sourceOnlyChecks": [
+    {
+      "command": "python -B native/tests/debug_overlay_test.py",
+      "tests": 4,
+      "exitCode": 0,
+      "meaning": "proves apply_debug_overlay(pinned third_party) equals the tracked micropython_embed source byte for byte, rejects double application, is CRLF-insensitive, and leaves the vendor tree unchanged",
+      "runBy": "author, reproduced independently by root"
+    },
+    {
+      "command": "ast.parse on debug_overlay.py, tests/debugger.py, tests/debug_overlay_test.py",
+      "files": 3,
+      "result": "PASS",
+      "runBy": "author, reproduced independently by root"
+    }
+  ],
+  "executionGatesUnrun": [
+    "current-source native rebuild for Windows, so the frozen DLL hash no longer describes the working tree",
+    "all 30 native debugger cases against a current-source build, including the 2 new generator trace-disable regressions",
+    "ordinary-100 run and representative balanced trace cost measurement",
+    "OHOS ABI builds for both arm64 and x86_64, signed HAP, and installed on-device debugging",
+    "publication and channel gates for the debugger artifact"
+  ],
+  "status": "source-only freeze; runtime regressions UNRUN; no red or green claimed on the frozen DLL"
+}

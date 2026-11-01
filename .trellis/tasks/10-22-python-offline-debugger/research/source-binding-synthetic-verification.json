@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-25T18:07:25.981208+00:00",
+  "evidenceKind": "synthetic-only; no compiler/SDK/Flutter/device or real process containment acceptance",
+  "checks": [
+    {
+      "command": "python -m unittest discover -s test -p python_audit_inputs_test.py -v",
+      "passedTests": 8,
+      "exitCode": 0
+    },
+    {
+      "command": "python -m unittest discover -s test -p python_native_provenance_test.py -q",
+      "passedTests": 29,
+      "exitCode": 0
+    },
+    {
+      "command": "python test/python_owned_process_control_test.py --synthetic-only --output build/python-owned-process-synthetic-review",
+      "passedSyntheticCases": 12,
+      "realControls": 0,
+      "exitCode": 0
+    },
+    {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File test/python_ohos_audit_build_test.ps1",
+      "passedSyntheticCases": 15,
+      "exitCode": 0
+    }
+  ],
+  "sourceIdentities": {
+    "tool/python_audit_inputs.py": "f139c43e9457bdb851b69d80e4f6955a6aea3121c67cefc8fb3b396948d24d50",
+    "test/python_audit_inputs_test.py": "2c57e3dbd8d6594685c5e6d095d11fcb8bc263aabb01bda8a7a3ac110ad83b76",
+    "tool/python_native_provenance.py": "f25ad2f5ef09cd8554a58fcbd036d38b4c312808e2cf876ddf42400b984ce7da",
+    "test/python_native_provenance_test.py": "fab4955f848c155f6b7dec7318d833b2caad03374243398208aa54d5db529899",
+    "tool/python_owned_process.py": "3061cf1d6258061b41ba656dd5f2dd9da5f1907d40e861aa3ff3152f35beadfd",
+    "test/python_owned_process_control_test.py": "ad2b9f7a001191e93dd70765be6c58331432cf2fd595110b20605d2496b0e845",
+    "tool/build_python_ohos_audit.ps1": "a2f7c648bbc4b73a9da2dae59d53e0eac1918c6dbfc6b30f57ebfbc6278e3d9a",
+    "test/python_ohos_audit_build_test.ps1": "89d3050bb0c2b8f5c30d9fbb1384fee46a4da2d752f918be7cac440cb6366e5a"
+  },
+  "openGates": [
+    "real Windows owned-process controls under new named grant",
+    "current Flutter suites and analysis",
+    "current native builds for both OHOS ABIs and debugger performance",
+    "current-source signed HAP binding",
+    "installed OHOS baseline/module/debugger/tools/workspace acceptance"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "recordedAt": "2026-10-25T21:42:27.030182+00:00",
+  "evidenceKind": "isolated doubles only; no actual child/publisher/SDK/native/device process",
+  "checks": [
+    {
+      "command": "python .trellis/tasks/10-22-python-offline-debugger/research/fixtures/verify_run_python_host.py",
+      "exitCode": 0,
+      "passedSyntheticChecks": 11,
+      "log": "build/python-host-synthetic-final-20261026/inner.log",
+      "logSha256": "2dd6ce868ad505d418cb36d1f41529530824860a9f431ccc449701843b3c2d93"
+    },
+    {
+      "command": "python .trellis/tasks/10-22-python-offline-debugger/research/fixtures/verify_run_python_granted_window.py",
+      "exitCode": 0,
+      "passedSyntheticChecks": 27,
+      "log": "build/python-host-synthetic-final-20261026/outer.log",
+      "logSha256": "3480dcf28c876bdaf8c19d4f15bf26e87af05dde95363d15dcd7d394e8a5bcfe"
+    }
+  ],
+  "sourceIdentities": {
+    ".trellis/tasks/10-22-python-offline-debugger/research/fixtures/run_python_host.py": {
+      "bytes": 22623,
+      "sha256": "395bbd439e0da00c3587337b8d7ce73aa76aa8968a0a208d649b354b782dd547",
+      "bareAsserts": 0
+    },
+    ".trellis/tasks/10-22-python-offline-debugger/research/fixtures/verify_run_python_host.py": {
+      "bytes": 21390,
+      "sha256": "a1965dd582d642dc0608391dac6ebdacaa9ad75eb9a8106c3573a63bf0acb3dc",
+      "bareAsserts": 0
+    },
+    ".trellis/tasks/10-22-python-offline-debugger/research/fixtures/run_python_granted_window.py": {
+      "bytes": 39696,
+      "sha256": "6abdb3f88b8b994b32735ca920c1644bfcee1d80417695aea9572583cbefbff7",
+      "bareAsserts": 0
+    },
+    ".trellis/tasks/10-22-python-offline-debugger/research/fixtures/verify_run_python_granted_window.py": {
+      "bytes": 45435,
+      "sha256": "e22145649e194fe31e985bde6dcbad57c7b49ca2f3ffb37c1a99b9a33f3a3d21",
+      "bareAsserts": 0
+    },
+    "tool/python_owned_process.py": {
+      "bytes": 26940,
+      "sha256": "3061cf1d6258061b41ba656dd5f2dd9da5f1907d40e861aa3ff3152f35beadfd",
+      "bareAsserts": 0
+    },
+    "test/python_owned_process_control_test.py": {
+      "bytes": 38934,
+      "sha256": "ad2b9f7a001191e93dd70765be6c58331432cf2fd595110b20605d2496b0e845",
+      "bareAsserts": 0
+    }
+  },
+  "independentReview": ".trellis/tasks/10-22-python-offline-debugger/research/source-only-harness-guard-review.md",
+  "deviceInventory": {
+    "grantSeq": 683,
+    "ackSeq": 684,
+    "releaseSeq": 685,
+    "existingServer": "unavailable/unconfirmed",
+    "clientInvoked": false,
+    "targetEstablished": false
+  },
+  "openGates": [
+    "real Windows process controls under a fresh named host grant",
+    "current five focused Flutter suites and scoped analysis",
+    "current native/performance and both OHOS ABI builds",
+    "current-source signed HAP and installed original content/modules/debugger/tools/workspace",
+    "more than 100 new substantial examples after installed originals pass"
+  ]
+}

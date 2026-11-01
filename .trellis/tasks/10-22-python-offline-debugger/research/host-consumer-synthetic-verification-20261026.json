@@ -1,0 +1,75 @@
+{
+  "recordedAt": "2026-10-26T04:32:50.784154+00:00",
+  "status": "source identities and synthetic evidence only; independent final review separate; no host grant",
+  "supersedes": "host-observer-synthetic-verification-20261026.json runner identities and11/27 counts only",
+  "checks": [
+    {
+      "scope": "inner",
+      "kind": "synthetic doubles only",
+      "passedChecks": 14,
+      "log": "build/python-debugger-consumer-tests-synthetic-20261026/inner.log",
+      "logSha256": "532476f14f9113380a113556cbb0c9b34dc21e99a6c869cd29c1e12ffb76e866",
+      "executionReportedBy": "HerdR p4; root checked existing log content only"
+    },
+    {
+      "scope": "outer",
+      "kind": "synthetic doubles only",
+      "passedChecks": 28,
+      "log": "build/python-debugger-consumer-tests-synthetic-20261026/outer.log",
+      "logSha256": "642d92943cf4f53170f113c5d82aa0a3c9a09f1a417ba9389e0f103827f9d098",
+      "executionReportedBy": "HerdR p4; root checked existing log content only"
+    }
+  ],
+  "sourceIdentities": {
+    ".trellis\\tasks\\10-22-python-offline-debugger\\research\\fixtures\\run_python_host.py": {
+      "bytes": 23603,
+      "sha256": "3d18b09c2806c3f6432471405874b6dc1f551e47281a4c1d04efc0edb96109b6"
+    },
+    ".trellis\\tasks\\10-22-python-offline-debugger\\research\\fixtures\\verify_run_python_host.py": {
+      "bytes": 27229,
+      "sha256": "5af93844e85c8b9f6a7d101fecc0b97cf316f210f7b95e7445e0cb7030d36376"
+    },
+    ".trellis\\tasks\\10-22-python-offline-debugger\\research\\fixtures\\run_python_granted_window.py": {
+      "bytes": 40328,
+      "sha256": "64faaa8d6d6ef6e47b1c188b74f1daf148320be3a8d2ccfce7fd67864e25bcb8"
+    },
+    ".trellis\\tasks\\10-22-python-offline-debugger\\research\\fixtures\\verify_run_python_granted_window.py": {
+      "bytes": 47762,
+      "sha256": "c04a8227d26c10c186e43ea4798ad1d63adf02228f3c09d55c71eba6b05ef51b"
+    },
+    "tool/python_owned_process.py": {
+      "bytes": 26940,
+      "sha256": "3061cf1d6258061b41ba656dd5f2dd9da5f1907d40e861aa3ff3152f35beadfd"
+    },
+    "test/python_owned_process_control_test.py": {
+      "bytes": 38934,
+      "sha256": "ad2b9f7a001191e93dd70765be6c58331432cf2fd595110b20605d2496b0e845"
+    },
+    "test/python_tools_page_test.dart": {
+      "bytes": 43895,
+      "sha256": "f12a935188cea6005aea9c368baec3b4f0c71cdffc8a0e2d353df0bc34dea8c1"
+    },
+    "test/python_highlighting_test.dart": {
+      "bytes": 9680,
+      "sha256": "bb094416539aecc3f9efe68ad0dc5a66ffbbda4ed3cc9384006dff7a2ba76d24"
+    },
+    "pubspec.yaml": {
+      "bytes": 1039,
+      "sha256": "633852704d969d211ce942e64e2c59b7460c386e3dc1eb5460b0d4d5cab85879"
+    },
+    "pubspec.lock": {
+      "bytes": 14451,
+      "sha256": "4bfd58a9ad9d45a7120b571b4263f4790336dbe5e3d1f4483d90d227aa45a14c"
+    },
+    ".dart_tool/package_config.json": {
+      "bytes": 12595,
+      "sha256": "cb81efd271435d0d486941a139baa15f3e78026543d3a1d05916153e92b8dcf4"
+    }
+  },
+  "currentExecutionScope": "optional --include-consumer-tests adds exact Tools/highlighting suites; with named workspace total7",
+  "realWindowsControls": "UNRUN",
+  "sdkTestsAnalyze": "UNRUN",
+  "nativeCurrentBuild30Cases": "UNRUN",
+  "installedOHOS": "UNRUN",
+  "readiness": "not requested by this evidence; READY704 retired by global732"
+}

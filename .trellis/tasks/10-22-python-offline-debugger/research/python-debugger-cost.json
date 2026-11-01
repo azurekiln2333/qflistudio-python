@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "kind": "real-native-ordinary-run-cost",
+  "device": false,
+  "workloadSha256": "a47b90ed887778d405ae463c34aede6c915ba268031a6fe4865a62d37b7b81f1",
+  "allocationWorkloadSha256": "1cab3b69e4bb3a63c1f3459926f6da54d352f559d54d28b3b240550918a957cb",
+  "samplesPerLibrary": 9,
+  "warmupsPerLibrary": 2,
+  "libraries": {
+    "baseline": {
+      "path": "D:\\MyNewProjects\\qfli_python\\build\\qfli_py_ffi-module-foundation-2329ef7d.dll",
+      "sha256": "2329ef7d374e35dd5159db0f3f056b094effc9a0372ad29fe704af472a6c309f",
+      "bytes": 714418,
+      "version": "1.24.1 (ecfdd5d)",
+      "elapsedSeconds": [
+        0.0025750999921001494,
+        0.002557799991336651,
+        0.002787499994155951,
+        0.002630300004966557,
+        0.00258100000792183,
+        0.002780499999062158,
+        0.002591199998278171,
+        0.0032498999935342,
+        0.002563899994129315
+      ],
+      "medianSeconds": 0.002591199998278171,
+      "output": "14901345\n",
+      "allocations": {
+        "exitCode": 0,
+        "output": "1760 32\n",
+        "error": null,
+        "truncated": false
+      }
+    },
+    "current": {
+      "path": "D:\\MyNewProjects\\qfli_python\\build\\qfli_py_ffi-debugger-stable.dll",
+      "sha256": "52e7400fdcd50cb03d94026ad6331c3b27770e2795e3418259d54e4d3a79a54e",
+      "bytes": 745758,
+      "version": "1.24.1 (ecfdd5d)",
+      "elapsedSeconds": [
+        0.002722599994740449,
+        0.0029399000050034374,
+        0.0028301999991526827,
+        0.002747500009718351,
+        0.002925900000263937,
+        0.0028055000002495944,
+        0.0029141000122763216,
+        0.002833999998983927,
+        0.002923100008047186
+      ],
+      "medianSeconds": 0.002833999998983927,
+      "output": "14901345\n",
+      "allocations": {
+        "exitCode": 0,
+        "output": "2144 32\n",
+        "error": null,
+        "truncated": false
+      }
+    }
+  },
+  "currentToBaselineMedianRatio": 1.0937017601370387,
+  "notes": "No debug session or trace callback is active. Both libraries preserve output. Compiler/raw-code/frame fields and VM branches remain; no zero-cost or device performance claim. Allocation output gives initial retained VM bytes followed by incremental bytes across 4000 nested calls."
+}

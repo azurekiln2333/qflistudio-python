@@ -1,0 +1,76 @@
+{
+  "oid": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+  "ref": "refs/heads/release/python-storefront-20261015",
+  "checks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "github",
+        "expected": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+        "chunk_id": "a29457",
+        "wall_time_seconds": 1.607707,
+        "exit_code": 0,
+        "original_token_count": 22,
+        "output": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b\trefs/heads/release/python-storefront-20261015\n",
+        "verified": true
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "gitee",
+        "expected": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+        "chunk_id": "6ad660",
+        "wall_time_seconds": 10.007084,
+        "original_token_count": 0,
+        "output": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b\trefs/heads/release/python-storefront-20261015\n",
+        "verified": true,
+        "exit_code": 0,
+        "observedSessionId": 4521
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "gitlab",
+        "expected": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+        "chunk_id": "140d6e",
+        "wall_time_seconds": 4.739952,
+        "exit_code": 0,
+        "original_token_count": 22,
+        "output": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b\trefs/heads/release/python-storefront-20261015\n",
+        "verified": true
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "gitcode",
+        "expected": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+        "chunk_id": "337db7",
+        "wall_time_seconds": 0.9124076,
+        "exit_code": 0,
+        "original_token_count": 22,
+        "output": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b\trefs/heads/release/python-storefront-20261015\n",
+        "verified": true
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "name": "cnb",
+        "expected": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+        "chunk_id": "d627a8",
+        "wall_time_seconds": 1.7215467,
+        "exit_code": 0,
+        "original_token_count": 22,
+        "output": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b\trefs/heads/release/python-storefront-20261015\n",
+        "verified": true
+      }
+    }
+  ],
+  "recordedAtUtc": "2026-10-23 02:49:28 UTC",
+  "kind": "python-native-offline-policy-push",
+  "workCommit": "bd789c3a6feb47769b0de8b6ae077ba2bf3f256b",
+  "currentHapGatePassed": false
+}

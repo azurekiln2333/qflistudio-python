@@ -1,0 +1,52 @@
+[
+  {
+    "host": "github.com",
+    "branch": "release/python-storefront-20261015",
+    "localRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "pushExitCode": 0,
+    "pushOutput": "To https://github.com/azurekiln2333/qflistudio-python.git\n   5674a30..a1a953b  a1a953bd5e8d7a3cc127859876de6f19b20aea1e -> release/python-storefront-20261015\n",
+    "verifyExitCode": 0,
+    "remoteRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "verified": true
+  },
+  {
+    "host": "gitee.com",
+    "branch": "release/python-storefront-20261015",
+    "localRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "pushExitCode": 0,
+    "pushOutput": "remote: Powered by \u001b[01;33mGITEE.COM \u001b[0m[1.1.23]        \nremote: Set trace flag c3428abd        \nTo https://gitee.com/azurekiln/qflistudio-python.git\n   5674a30..a1a953b  a1a953bd5e8d7a3cc127859876de6f19b20aea1e -> release/python-storefront-20261015\n",
+    "verifyExitCode": 0,
+    "remoteRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "verified": true
+  },
+  {
+    "host": "gitlab.com",
+    "branch": "release/python-storefront-20261015",
+    "localRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "pushExitCode": 0,
+    "pushOutput": "remote: \nremote: To create a merge request for release/python-storefront-20261015, visit:        \nremote:   https://gitlab.com/azurekiln-team/qflistudio-python/-/merge_requests/new?merge_request%5Bsource_branch%5D=release%2Fpython-storefront-20261015        \nremote: \nTo gitlab.com:azurekiln-team/qflistudio-python.git\n   5674a30..a1a953b  a1a953bd5e8d7a3cc127859876de6f19b20aea1e -> release/python-storefront-20261015\n",
+    "verifyExitCode": 0,
+    "remoteRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "verified": true
+  },
+  {
+    "host": "gitcode.com",
+    "branch": "release/python-storefront-20261015",
+    "localRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "pushExitCode": 0,
+    "pushOutput": "remote: Start Git Hooks Checking \t\t\t\t\t\u001b[40;36m[PASSED]\u001b[0m        \nremote: \nremote: To create a merge request for release/python-storefront-20261015, visit:        \nremote:   https://gitcode.com/azurekiln/qflistudio-python/merge_requests/new?source_branch=release/python-storefront-20261015        \nremote: \nTo https://gitcode.com/azurekiln/qflistudio-python.git\n   5674a30..a1a953b  a1a953bd5e8d7a3cc127859876de6f19b20aea1e -> release/python-storefront-20261015\n",
+    "verifyExitCode": 0,
+    "remoteRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "verified": true
+  },
+  {
+    "host": "cnb.cool",
+    "branch": "release/python-storefront-20261015",
+    "localRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "pushExitCode": 0,
+    "pushOutput": "remote: \nremote: Create a pull request for 'release/python-storefront-20261015' to 'main' by visiting:        \nremote: \nremote: \thttps://cnb.cool/azurekiln/qflistudio-python/-/compare/main...release/python-storefront-20261015        \nremote: \nTo https://cnb.cool/azurekiln/qflistudio-python\n   5674a30..a1a953b  a1a953bd5e8d7a3cc127859876de6f19b20aea1e -> release/python-storefront-20261015\n",
+    "verifyExitCode": 0,
+    "remoteRevision": "a1a953bd5e8d7a3cc127859876de6f19b20aea1e",
+    "verified": true
+  }
+]

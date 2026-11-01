@@ -1,0 +1,72 @@
+{
+  "startedUtc": "2026-10-22T10:37:01.3505488Z",
+  "target": "build/python_module_audit/main.dart",
+  "platform": "ohos-x64",
+  "javaToolOptions": "-Xms16m -Xmx256m -XX:+UseSerialGC",
+  "buildExitCode": 0,
+  "profileRestored": true,
+  "rootProfileUnchanged": true,
+  "environmentRestored": true,
+  "logPath": "D:\\MyNewProjects\\qfli_python\\build\\python-ohos-audit-build.log",
+  "hap": null,
+  "error": "Packaged Python SO differs from the generated-entry or current staged SO.",
+  "originalProfileSha256": "2a34c8a555ab3b48608b92237d5cc3c09feb66c9be72560343a0418e0083ce04",
+  "originalRootProfileSha256": "acbfefab912e01ed44e382eddc5ed10ab36dd383caea5b1ab1bb7dcb5d3feb32",
+  "recoveryProfilePath": "D:\\MyNewProjects\\qfli_python\\build\\python-ohos-audit-profile-20261022T103701350-2656.original",
+  "inputs": {
+    "suiteSource": "native/tests/python_stdlib_smoke.py",
+    "suiteSha256": "e178295cd87e5bc7a316298b2ccc60ec4473e3266384508a1cfc31fb13c2e7c0",
+    "bundleVersion": "v1",
+    "bundledModuleNames": [
+      "base64",
+      "bisect",
+      "contextlib",
+      "copy",
+      "csv",
+      "functools",
+      "itertools",
+      "statistics",
+      "string",
+      "textwrap"
+    ],
+    "assetDigests": {
+      "assets/python_stdlib/base64.py": "f55699fa8b79318c74910747a7d13b88a269bef77910d6637905f4feae289e16",
+      "assets/python_stdlib/bisect.py": "b053b85bb99f0dbaddf0fb11d0cc39833785538dd8f6399a874f64ecd9e4b85f",
+      "assets/python_stdlib/contextlib.py": "f2c31c7698a9ec82cb654eaf0a81fe2a07f2126a3b1ec6289b8a1a9cdecee4d7",
+      "assets/python_stdlib/copy.py": "bd6754af8843cd9d4ac6b997689a77b669e4916e8f5f03a76101ba92e8ce53cf",
+      "assets/python_stdlib/csv.py": "b66d83a9a210ab0a1d89d4239a2f79e49168b85abc058a83e4c86567d87019e3",
+      "assets/python_stdlib/functools.py": "07e67d0fa1ebcb217540ff18dda99e181ae229ecce86c36c19b70ffdb5d119ec",
+      "assets/python_stdlib/itertools.py": "2e522ec61775def58b1ff7100ba50593113a193f1188caa4fa653ad75db319dc",
+      "assets/python_stdlib/LICENSE-micropython-lib.txt": "a38cf48836aa313254cdcf3de9fb7c24da4a2eab75ead2cc0cecd998336e7800",
+      "assets/python_stdlib/LICENSE-qfli.txt": "64dba0c69a75f60fa9767824b29038dc086c4cb8d6a74fdfb2121d3bb42d3eaf",
+      "assets/python_stdlib/manifest.json": "44f2308972f90c5e7289fab87edc82e373a8c7bd852d5ffb0fb5d5db8c36cbec",
+      "assets/python_stdlib/PROVENANCE.md": "501de8005e67866505553aa959212ceb54763c85387bb8a18d6a6224fe0a93d0",
+      "assets/python_stdlib/statistics.py": "5a806524a905ab1d2e343fa454fcd3e64b1706e3e1045bb0b24cde5cf74dfc1d",
+      "assets/python_stdlib/string.py": "b172526030d482c6fda2915b7089ae86e38af6c4464d5053c46c6964b0573e02",
+      "assets/python_stdlib/textwrap.py": "81e5dc5d0e832b7ba6b9cda5cea29a3310f4f566c88c3c3c46069436e3c4afa7",
+      "assets/python_stdlib/upstream.json": "0167e85b4b5e9b7e9f1f82596e1ff0cb6e8fa5ae72a3e37c9723f6ffe92f9bfa"
+    },
+    "sourceDigests": {
+      "tool/python_module_ohos_audit.dart": "f705fec3b179cdf0769eb837f0b01f15659d06003a1a725ecdc0ae4adb588b85",
+      "lib/python_runner.dart": "e604bdf2283ff47ca21da8f23dca794c66ac903d5680012ccd61a15cd81d6b35",
+      "lib/python_ffi.dart": "ba73e80c6a1c60d7648be7318938dd8023f33468830101afd7a5f06064bcb490",
+      "lib/python_packages.dart": "89f5a056681ddbd1d5a156d5346a06568015391b6b42eba36987c8f7843ad396",
+      "lib/python_module_catalog.dart": "7c8c521a91de22acff67df93689a3e1ac101bfc2709fd5d7cc3a0997e1690e66",
+      "native/ohos/QfliPyNative.ets": "65fef0f8f32677fcbc2363fc6ba6e611a2493c321910310d58216eb67cb70bcf",
+      "ohos/entry/src/main/ets/plugins/QfliPyNative.ets": "65fef0f8f32677fcbc2363fc6ba6e611a2493c321910310d58216eb67cb70bcf"
+    },
+    "nativeLibrary": {
+      "path": "ohos/entry/libs/x86_64/libqfli_py.so",
+      "sha256": "78b31d943fe93a63e9de654d95cbec16bc12507e686d79acf5fba41003671717",
+      "bytes": 2394848,
+      "abi": "x86_64",
+      "evidenceKind": "declared-build-input; independently checked against HAP"
+    }
+  },
+  "targetSha256": "dc78a32eedc1ad711443e775501870627fd83d5986a1a63260ed447a38c598df",
+  "generatedSuiteSha256": "2989f9d4ee1839ba78fc074a3c26ae162da7b9aec84980723a97da5ce2eff9d0",
+  "temporaryProfileSha256": "32d412a33fe1f47ea11deeef0b015ad4b94533cd89f633cc0a3f1f55425a0ba8",
+  "restoredProfileSha256": "2a34c8a555ab3b48608b92237d5cc3c09feb66c9be72560343a0418e0083ce04",
+  "finalRootProfileSha256": "acbfefab912e01ed44e382eddc5ed10ab36dd383caea5b1ab1bb7dcb5d3feb32",
+  "finishedUtc": "2026-10-22T10:37:29.1735563Z"
+}
