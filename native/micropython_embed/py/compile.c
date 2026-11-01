@@ -38,6 +38,9 @@
 #include "py/nativeglue.h"
 #include "py/persistentcode.h"
 #include "py/smallint.h"
+#if QFLI_PY_DEBUG_METADATA
+#include "qfli_debug_metadata.h"
+#endif
 
 #if MICROPY_ENABLE_COMPILER
 
@@ -3591,6 +3594,11 @@ void mp_compile_to_raw_code(mp_parse_tree_t *parse_tree, qstr source_file, bool 
             if (comp->compile_error == MP_OBJ_NULL) {
                 while (!compile_scope(comp, s, MP_PASS_EMIT)) {
                 }
+                #if QFLI_PY_DEBUG_METADATA
+                if (comp->compile_error == MP_OBJ_NULL) {
+                    qfli_py_debug_record_scope(s);
+                }
+                #endif
             }
         }
     }

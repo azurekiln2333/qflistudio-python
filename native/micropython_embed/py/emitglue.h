@@ -75,8 +75,16 @@ typedef struct _mp_raw_code_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind; // of type mp_raw_code_kind_t; only 3 bits used
     bool is_generator;
+    #if MICROPY_PY_SYS_SETTRACE
+    // Definition source line for call events, not the first body line.
+    // This fills the 64-bit common-header padding.
+    uint32_t line_of_definition;
+    #endif
     const void *fun_data;
     struct _mp_raw_code_t **children;
+    #if QFLI_PY_DEBUG_METADATA
+    void *qfli_debug_metadata; // GC-owned, never serialized
+    #endif
     #if MICROPY_PERSISTENT_CODE_SAVE
     uint32_t fun_data_len; // for mp_raw_code_save
     uint16_t n_children;
@@ -84,11 +92,6 @@ typedef struct _mp_raw_code_t {
     uint16_t prelude_offset;
     #endif
     #if MICROPY_PY_SYS_SETTRACE
-    // line_of_definition is a Python source line where the raw_code was
-    // created e.g. MP_BC_MAKE_FUNCTION. This is different from lineno info
-    // stored in prelude, which provides line number for first statement of
-    // a function. Required to properly implement "call" trace event.
-    uint32_t line_of_definition;
     mp_bytecode_prelude_t prelude;
     #endif
     #endif
@@ -105,8 +108,16 @@ typedef struct _mp_raw_code_truncated_t {
     uint8_t proto_fun_indicator[2];
     uint8_t kind;
     bool is_generator;
+    #if MICROPY_PY_SYS_SETTRACE
+    // Definition source line for call events, not the first body line.
+    // This fills the 64-bit common-header padding.
+    uint32_t line_of_definition;
+    #endif
     const void *fun_data;
     struct _mp_raw_code_t **children;
+    #if QFLI_PY_DEBUG_METADATA
+    void *qfli_debug_metadata; // GC-owned, never serialized
+    #endif
     #if MICROPY_PERSISTENT_CODE_SAVE
     uint32_t fun_data_len;
     uint16_t n_children;
@@ -114,7 +125,6 @@ typedef struct _mp_raw_code_truncated_t {
     uint16_t prelude_offset;
     #endif
     #if MICROPY_PY_SYS_SETTRACE
-    uint32_t line_of_definition;
     mp_bytecode_prelude_t prelude;
     #endif
     #endif

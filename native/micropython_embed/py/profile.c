@@ -28,6 +28,7 @@
 #include "py/bc0.h"
 #include "py/gc.h"
 #include "py/objfun.h"
+#include "py/nlr.h"
 
 #if MICROPY_PY_SYS_SETTRACE
 
@@ -300,8 +301,15 @@ static mp_obj_t mp_prof_callback_invoke(mp_obj_t callback, prof_callback_args_t 
     mp_prof_is_executing = true;
 
     mp_obj_t a[3] = {MP_OBJ_FROM_PTR(args->frame), args->event, args->arg};
-    mp_obj_t top = mp_call_function_n_kw(callback, 3, 0, a);
-
+    mp_obj_t top;
+    nlr_buf_t trace_nlr;
+    if (nlr_push(&trace_nlr) == 0) {
+        top = mp_call_function_n_kw(callback, 3, 0, a);
+        nlr_pop();
+    } else {
+        mp_prof_is_executing = false;
+        nlr_jump(trace_nlr.ret_val);
+    }
     mp_prof_is_executing = false;
 
     if (MP_STATE_THREAD(mp_pending_exception) != MP_OBJ_NULL) {

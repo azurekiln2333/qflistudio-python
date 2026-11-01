@@ -158,7 +158,7 @@
     assert(code_state != code_state->prev_state); \
     code_state->prev_state = MP_STATE_THREAD(current_code_state); \
     assert(code_state != code_state->prev_state); \
-    if (!mp_prof_is_executing) { \
+    if ((MP_STATE_THREAD(prof_trace_callback) || code_state->frame) && !mp_prof_is_executing) { \
         mp_prof_frame_enter(code_state); \
     } \
 } while(0)
@@ -171,7 +171,7 @@
 
 #define FRAME_UPDATE() do { \
     assert(MP_STATE_THREAD(current_code_state) == code_state); \
-    if (!mp_prof_is_executing) { \
+    if (code_state->frame && !mp_prof_is_executing) { \
         code_state->frame = MP_OBJ_TO_PTR(mp_prof_frame_update(code_state)); \
     } \
 } while(0)
@@ -179,10 +179,10 @@
 #define TRACE_TICK(current_ip, current_sp, is_exception) do { \
     assert(code_state != code_state->prev_state); \
     assert(MP_STATE_THREAD(current_code_state) == code_state); \
-    if (!mp_prof_is_executing && code_state->frame && MP_STATE_THREAD(prof_trace_callback)) { \
+    if (code_state->frame && !mp_prof_is_executing && MP_STATE_THREAD(prof_trace_callback)) { \
         MP_PROF_INSTR_DEBUG_PRINT(code_state->ip); \
     } \
-    if (!mp_prof_is_executing && code_state->frame && code_state->frame->callback) { \
+    if (code_state->frame && !mp_prof_is_executing && code_state->frame->callback) { \
         mp_prof_instr_tick(code_state, is_exception); \
     } \
 } while(0)
