@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:ffi/ffi.dart';
-import 'package:path/path.dart' as p;
+
+import 'python_native_library.dart';
 
 final class _NativeResult extends Struct {
   @Int32()
@@ -276,38 +276,13 @@ class _Bindings {
 
 _Bindings _loadBindings(String? libraryPath) {
   try {
-    return _Bindings(_openLibrary(libraryPath));
+    return _Bindings(openPythonNativeLibrary(libraryPath));
   } catch (error) {
     throw PythonFfiException(
       'QFLI_PY_MODULE_MISSING',
       'The bundled MicroPython runtime could not be loaded: $error',
     );
   }
-}
-
-DynamicLibrary _openLibrary(String? explicitPath) {
-  if (explicitPath != null) return DynamicLibrary.open(explicitPath);
-  if (Platform.isIOS || Platform.isMacOS) return DynamicLibrary.process();
-  if (!Platform.isWindows && !Platform.isLinux) {
-    throw UnsupportedError('No MicroPython FFI library for this platform.');
-  }
-  final name = Platform.isWindows ? 'qfli_py_ffi.dll' : 'libqfli_py_ffi.so';
-  final executableDirectory = File(Platform.resolvedExecutable).parent.path;
-  final candidates = [
-    p.join(executableDirectory, name),
-    p.join(executableDirectory, 'lib', name),
-    p.join(
-      Directory.current.path,
-      'native',
-      'build',
-      Platform.isWindows ? 'windows' : 'linux',
-      name,
-    ),
-  ];
-  for (final path in candidates) {
-    if (File(path).existsSync()) return DynamicLibrary.open(path);
-  }
-  return DynamicLibrary.open(name);
 }
 
 Map<String, Object?> _invokeNative(_NativeRequest request) {

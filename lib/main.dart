@@ -9,6 +9,8 @@ import 'package:qfli_studio_core/store/settings_store.dart';
 import 'package:qfli_studio_core/terminal/shell/sandbox_shell_backend.dart';
 
 import 'app_startup.dart';
+import 'python_code_analyzer.dart';
+import 'python_debugger.dart';
 import 'python_runner.dart';
 import 'python_terminal.dart';
 import 'python_tools_page.dart';
@@ -24,6 +26,9 @@ const StudioProfile pythonProfile = StudioProfile(
   appTitle: _appTitle,
   templates: [ProjectTemplate.empty, ProjectTemplate.python],
   runner: PythonProgramRunner(),
+  codeAnalyzer: PythonCodeAnalyzer(),
+  debugger: PythonDebugger(),
+  toolsTabBuilder: buildPythonToolsTab,
   toolsPageBuilder: buildPythonToolsPage,
   isOffline: true,
   productKey: StudioProductCatalog.pyFlowKey,
@@ -41,8 +46,10 @@ const StudioProfile pythonProfile = StudioProfile(
 );
 
 /// 档位用的无参包装：生产路径用默认 runner 与默认探测源。
-Future<bool> _pythonTerminalDelegate(SandboxShellBackend backend, String command) =>
-    pythonTerminalDelegate(backend, command);
+Future<bool> _pythonTerminalDelegate(
+  SandboxShellBackend backend,
+  String command,
+) => pythonTerminalDelegate(backend, command);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

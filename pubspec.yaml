@@ -35,6 +35,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # test 需要 re_editor 的编辑器类型。
+  # path override 仍指向 vendored 0.10.0，lock 不选网络版本。
+  re_editor: ^0.10.0
 
 flutter:
   uses-material-design: true

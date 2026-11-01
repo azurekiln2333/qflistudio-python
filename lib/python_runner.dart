@@ -8,6 +8,7 @@ import 'package:qfli_studio_core/services/studio_profile.dart';
 
 import 'python_ffi.dart';
 import 'python_packages.dart';
+import 'python_runtime_activity.dart';
 
 enum PythonNativeTransport { automatic, methodChannel, ffi }
 
@@ -33,11 +34,16 @@ class PythonProgramRunner implements ProgramRunner {
     this.transport = PythonNativeTransport.automatic,
     this.libraryPath,
     this.packageService,
+    this.runtimeActivity,
   });
 
   final PythonNativeTransport transport;
   final String? libraryPath;
   final PythonPackageService? packageService;
+  final PythonRuntimeActivity? runtimeActivity;
+
+  PythonRuntimeActivity get _activity =>
+      runtimeActivity ?? PythonRuntimeActivity.shared;
 
   bool get _useFfi => switch (transport) {
     PythonNativeTransport.automatic =>
@@ -80,14 +86,18 @@ class PythonProgramRunner implements ProgramRunner {
     }
     final source = _readText(File(entryFile));
     if (source == null) return const PythonCompilationResult(error: '无法读取文件。');
-    final probe = await _probeNative();
-    if (!probe.available || !probe.supportsArtifacts) {
-      return PythonCompilationResult(
-        error: probe.detail.isEmpty ? '此运行组件不支持生成 .mpy 文件。' : probe.detail,
-      );
+    final lease = _activity.tryAcquire(PythonRuntimeOperation.compile);
+    if (lease == null) {
+      return PythonCompilationResult(error: _activity.busyReason);
     }
-    final artifact = p.setExtension(entryFile, '.mpy');
     try {
+      final probe = await _probeNative();
+      if (!probe.available || !probe.supportsArtifacts) {
+        return PythonCompilationResult(
+          error: probe.detail.isEmpty ? '此运行组件不支持生成 .mpy 文件。' : probe.detail,
+        );
+      }
+      final artifact = p.setExtension(entryFile, '.mpy');
       final raw = await _invokeNative('compile', {
         'source': source,
         'stdin': '',
@@ -110,6 +120,8 @@ class PythonProgramRunner implements ProgramRunner {
       return const PythonCompilationResult(error: 'Python 运行组件不可用。');
     } on PlatformException catch (error) {
       return PythonCompilationResult(error: error.message ?? error.code);
+    } finally {
+      lease.release();
     }
   }
 
@@ -144,18 +156,22 @@ class PythonProgramRunner implements ProgramRunner {
     final root = p.normalize(p.absolute(projectPath));
     final entry = p.normalize(p.absolute(entryFile));
     if (p.extension(entry).toLowerCase() != '.py') {
-      return const PythonSyntaxResult(error: '请选择 Python 源码文件。');
+      return const PythonSyntaxResult.unavailable('请选择 Python 源码文件。');
     }
     if (!p.isWithin(root, entry)) {
-      return const PythonSyntaxResult(error: '语法检查文件必须位于当前项目中。');
+      return const PythonSyntaxResult.unavailable('语法检查文件必须位于当前项目中。');
     }
-    final probe = await _probeNative();
-    if (!probe.available) {
-      return PythonSyntaxResult(
-        error: probe.detail.isEmpty ? 'Python 运行组件不可用。' : probe.detail,
-      );
+    final lease = _activity.tryAcquire(PythonRuntimeOperation.analysis);
+    if (lease == null) {
+      return PythonSyntaxResult.unavailable(_activity.busyReason);
     }
     try {
+      final probe = await _probeNative();
+      if (!probe.available) {
+        return PythonSyntaxResult.unavailable(
+          probe.detail.isEmpty ? 'Python 运行组件不可用。' : probe.detail,
+        );
+      }
       final raw = await _invokeNative('checkSyntax', {
         'source': source,
         'stdin': '',
@@ -163,19 +179,36 @@ class PythonProgramRunner implements ProgramRunner {
         'projectPath': projectPath,
         'entryFile': entryFile,
       });
-      if (raw is! Map || raw['exitCode'] is! int) {
-        return const PythonSyntaxResult(error: '原生运行时返回了意外的结果。');
+      if (raw is! Map ||
+          raw['exitCode'] is! int ||
+          (raw['error'] != null && raw['error'] is! String) ||
+          (raw['output'] != null && raw['output'] is! String) ||
+          (raw['truncated'] != null && raw['truncated'] is! bool)) {
+        return const PythonSyntaxResult.unavailable('原生运行时返回了意外的结果。');
       }
       final error = '${raw['error'] ?? ''}'.trim();
+      if (raw['truncated'] == true) {
+        return const PythonSyntaxResult.unavailable('原生编译器的诊断被截断，无法完成语法检查。');
+      }
+      if (raw['exitCode'] == 0 && error.isNotEmpty ||
+          raw['exitCode'] != 0 && error.isEmpty ||
+          raw['exitCode'] != 0 && raw['exitCode'] != 1 ||
+          '${raw['output'] ?? ''}'.isNotEmpty) {
+        return PythonSyntaxResult.unavailable(
+          error.isEmpty ? '原生编译器未返回有效的语法检查结果。' : error,
+        );
+      }
       return PythonSyntaxResult(
         success: raw['exitCode'] == 0 && error.isEmpty,
         error: error,
         version: probe.version,
       );
     } on MissingPluginException {
-      return const PythonSyntaxResult(error: 'Python 运行组件不可用。');
+      return const PythonSyntaxResult.unavailable('Python 运行组件不可用。');
     } on PlatformException catch (error) {
-      return PythonSyntaxResult(error: error.message ?? error.code);
+      return PythonSyntaxResult.unavailable(error.message ?? error.code);
+    } finally {
+      lease.release();
     }
   }
 
@@ -220,43 +253,62 @@ class PythonProgramRunner implements ProgramRunner {
       return _failure(label, '$_appPrefix无法读取 $display（编码或权限问题）。');
     }
 
-    // 探测原生后端。每次运行都问一遍而不是缓存：一次通道往返对「按一下运行」
-    // 这个频率完全无所谓，而缓存会引入跨运行的可变状态，得不偿失。
-    final probe = await _probeNative();
-    if (!probe.available) {
-      return _notWired(label, probe.detail);
+    final lease = _activity.tryAcquire(PythonRuntimeOperation.run);
+    if (lease == null) {
+      return _failure(label, '$_appPrefix${_activity.busyReason}');
     }
-    if (isBytecode && !probe.supportsArtifacts) {
-      return _failure(label, '$_appPrefix此运行组件不支持 .mpy 文件。');
-    }
-
+    var retainedByResult = false;
     try {
-      final preparation = await (packageService ?? PythonPackageService())
-          .ensureBundledModules(projectPath);
-      if (!preparation.success) {
-        return _failure(label, '$_appPrefix${preparation.message}');
+      // Claim the VM before asynchronous probing or bundle preparation so two
+      // runners cannot both pass the idle check and submit native work.
+      final probe = await _probeNative();
+      if (!probe.available) {
+        return _notWired(label, probe.detail);
       }
-    } on Object catch (error) {
-      return _failure(label, '$_appPrefix准备离线模块失败：$error');
-    }
+      if (isBytecode && !probe.supportsArtifacts) {
+        return _failure(label, '$_appPrefix此运行组件不支持 .mpy 文件。');
+      }
 
-    if (_useFfi || probe.supportsCancellation || isBytecode) {
-      return _runControlled(
-        fileName: label,
-        source: source,
-        stdin: _readStdin(projectPath),
-        projectPath: projectPath,
-        entryFile: entryFile,
-        bytecodeFile: isBytecode ? entryFile : '',
+      try {
+        final preparation = await (packageService ?? PythonPackageService())
+            .ensureBundledModules(projectPath);
+        if (!preparation.success) {
+          return _failure(label, '$_appPrefix${preparation.message}');
+        }
+      } on Object catch (error) {
+        return _failure(label, '$_appPrefix准备离线模块失败：$error');
+      }
+
+      final result = _useFfi || probe.supportsCancellation || isBytecode
+          ? await _runControlled(
+              fileName: label,
+              source: source,
+              stdin: _readStdin(projectPath),
+              projectPath: projectPath,
+              entryFile: entryFile,
+              bytecodeFile: isBytecode ? entryFile : '',
+            )
+          : await _runNative(
+              fileName: label,
+              source: source,
+              stdin: _readStdin(projectPath),
+              projectPath: projectPath,
+              entryFile: entryFile,
+            );
+      final exitCode = result.exitCode.whenComplete(lease.release);
+      retainedByResult = true;
+      return ProgramRunResult(
+        title: result.title,
+        stdout: result.stdout,
+        stderr: result.stderr,
+        exitCode: exitCode,
+        cancel: result.cancel,
       );
+    } finally {
+      // Controlled runs return their handle before native completion. Stop only
+      // requests cancellation; only the backend exit can release that lease.
+      if (!retainedByResult) lease.release();
     }
-    return _runNative(
-      fileName: label,
-      source: source,
-      stdin: _readStdin(projectPath),
-      projectPath: projectPath,
-      entryFile: entryFile,
-    );
   }
 
   /// 终端里显示的调用行，形如 `python src/main.py`。
@@ -610,11 +662,21 @@ class PythonSyntaxResult {
     this.success = false,
     this.error = '',
     this.version = '',
+    this.unavailableReason,
   });
+
+  const PythonSyntaxResult.unavailable(String reason)
+    : success = false,
+      error = reason,
+      version = '',
+      unavailableReason = reason;
 
   final bool success;
   final String error;
   final String version;
+
+  /// Non-null when the compiler did not complete a usable source check.
+  final String? unavailableReason;
 }
 
 class PythonCompilationResult extends PythonSyntaxResult {

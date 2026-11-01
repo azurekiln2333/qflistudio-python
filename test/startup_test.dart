@@ -1,10 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:qfli_python/app_startup.dart';
+import 'package:qfli_python/main.dart' show pythonProfile;
+import 'package:qfli_studio_core/app.dart';
+import 'package:qfli_studio_core/pages/home_page.dart';
+import 'package:qfli_studio_core/services/app_backup_service.dart';
+import 'package:qfli_studio_core/services/app_restore_gate.dart';
+import 'package:qfli_studio_core/services/studio_profile.dart';
+import 'package:qfli_studio_core/splash_screen.dart';
 import 'package:qfli_studio_core/store/auth_store.dart';
 import 'package:qfli_studio_core/store/project_store.dart';
 import 'package:qfli_studio_core/store/settings_store.dart';
@@ -78,9 +86,19 @@ void main() {
   late ValueNotifier<bool> ready;
   late List<MethodCall> progressCalls;
   late List<({bool ready, bool canSendFrame})> layouts;
+  late Directory directory;
+  String? originalBackupRoot;
+  AppRestoreStatus? originalRestoreStatus;
+  StudioProfile? originalProfile;
 
   setUp(() {
     binding.resetFirstFrameSent();
+    directory = Directory.systemTemp.createTempSync('qfli_python_startup_');
+    originalBackupRoot = AppBackupService.rootOverride;
+    originalRestoreStatus = AppRestoreGate.status.value;
+    originalProfile = StudioProfile.current;
+    AppBackupService.rootOverride = directory.path;
+    AppRestoreGate.status.value = null;
     store = _ProjectStore();
     auth = _AuthStore();
     settings = _SettingsStore();
@@ -104,7 +122,35 @@ void main() {
     auth.dispose();
     settings.dispose();
     ready.dispose();
+    AppBackupService.rootOverride = originalBackupRoot;
+    AppRestoreGate.status.value = originalRestoreStatus;
+    StudioProfile.current = originalProfile;
+    directory.deleteSync(recursive: true);
   });
+
+  Future<void> waitForIo(
+    WidgetTester tester,
+    bool Function() complete, {
+    required String reason,
+  }) async {
+    // Restore preflight and real stores use filesystem I/O outside fake time.
+    for (var attempt = 0; !complete() && attempt < 100; attempt++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 10)),
+      );
+      await tester.pump();
+    }
+    expect(complete(), isTrue, reason: reason);
+  }
+
+  Future<void> waitForLoads(WidgetTester tester) => waitForIo(
+    tester,
+    () =>
+        store.loading.started &&
+        auth.loading.started &&
+        settings.loading.started,
+    reason: 'The isolated restore preflight must finish before store loads.',
+  );
 
   Future<void> launch() => runWithAppStartup(
     app: _StartupProbe(
@@ -146,6 +192,7 @@ void main() {
         expect(layouts, [(ready: false, canSendFrame: false)]);
         expect(store.loading.started, isFalse);
         await tester.pump(const Duration(milliseconds: 160));
+        await waitForLoads(tester);
         expect(store.loading.started, isTrue);
         expect(auth.loading.started, isTrue);
         expect(settings.loading.started, isTrue);
@@ -191,6 +238,7 @@ void main() {
       final startup = launch();
       await tester.pump();
       await tester.pump(const Duration(seconds: 2));
+      await waitForLoads(tester);
       expect(binding.sendFramesToEngine, isFalse);
       expect(ready.value, isFalse);
       finishLoads();
@@ -223,6 +271,7 @@ void main() {
         final startup = launch();
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 160));
+        await waitForLoads(tester);
         store.loading.completion.completeError(
           StateError('registry is corrupt'),
           StackTrace.empty,
@@ -259,6 +308,7 @@ void main() {
       final startup = launch();
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 160));
+      await waitForLoads(tester);
       finishLoads();
       await tester.pump();
       expect(reportedProgress(), [1 / 3, 2 / 3, 1]);
@@ -281,6 +331,7 @@ void main() {
       final failure = expectLater(startup, throwsStateError);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 160));
+      await waitForLoads(tester);
       finishLoads();
       await tester.pump();
       await failure;
@@ -298,6 +349,7 @@ void main() {
       expect(store.loading.started, isFalse);
       await tester.pump();
       expect(layouts, [(ready: false, canSendFrame: true)]);
+      await waitForLoads(tester);
       expect(store.loading.started, isTrue);
       expect(find.byKey(const ValueKey('loading')), findsOneWidget);
       finishLoads();
@@ -311,4 +363,79 @@ void main() {
     },
     variant: TargetPlatformVariant.only(TargetPlatform.windows),
   );
+
+  for (final channelAvailable in [true, false]) {
+    testWidgets(
+      'OHOS first engine frame contains the real home with progress channel '
+      '${channelAvailable ? "available" : "missing"}',
+      (tester) async {
+        StudioProfile.current = pythonProfile;
+        final projectStore = ProjectStore(
+          storageFile: File('${directory.path}/projects.json'),
+        );
+        final authStore = AuthStore(
+          storageFile: File('${directory.path}/auth.json'),
+        );
+        final settingsStore = SettingsStore(
+          storageFile: File('${directory.path}/settings.json'),
+        );
+        if (!channelAvailable) {
+          binding.defaultBinaryMessenger.setMockMethodCallHandler(
+            _platformChannel,
+            null,
+          );
+        }
+        addTearDown(() async {
+          await tester.pumpWidget(const SizedBox.shrink());
+          projectStore.dispose();
+          authStore.dispose();
+          settingsStore.dispose();
+        });
+
+        final startup = runWithAppStartup(
+          app: QfliApp(
+            store: projectStore,
+            auth: authStore,
+            settings: settingsStore,
+            ready: ready,
+          ),
+          store: projectStore,
+          auth: authStore,
+          settings: settingsStore,
+          ready: ready,
+        );
+        expect(binding.sendFramesToEngine, isFalse);
+        await tester.pump();
+        expect(find.byType(SplashScreen), findsOneWidget);
+        expect(find.byType(HomePage), findsNothing);
+        expect(binding.sendFramesToEngine, isFalse);
+
+        await tester.pump(const Duration(milliseconds: 160));
+        await waitForIo(
+          tester,
+          () => ready.value,
+          reason: 'Real local stores must finish before the native handoff.',
+        );
+        await tester.pump();
+        expect(projectStore.loaded, isTrue);
+        expect(find.byType(HomePage), findsOneWidget);
+        expect(find.byType(SplashScreen), findsNothing);
+        expect(binding.sendFramesToEngine, isFalse);
+        if (channelAvailable) {
+          expect(reportedProgress(), [1 / 3, 2 / 3, 1]);
+        }
+
+        await tester.pump(const Duration(milliseconds: 1100));
+        await tester.pump();
+        await startup;
+        expect(binding.sendFramesToEngine, isTrue);
+        await tester.pump();
+        expect(find.byType(HomePage), findsOneWidget);
+        expect(find.byType(SplashScreen), findsNothing);
+        expect(tester.takeException(), isNull);
+      },
+      timeout: const Timeout(Duration(seconds: 20)),
+      variant: TargetPlatformVariant.only(TargetPlatform.ohos),
+    );
+  }
 }

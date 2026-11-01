@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:qfli_python/main.dart' show pythonProfile;
+import 'package:qfli_python/python_code_analyzer.dart';
 import 'package:qfli_python/python_runner.dart';
 import 'package:qfli_studio_core/services/project_templates.dart';
 import 'package:qfli_studio_core/services/runner_service.dart';
@@ -104,6 +105,10 @@ void main() {
   );
 
   group('档位收窄', () {
+    test('Python profile connects native snapshot diagnostics', () {
+      expect(pythonProfile.codeAnalyzer, isA<PythonCodeAnalyzer>());
+    });
+
     test('新建项目只放行「空项目」和 Python', () {
       expect(pythonProfile.filterTemplates(ProjectTemplate.values), [
         ProjectTemplate.empty,
