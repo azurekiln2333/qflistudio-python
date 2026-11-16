@@ -51,8 +51,8 @@ module QfliPythonNative
     spec.homepage = 'https://micropython.org'
     spec.author = 'QFLIStudio'
     spec.license = {
-      :type => 'Proprietary',
-      :text => 'QFLIPyFlow app packaging. Embedded MicroPython files retain their upstream license notices.'
+      :type => 'GPL-3.0',
+      :text => File.read(File.join(native_dir, '..', 'LICENSE'))
     }
     spec.source = { :path => '.' }
     spec.source_files = staged_sources.reject { |path| path.match?(TEXTUAL_SOURCES) }

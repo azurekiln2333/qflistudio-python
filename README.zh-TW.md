@@ -182,3 +182,9 @@ hdc shell hilog -z 5000 -T QfliPyNative
 - `native/PLATFORMS.md`：平台建置與實測證據。
 - `native/lifecycle.md`：取消、位元組碼與所有權。
 - `.trellis/spec/`：編碼契約與驗證指引。
+
+## 授權條款
+
+除單獨標明授權的元件外，本專案採用 GNU GPLv3。
+完整條款見 [LICENSE](LICENSE)。
+獨立授權元件保留其原授權與著作權聲明。

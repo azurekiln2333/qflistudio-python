@@ -182,3 +182,9 @@ hdc shell hilog -z 5000 -T QfliPyNative
 - `native/PLATFORMS.md`: platform builds and measured evidence.
 - `native/lifecycle.md`: cancellation, bytecode and ownership.
 - `.trellis/spec/`: coding contracts and verification guidance.
+
+## License
+
+This project uses GNU GPLv3, except for components with their own licenses.
+See [LICENSE](LICENSE) for the full terms.
+Independently licensed components retain their licenses and copyright notices.
