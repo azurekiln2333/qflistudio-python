@@ -56,3 +56,32 @@ Do not use self-hosted runners as a substitute for offloading local disk use.
 Artifacts belong to individual Actions runs. Download ZIPs after signing in.
 workflow_dispatch UI requires default-branch workflow discovery; first-run push works
 on a dedicated feature branch without updating main.
+
+## First cloud run and test portability fix
+
+Commit fafca72 ran Native build 43923910709 and Native OHOS build 43923910795.
+OHOS ARM64/x86_64, Linux and all three Android ABIs passed. Windows compiled its
+DLL and ran 30 debugger tests; two path assertions failed because TEMP used RUNNER~1
+while native canonicalization returned runneradmin. The test fixture now resolves
+the temporary root with pathlib.Path.resolve(). All assertions and runtime code
+are unchanged. A local GetShortPathNameW probe verified alias resolution without
+starting a native build. Re-run the cloud workflows before adopting Windows output.
+
+## Revised user scope
+
+The user selected Android, OHOS, iOS and macOS publication. Remove Windows and Linux
+jobs. Their first-run evidence remains historical only. Add standalone iOS static
+XCFramework and macOS universal dylib using preinstalled Xcode. Toolchains are inputs;
+the compiled outputs are this project's customized MicroPython runtime.
+Keep the fixture root normalization for macOS /var versus /private/var behavior.
+
+## License alignment
+
+The user requested GPL-3.0 parity with D:/MyNewProjects/qflistudio and a separate
+standard commit/push first. Commit c535f60 (`docs(license): align GPL-3.0 licensing
+with qflistudio`) added root LICENSE, README license sections in three languages,
+and GPL-3.0 Apple podspec metadata. It was pushed before the revised CI work.
+LICENSE is byte-identical to the main project's local LICENSE, SHA256
+3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986.
+The main project was read only. Independently licensed component files were preserved.
+Published native artifacts also carry LICENSE and the pinned MicroPython LICENSE copy.

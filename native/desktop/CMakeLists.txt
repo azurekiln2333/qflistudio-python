@@ -16,7 +16,15 @@ if(QFLI_PY_EMBED_COUNT LESS 100)
     message(FATAL_ERROR "The tracked MicroPython embedding package is incomplete")
 endif()
 
-add_library(qfli_py_ffi SHARED
+# iOS distributes static archives in an XCFramework; desktop callers keep the
+# shared-library default and the same compilation-unit selection.
+set(QFLI_PY_LIBRARY_TYPE "SHARED" CACHE STRING "Native library type: SHARED or STATIC")
+set_property(CACHE QFLI_PY_LIBRARY_TYPE PROPERTY STRINGS SHARED STATIC)
+if(NOT QFLI_PY_LIBRARY_TYPE MATCHES "^(SHARED|STATIC)$")
+    message(FATAL_ERROR "QFLI_PY_LIBRARY_TYPE must be SHARED or STATIC")
+endif()
+
+add_library(qfli_py_ffi ${QFLI_PY_LIBRARY_TYPE}
     ${QFLI_PY_EMBED_SOURCES}
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_hal.c"
     "${QFLI_PY_NATIVE_DIR}/src/qfli_py_stdio.c"
@@ -42,13 +50,15 @@ set_target_properties(qfli_py_ffi PROPERTIES
     C_STANDARD_REQUIRED YES
     POSITION_INDEPENDENT_CODE YES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
 foreach(QFLI_PY_CONFIGURATION Debug Release Profile RelWithDebInfo MinSizeRel)
     string(TOUPPER "${QFLI_PY_CONFIGURATION}" QFLI_PY_CONFIGURATION_UPPER)
     set_target_properties(qfli_py_ffi PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY_${QFLI_PY_CONFIGURATION_UPPER} "${CMAKE_CURRENT_BINARY_DIR}"
-        LIBRARY_OUTPUT_DIRECTORY_${QFLI_PY_CONFIGURATION_UPPER} "${CMAKE_CURRENT_BINARY_DIR}")
+        LIBRARY_OUTPUT_DIRECTORY_${QFLI_PY_CONFIGURATION_UPPER} "${CMAKE_CURRENT_BINARY_DIR}"
+        ARCHIVE_OUTPUT_DIRECTORY_${QFLI_PY_CONFIGURATION_UPPER} "${CMAKE_CURRENT_BINARY_DIR}")
 endforeach()
 
 if(WIN32)

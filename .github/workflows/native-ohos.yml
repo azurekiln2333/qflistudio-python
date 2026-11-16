@@ -4,12 +4,14 @@ on:
   push:
     paths:
       - "native/**"
+      - "LICENSE"
       - "tool/python_native_provenance.py"
       - ".github/workflows/native-ohos.yml"
       - ".gitmodules"
   pull_request:
     paths:
       - "native/**"
+      - "LICENSE"
       - "tool/python_native_provenance.py"
       - ".github/workflows/native-ohos.yml"
       - ".gitmodules"

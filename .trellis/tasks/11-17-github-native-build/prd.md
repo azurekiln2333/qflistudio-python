@@ -14,10 +14,12 @@ and explain the current project status and local disk use.
   embedding package; OHOS regenerates it using the pinned upstream submodule.
 - Local build/ occupies about 12.6 GB; native/build/ occupies about 40 MB.
 - Native libraries and signed full-app packages are different deliverables.
+- The user subsequently selected Android, OHOS, iOS and macOS as build targets.
+  Windows and Linux publish jobs are removed from the final scope.
 
 ## Requirements
 
-- R1: Use GitHub-hosted runners for Linux, Windows, Android and OHOS native builds.
+- R1: Use GitHub-hosted runners for Android, OHOS, iOS and macOS native builds.
   Do not depend on a local self-hosted runner.
 - R2: Upload named ABI-specific libraries with checksums and build identification.
   Run existing applicable native smoke checks before publishing passed artifacts.
@@ -25,12 +27,18 @@ and explain the current project status and local disk use.
   Report observed run conclusions and artifact download locations accurately.
 - R4: Document artifact contents, local use, retention, and rebuild limitations.
 - R5: Report measured disk use and distinguish generated caches from source.
+- R6: Add GPL-3.0 licensing aligned byte-for-byte with the main project's LICENSE.
+  Update README and Apple package metadata. Commit and push licensing separately
+  before continuing cloud build delivery, as requested by the user.
 
 ## Acceptance Criteria
 
 - [ ] GitHub records a completed run for the implementation commit.
 - [ ] Successful native jobs have downloadable, correctly named ABI artifacts.
-- [ ] The downloaded libraries match published checksums and expected file types.
+- [ ] The downloaded libraries match published checksums and ELF/Mach-O architectures.
+- [ ] iOS includes device ARM64 and simulator ARM64/x86_64 static slices.
+- [ ] macOS includes ARM64/x86_64 and executes native tests on the hosted Mac.
+- [x] GPL-3.0 LICENSE matches D:/MyNewProjects/qflistudio/LICENSE and is pushed separately.
 - [ ] Failed or unavailable target checks remain explicit; building is not device validation.
 - [ ] The user receives a run URL, artifact list and clear disk-use explanation.
 
@@ -38,4 +46,4 @@ and explain the current project status and local disk use.
 
 Full Flutter app builds, signing, installation, device validation, release publishing,
 automatic deletion of local files, and changing the application/runtime ABI.
-Apple pod/app integration remains outside this first CI validation.
+Full Flutter CocoaPods integration and Windows/Linux artifact publishing remain outside scope.

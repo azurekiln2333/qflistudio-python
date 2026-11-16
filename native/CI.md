@@ -6,8 +6,8 @@ or app-signing credentials.
 
 ## Run and download
 
-Open this repository's **Actions** tab. Select **Native build** or
-**Native OHOS build**, then open the run for the intended branch and commit.
+Open this repository's **Actions** tab. Select **Native Android build**,
+**Native OHOS build** or **Native Apple build**, then open the intended run.
 At the bottom of its summary, select a package under **Artifacts** to download a ZIP.
 Sign in to GitHub to download artifacts. The workflow requests **14 days** of retention;
 the run page shows the actual expiry. These files are not GitHub Release attachments.
@@ -18,29 +18,36 @@ exists on the default branch; a push to the CI branch can trigger its first run.
 
 | Workflow | Artifact | Main file | Target |
 | --- | --- | --- | --- |
-| Native build | `native-linux-x64` | `libqfli_py_ffi.so` | Linux x86_64 FFI |
-| Native build | `native-windows-x64` | `qfli_py_ffi.dll` | Windows x86_64 FFI |
-| Native build | `native-android-arm64-v8a` | `libqfli_py.so` | Android ARM64 JNI |
-| Native build | `native-android-armeabi-v7a` | `libqfli_py.so` | Android ARM32 JNI |
-| Native build | `native-android-x86_64` | `libqfli_py.so` | Android x86_64 JNI |
+| Native Android build | `native-android-arm64-v8a` | `libqfli_py.so` | Android ARM64 JNI |
+| Native Android build | `native-android-armeabi-v7a` | `libqfli_py.so` | Android ARM32 JNI |
+| Native Android build | `native-android-x86_64` | `libqfli_py.so` | Android x86_64 JNI |
 | Native OHOS build | `native-ohos-arm64-v8a` | `libqfli_py.so` | OpenHarmony ARM64 NAPI |
 | Native OHOS build | `native-ohos-x86_64` | `libqfli_py.so` | OpenHarmony x86_64 NAPI |
+| Native Apple build | `native-ios-xcframework` | `qfli_py_ffi.xcframework` | iOS ARM64 device + ARM64/x86_64 simulator static libraries |
+| Native Apple build | `native-macos-universal` | `libqfli_py_ffi.dylib` | macOS ARM64/x86_64 FFI |
 
 Each package includes `SHA256SUMS` and `BUILD_INFO.txt`. The build information identifies
 the source commit and toolchain. Small test reports or binary inspection reports provide
 the evidence for that target. A library is uploaded only after its build and validation
 steps pass. OHOS retains a successful ABI artifact if the other ABI fails; the overall
 job still reports failure in that case.
+Packages also carry the project's GPL-3.0 `LICENSE` and `LICENSE-MicroPython`.
 
-Linux and Windows run real native checks. Android and OHOS are cross-compiled and
-inspected; those jobs do not establish execution on an Android or HarmonyOS device.
-No APK, AAB, HAP, Windows application installer, or Apple package is produced here.
+macOS runs real native checks on the hosted Mac architecture. Android, OHOS and
+iOS are cross-compiled and inspected. Those jobs do not establish device execution.
+No APK, AAB, HAP, IPA or full application installer is produced here.
+Windows and Linux libraries are outside the selected publication targets.
 
 ## Toolchains and local use
 
-Desktop and Android builds consume the tracked `native/micropython_embed` package.
+Apple and Android builds consume the tracked `native/micropython_embed` package.
 Android uses NDK `27.0.12077973`, static C++ linkage and 16 KiB ELF segment alignment.
 OHOS initializes the pinned MicroPython 1.24.1 submodule and regenerates embedding inputs.
+Apple builds use the Xcode SDKs preinstalled on the GitHub Mac runner.
+These workflows compile the project's custom MicroPython runtime, not the compilers.
+Existing GCC, Clang and Xcode installations are tools that produce the runtime libraries.
+The Apple job uses Xcode 16.4. Its iOS minimums are 13.0 for devices and 14.0 for
+simulators. macOS minimums are 11.0 for ARM64 and 10.15 for x86_64.
 
 OHOS uses the official OpenHarmony **6.1 Release** Linux SDK, native version
 **6.1.0.31 / API 23**. The SDK bundle is pinned by SHA256. This differs from the
@@ -53,11 +60,11 @@ For OHOS app packaging, place the downloaded library in
 `ohos/entry/libs/<abi>/libqfli_py.so`. Match the app's ABI and source commit. The current
 release app selects ARM64. An x86_64 library alone does not provide an x86_64 Flutter app.
 
-For standalone FFI testing, the loader accepts an explicit library path. Its development
-locations are `native/build/windows/qfli_py_ffi.dll` and
-`native/build/linux/libqfli_py_ffi.so`. Android and desktop Flutter integration still
-compile native sources during app builds. Downloading a library does not configure those
-integrations to consume prebuilt binaries.
+For standalone macOS FFI testing, use an explicit dylib path. The iOS XCFramework
+contains static libraries and public headers for native integration. Retain the FFI
+symbols when linking the final app, as the existing Apple podspec does.
+Android and Apple Flutter integration still compile native sources during app builds.
+Downloading a library does not configure those integrations to consume prebuilt binaries.
 
 ## Local disk use
 

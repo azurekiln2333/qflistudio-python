@@ -8,10 +8,13 @@ Use existing CMake targets and native tests. Add native/CI.md for operational us
 
 ## Jobs and contracts
 
-- Linux: build native/desktop, run the existing C smoke suite linked against the
-  built shared library, and run existing debugger checks when supported.
-- Windows: build the existing desktop target on a GitHub Windows runner. Use the
-  supported compiler path and run a real native probe with existing test tooling.
+- iOS: reuse the tracked CMake source selection with a static-library option,
+  compile ARM64 device and ARM64/x86_64 simulator slices with Xcode SDKs, and
+  package the static libraries and public headers into an XCFramework.
+- macOS: compile a universal ARM64/x86_64 dylib with the existing shared target.
+  Run real ctypes debugger tests on the hosted Mac architecture. Inspect both
+  slices, dependencies and public exports. Do not claim runtime checks for an
+  architecture that was only cross-compiled.
 - Android: use the pinned NDK 27.0.12077973 and CMake native/android for arm64-v8a,
   armeabi-v7a and x86_64. Retain static C++ and 16 KiB alignment.
 - OHOS: acquire a fixed official Linux OpenHarmony native SDK in the hosted runner,
@@ -27,6 +30,9 @@ Native-only artifacts are not APK/HAP installers. Android and desktop Flutter
 integration currently rebuild source; downloading a library does not switch those
 builds to prebuilt mode. OHOS can consume the matching library in entry/libs/<abi>.
 OpenHarmony cross-compilation alone cannot establish HarmonyOS device execution.
+Apple jobs use the hosted Xcode toolchain and do not build Xcode or LLVM. These
+standalone artifacts do not replace Flutter CocoaPods source integration automatically.
+Preserve existing default shared-library behavior when adding an iOS static option.
 
 ## Delivery
 

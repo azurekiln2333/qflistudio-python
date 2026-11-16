@@ -1,0 +1,59 @@
+name: Native Apple build
+
+on:
+  push:
+    paths:
+      - "native/**"
+      - "LICENSE"
+      - ".github/workflows/native-apple.yml"
+  pull_request:
+    paths:
+      - "native/**"
+      - "LICENSE"
+      - ".github/workflows/native-apple.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-apple-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apple:
+    name: Apple ${{ matrix.target }} native library
+    runs-on: macos-15
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: ios
+            artifact: native-ios-xcframework
+          - target: macos
+            artifact: native-macos-universal
+    env:
+      # Use the runner's installed toolchain, without downloading or building Xcode.
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      QFLI_APPLE_TARGET: ${{ matrix.target }}
+    steps:
+      - name: Check out tracked native inputs
+        uses: actions/checkout@v4
+
+      - name: Set up host Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Build and inspect native libraries
+        shell: bash
+        run: bash native/tools/ci_apple_build.sh
+
+      - name: Upload Apple native library and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: native/build/ci-artifacts/apple-${{ matrix.target }}/
+          if-no-files-found: error
+          retention-days: 14

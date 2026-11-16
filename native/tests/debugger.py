@@ -156,7 +156,7 @@ NATIVE: Native
 class DebuggerTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory(prefix="qfli-debug-")
-        self.root = pathlib.Path(self.directory.name)
+        self.root = pathlib.Path(self.directory.name).resolve()
         self.runs = []
 
     def tearDown(self):

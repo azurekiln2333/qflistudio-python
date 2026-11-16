@@ -50,6 +50,7 @@ configure=(
 
 # Complete and stage each ABI before the next one regenerates shared headers.
 cp -- "$library" "$artifact_directory/libqfli_py.so"
+cp -- LICENSE native/LICENSE-MicroPython "$artifact_directory/"
 cp -- "$manifest" "$artifact_directory/native-build-evidence.json"
 cp -- "$OHOS_SDK_NATIVE/oh-uni-package.json" "$artifact_directory/sdk-package.json"
 {
@@ -71,7 +72,7 @@ cp -- "$OHOS_SDK_NATIVE/oh-uni-package.json" "$artifact_directory/sdk-package.js
 (
   cd "$artifact_directory"
   sha256sum libqfli_py.so native-build-evidence.json sdk-package.json \
-    dependencies.txt BUILD_INFO.txt > SHA256SUMS
+    dependencies.txt BUILD_INFO.txt LICENSE LICENSE-MicroPython > SHA256SUMS
 )
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
   {
