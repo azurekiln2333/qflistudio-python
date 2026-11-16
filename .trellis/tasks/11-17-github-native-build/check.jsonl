@@ -1,0 +1,4 @@
+{"file":".trellis/spec/backend/index.md","reason":"Complete native scope"}
+{"file":".trellis/spec/backend/native-python-runtime.md","reason":"Generated input, linkage and artifact validation"}
+{"file":".trellis/spec/backend/python-ffi.md","reason":"Native runtime evidence"}
+{"file":".trellis/spec/backend/quality-guidelines.md","reason":"Quality and source identity"}

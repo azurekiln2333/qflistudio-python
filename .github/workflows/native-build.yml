@@ -1,0 +1,217 @@
+name: Native build
+
+on:
+  push:
+    paths:
+      - "native/**"
+      - "android/app/build.gradle.kts"
+      - ".github/workflows/native-build.yml"
+  pull_request:
+    paths:
+      - "native/**"
+      - "android/app/build.gradle.kts"
+      - ".github/workflows/native-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  desktop-linux:
+    name: Linux x64 library and runtime tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out tracked native inputs
+        uses: actions/checkout@v4
+
+      - name: Build Linux native library
+        shell: bash
+        run: sh native/desktop/build.sh
+
+      - name: Run C smoke tests against the built library
+        shell: bash
+        run: |
+          gcc -std=gnu99 -O2 -I native/src native/tests/smoke.c \
+            -L native/build/linux -lqfli_py_ffi \
+            -Wl,-rpath,"$PWD/native/build/linux" \
+            -o native/build/linux/qfli_py_smoke
+          native/build/linux/qfli_py_smoke | tee native/build/linux/smoke-report.txt
+
+      - name: Run native debugger regressions
+        shell: bash
+        run: |
+          python3 native/tests/debugger.py native/build/linux/libqfli_py_ffi.so \
+            --report native/build/linux/debugger-report.json
+
+      - name: Stage Linux artifact
+        shell: bash
+        run: |
+          mkdir -p build/native-artifact
+          cp native/build/linux/libqfli_py_ffi.so \
+            native/build/linux/smoke-report.txt \
+            native/build/linux/debugger-report.json build/native-artifact/
+          {
+            echo "target=linux-x64"
+            echo "build_type=Release"
+            echo "commit=$GITHUB_SHA"
+            echo "run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "runner=$RUNNER_OS $RUNNER_ARCH"
+            gcc --version
+            cmake --version
+            python3 --version
+          } > build/native-artifact/BUILD_INFO.txt
+          cd build/native-artifact
+          sha256sum libqfli_py_ffi.so BUILD_INFO.txt smoke-report.txt debugger-report.json > SHA256SUMS
+
+      - name: Upload Linux native library
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-x64
+          path: build/native-artifact/
+          if-no-files-found: error
+          retention-days: 14
+
+  desktop-windows:
+    name: Windows x64 library and runtime tests
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - name: Check out tracked native inputs
+        uses: actions/checkout@v4
+
+      - name: Build Windows native library with MinGW
+        shell: pwsh
+        run: |
+          $compiler = (Get-Command gcc.exe -ErrorAction Stop).Source
+          $target = & $compiler -dumpmachine
+          if ($LASTEXITCODE -ne 0 -or $target -notmatch '^x86_64-w64-mingw32$') {
+            throw "Expected x64 MinGW GCC, got: $target"
+          }
+          & ./native/desktop/build.ps1 -Compiler $compiler -Jobs 2
+
+      - name: Run native debugger regressions
+        shell: pwsh
+        run: |
+          python native/tests/debugger.py native/build/windows/qfli_py_ffi.dll --report native/build/windows/debugger-report.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native debugger regressions failed.' }
+
+      - name: Stage Windows artifact
+        shell: pwsh
+        run: |
+          $destination = New-Item -ItemType Directory -Path build/native-artifact -Force
+          Copy-Item native/build/windows/qfli_py_ffi.dll,native/build/windows/debugger-report.json -Destination $destination
+          @(
+            'target=windows-x64'
+            'build_type=Release'
+            "commit=$env:GITHUB_SHA"
+            "run=$env:GITHUB_SERVER_URL/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+            "runner=$env:RUNNER_OS $env:RUNNER_ARCH"
+            (& gcc --version)
+            (& cmake --version)
+            (& python --version)
+          ) | Set-Content -Encoding utf8 build/native-artifact/BUILD_INFO.txt
+          $checksums = foreach ($name in @('qfli_py_ffi.dll', 'BUILD_INFO.txt', 'debugger-report.json')) {
+            $digest = (Get-FileHash -Algorithm SHA256 (Join-Path $destination $name)).Hash.ToLowerInvariant()
+            "$digest  $name"
+          }
+          $checksums | Set-Content -Encoding ascii build/native-artifact/SHA256SUMS
+
+      - name: Upload Windows native library
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-windows-x64
+          path: build/native-artifact/
+          if-no-files-found: error
+          retention-days: 14
+
+  android:
+    name: Android ${{ matrix.abi }} library
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a, x86_64]
+    env:
+      NDK_VERSION: "27.0.12077973"
+      CMAKE_VERSION: "3.22.1"
+      ANDROID_API: "24"
+      TARGET_ABI: ${{ matrix.abi }}
+    steps:
+      - name: Check out tracked native inputs
+        uses: actions/checkout@v4
+
+      - name: Install pinned Android build tools
+        shell: bash
+        run: |
+          export JAVA_HOME="$JAVA_HOME_17_X64"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "ndk;$NDK_VERSION" "cmake;$CMAKE_VERSION"
+
+      - name: Build Android native library
+        shell: bash
+        run: |
+          ndk="$ANDROID_HOME/ndk/$NDK_VERSION"
+          cmake_bin="$ANDROID_HOME/cmake/$CMAKE_VERSION/bin"
+          "$cmake_bin/cmake" -S native/android -B native/build/android -G Ninja \
+            "-DCMAKE_MAKE_PROGRAM=$cmake_bin/ninja" \
+            "-DCMAKE_TOOLCHAIN_FILE=$ndk/build/cmake/android.toolchain.cmake" \
+            "-DANDROID_ABI=$TARGET_ABI" "-DANDROID_PLATFORM=android-$ANDROID_API" \
+            -DANDROID_STL=c++_static -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON \
+            -DCMAKE_BUILD_TYPE=Release
+          "$cmake_bin/cmake" --build native/build/android --target qfli_py --parallel 2
+
+      - name: Inspect ELF dependencies and 16 KiB alignment
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import pathlib
+          import re
+          import subprocess
+
+          readelf = pathlib.Path(os.environ['ANDROID_HOME']) / 'ndk' / os.environ['NDK_VERSION'] / 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf'
+          library = pathlib.Path('native/build/android/libqfli_py.so')
+          report = subprocess.check_output([str(readelf), '-h', '-l', '-d', '-W', str(library)], text=True)
+          print(report)
+          library.with_name('elf-report.txt').write_text(report, encoding='utf-8')
+          needed = set(re.findall(r'\(NEEDED\).*?\[(.*?)\]', report))
+          unexpected = needed - {'libc.so', 'libm.so', 'libdl.so', 'liblog.so'}
+          if unexpected:
+              raise SystemExit(f'Unexpected dynamic dependencies: {sorted(unexpected)}')
+          loads = [line.split() for line in report.splitlines() if line.strip().startswith('LOAD ')]
+          if not loads or any(int(fields[-1], 16) < 16384 for fields in loads):
+              raise SystemExit('Every ELF LOAD segment must use at least 16 KiB alignment')
+          print('PASS Android dependencies and 16 KiB ELF alignment')
+          PY
+
+      - name: Stage Android artifact
+        shell: bash
+        run: |
+          mkdir -p build/native-artifact
+          cp native/build/android/libqfli_py.so native/build/android/elf-report.txt build/native-artifact/
+          {
+            echo "target=android-$TARGET_ABI"
+            echo "build_type=Release"
+            echo "android_api=$ANDROID_API"
+            echo "ndk=$NDK_VERSION"
+            echo "commit=$GITHUB_SHA"
+            echo "run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            "$ANDROID_HOME/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin/clang" --version
+            "$ANDROID_HOME/cmake/$CMAKE_VERSION/bin/cmake" --version
+          } > build/native-artifact/BUILD_INFO.txt
+          cd build/native-artifact
+          sha256sum libqfli_py.so BUILD_INFO.txt elf-report.txt > SHA256SUMS
+
+      - name: Upload Android native library
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-android-${{ matrix.abi }}
+          path: build/native-artifact/
+          if-no-files-found: error
+          retention-days: 14

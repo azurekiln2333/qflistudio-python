@@ -1,5 +1,9 @@
 # 原生执行后端（内嵌 MicroPython）
 
+GitHub 云端构建见 [CI.md](CI.md)。
+该文档列出原生库产物和下载步骤。
+该文档也说明本地目录占用。
+
 Python 版 App 的执行后端。**引擎是上游 MicroPython 1.24.1（commit `ecfdd5d`），
 不是手写的解释器。**
 

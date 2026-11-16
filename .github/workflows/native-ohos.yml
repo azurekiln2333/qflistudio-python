@@ -1,0 +1,114 @@
+name: Native OHOS build
+
+on:
+  push:
+    paths:
+      - "native/**"
+      - "tool/python_native_provenance.py"
+      - ".github/workflows/native-ohos.yml"
+      - ".gitmodules"
+  pull_request:
+    paths:
+      - "native/**"
+      - "tool/python_native_provenance.py"
+      - ".github/workflows/native-ohos.yml"
+      - ".gitmodules"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-ohos-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: OpenHarmony arm64 and x86_64
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SDK_URL: https://repo.huaweicloud.com/openharmony/os/6.1-Release/ohos-sdk-windows_linux-public.tar.gz
+      SDK_SHA256: b833b75a64ee46bbd7880921abbb49b733ec5c8171b6684c9b524d57f624cee0
+    steps:
+      - name: Check out the pinned MicroPython source
+        uses: actions/checkout@v4
+        with:
+          # Only the recorded MicroPython revision is needed, not its submodules.
+          submodules: true
+
+      - name: Set up host Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes cmake ninja-build unzip
+          test "$(git -C native/third_party/micropython rev-parse HEAD)" = ecfdd5d6f9be971852003c2049600dc7b3e2a838
+
+      - name: Download and verify the official OpenHarmony SDK
+        id: sdk
+        run: |
+          sdk_directory="$RUNNER_TEMP/ohos-sdk"
+          archive="$RUNNER_TEMP/ohos-sdk-6.1.tar.gz"
+          mkdir -p "$sdk_directory"
+          curl --fail --location --retry 3 --retry-delay 5 --retry-max-time 1200 \
+            --connect-timeout 30 --max-time 900 --output "$archive" "$SDK_URL"
+          printf '%s  %s\n' "$SDK_SHA256" "$archive" | sha256sum --check --strict
+          tar -xzf "$archive" --directory "$sdk_directory" --wildcards 'linux/native-*.zip'
+          native_archives=("$sdk_directory"/linux/native-*.zip)
+          test "${#native_archives[@]}" -eq 1
+          unzip -q "${native_archives[0]}" -d "$sdk_directory"
+          native_sdk="$sdk_directory/native"
+          test -f "$native_sdk/build/cmake/ohos.toolchain.cmake"
+          test -f "$native_sdk/oh-uni-package.json"
+          cat "$native_sdk/oh-uni-package.json"
+          printf 'OHOS_SDK_NATIVE=%s\n' "$native_sdk" >> "$GITHUB_ENV"
+          # Keep only the extracted native toolchain on this ephemeral runner.
+          rm -- "$archive" "${native_archives[0]}"
+
+      - name: Build and inspect arm64-v8a
+        id: arm64
+        continue-on-error: true
+        env:
+          QFLI_OHOS_ABI: arm64-v8a
+        run: bash native/tools/ci_ohos_build.sh
+
+      - name: Upload arm64-v8a library and evidence
+        if: steps.arm64.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ohos-arm64-v8a
+          path: native/build/ci-artifacts/ohos-arm64-v8a/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Build and inspect x86_64
+        id: x86_64
+        continue-on-error: true
+        env:
+          QFLI_OHOS_ABI: x86_64
+        run: bash native/tools/ci_ohos_build.sh
+
+      - name: Upload x86_64 library and evidence
+        if: steps.x86_64.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ohos-x86_64
+          path: native/build/ci-artifacts/ohos-x86_64/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Require both ABI builds to pass
+        if: always()
+        env:
+          ARM64_OUTCOME: ${{ steps.arm64.outcome }}
+          X86_64_OUTCOME: ${{ steps.x86_64.outcome }}
+        run: |
+          test "$ARM64_OUTCOME" = success
+          test "$X86_64_OUTCOME" = success
