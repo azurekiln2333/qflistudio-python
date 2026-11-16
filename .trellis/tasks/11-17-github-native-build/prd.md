@@ -33,14 +33,17 @@ and explain the current project status and local disk use.
 
 ## Acceptance Criteria
 
-- [ ] GitHub records a completed run for the implementation commit.
-- [ ] Successful native jobs have downloadable, correctly named ABI artifacts.
-- [ ] The downloaded libraries match published checksums and ELF/Mach-O architectures.
-- [ ] iOS includes device ARM64 and simulator ARM64/x86_64 static slices.
-- [ ] macOS includes ARM64/x86_64 and executes native tests on the hosted Mac.
+- [x] GitHub records a completed run for the implementation commit.
+- [x] Successful native jobs have downloadable, correctly named ABI artifacts.
+- [x] The downloaded libraries match published checksums and ELF/Mach-O architectures.
+- [x] iOS includes device ARM64 and simulator ARM64/x86_64 static slices.
+- [x] macOS includes ARM64/x86_64 and executes native tests on the hosted Mac.
 - [x] GPL-3.0 LICENSE matches D:/MyNewProjects/qflistudio/LICENSE and is pushed separately.
-- [ ] Failed or unavailable target checks remain explicit; building is not device validation.
-- [ ] The user receives a run URL, artifact list and clear disk-use explanation.
+- [x] Failed or unavailable target checks remain explicit; building is not device validation.
+- [x] The user receives a run URL, artifact list and clear disk-use explanation.
+
+See `research/cloud-validation.md` for successful run URLs and verification scope.
+`research/verified-artifacts.json` records all seven downloadable artifacts.
 
 ## Out of Scope
 

@@ -205,5 +205,181 @@
       }
     },
     "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940473063/artifacts/14261694713"
+  },
+  {
+    "name": "native-macos-universal",
+    "artifactId": 14264302938,
+    "runId": "43942603480",
+    "archiveBytes": 404219,
+    "libraryBytes": 820824,
+    "libraries": [
+      {
+        "path": "libqfli_py_ffi.dylib",
+        "bytes": 820824,
+        "sha256": "6f4f03ae33f789a7a13e433e8f27e98354b0afb6190f326797a78806da2ab7b6"
+      }
+    ],
+    "expiresAt": "2026-11-30T20:01:50Z",
+    "files": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "SHA256SUMS",
+      "arm64-dependencies.txt",
+      "arm64-platform.json",
+      "arm64-symbols.txt",
+      "debugger-report.json",
+      "libqfli_py_ffi.dylib",
+      "qfli_py_bridge.h",
+      "qfli_py_debug.h",
+      "x86_64-dependencies.txt",
+      "x86_64-platform.json",
+      "x86_64-symbols.txt"
+    ],
+    "checked": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "arm64-dependencies.txt",
+      "arm64-platform.json",
+      "arm64-symbols.txt",
+      "debugger-report.json",
+      "libqfli_py_ffi.dylib",
+      "qfli_py_bridge.h",
+      "qfli_py_debug.h",
+      "x86_64-dependencies.txt",
+      "x86_64-platform.json",
+      "x86_64-symbols.txt"
+    ],
+    "binary": {
+      "format": "Apple",
+      "libraries": [
+        {
+          "path": "libqfli_py_ffi.dylib",
+          "slices": [
+            {
+              "cpu": 16777223,
+              "platforms": [
+                1
+              ],
+              "format": "Mach-O"
+            },
+            {
+              "cpu": 16777228,
+              "platforms": [
+                1
+              ],
+              "format": "Mach-O"
+            }
+          ]
+        }
+      ]
+    },
+    "reports": {
+      "debugger": {
+        "tests": 30,
+        "failures": [],
+        "errors": [],
+        "elapsedSeconds": 0.934
+      }
+    },
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43942603480/artifacts/14264302938"
+  },
+  {
+    "name": "native-ios-xcframework",
+    "artifactId": 14263229955,
+    "runId": "43942603480",
+    "archiveBytes": 800018,
+    "libraryBytes": 2022064,
+    "libraries": [
+      {
+        "path": "qfli_py_ffi.xcframework/ios-arm64/libqfli_py_ffi.a",
+        "bytes": 692408,
+        "sha256": "985d7866fee435f18738d83d5b2e52486849d6fdf1f946c98c1a8b7344740c94"
+      },
+      {
+        "path": "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/libqfli_py_ffi.a",
+        "bytes": 1329656,
+        "sha256": "bf611f22e28ed553ac5adcba1c4558ca88b9a8fc1d0e51628c6e01d18cf75b66"
+      }
+    ],
+    "expiresAt": "2026-11-30T20:02:49Z",
+    "files": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "SHA256SUMS",
+      "ios-arm64-platform.json",
+      "ios-arm64-symbols.txt",
+      "qfli_py_ffi.xcframework/Info.plist",
+      "qfli_py_ffi.xcframework/ios-arm64/Headers/qfli_py_bridge.h",
+      "qfli_py_ffi.xcframework/ios-arm64/Headers/qfli_py_debug.h",
+      "qfli_py_ffi.xcframework/ios-arm64/libqfli_py_ffi.a",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/Headers/qfli_py_bridge.h",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/Headers/qfli_py_debug.h",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/libqfli_py_ffi.a",
+      "simulator-arm64-platform.json",
+      "simulator-arm64-symbols.txt",
+      "simulator-x86_64-platform.json",
+      "simulator-x86_64-symbols.txt",
+      "xcframework-report.json"
+    ],
+    "checked": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "ios-arm64-platform.json",
+      "ios-arm64-symbols.txt",
+      "qfli_py_ffi.xcframework/Info.plist",
+      "qfli_py_ffi.xcframework/ios-arm64/Headers/qfli_py_bridge.h",
+      "qfli_py_ffi.xcframework/ios-arm64/Headers/qfli_py_debug.h",
+      "qfli_py_ffi.xcframework/ios-arm64/libqfli_py_ffi.a",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/Headers/qfli_py_bridge.h",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/Headers/qfli_py_debug.h",
+      "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/libqfli_py_ffi.a",
+      "simulator-arm64-platform.json",
+      "simulator-arm64-symbols.txt",
+      "simulator-x86_64-platform.json",
+      "simulator-x86_64-symbols.txt",
+      "xcframework-report.json"
+    ],
+    "binary": {
+      "format": "Apple",
+      "libraries": [
+        {
+          "path": "qfli_py_ffi.xcframework/ios-arm64/libqfli_py_ffi.a",
+          "slices": [
+            {
+              "cpu": 16777228,
+              "platforms": [
+                2
+              ],
+              "format": "archive"
+            }
+          ]
+        },
+        {
+          "path": "qfli_py_ffi.xcframework/ios-arm64_x86_64-simulator/libqfli_py_ffi.a",
+          "slices": [
+            {
+              "cpu": 16777223,
+              "platforms": [
+                7
+              ],
+              "format": "archive"
+            },
+            {
+              "cpu": 16777228,
+              "platforms": [
+                7
+              ],
+              "format": "archive"
+            }
+          ]
+        }
+      ]
+    },
+    "reports": {},
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43942603480/artifacts/14263229955"
   }
 ]
