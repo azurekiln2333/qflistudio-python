@@ -209,3 +209,45 @@ Completed Python terminal/native/offline/curriculum audit and final Android/OHOS
 - Unlock OHOS device192.168.68.207:46551 and validate fresh base17, cancellation, bytecode and argument6 self-checks; latest launch is10106102.
 - Coordinate free Android foreground for standalone/editor run/compile/stop and final release installation/JNI usability; peer WebForge held last window, no competing launch performed.
 - Configure and verify production store signing separately; existing Android and OHOS debug signing was preserved. Release/native tasks remain in progress.
+
+
+## Session 7: Native cloud builds and GPL-3.0 alignment
+<!-- trellis-session: v=2 fp=eca45e81cbe39e6f -->
+
+**Date**: 2026-11-17
+**Task**: Native cloud builds and GPL-3.0 alignment
+**Branch**: `ci/native-build-20261117`
+
+### Summary
+
+Published Android, OHOS, iOS and macOS native workflows; verified all seven downloaded artifacts; aligned GPL-3.0 with the main project; documented local disk use.
+
+### Main Changes
+
+- Added GitHub-hosted native workflows and downloadable libraries with licenses, checksums and build evidence.
+- Kept Windows/Linux outside publication scope and used existing SDK/compiler toolchains.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e03c7ce` | ci(native): build and publish native libraries on GitHub-hosted runners |
+| `fafca72` | chore(ci): normalize workflow and task line endings |
+| `c535f60` | docs(license): align GPL-3.0 licensing with qflistudio |
+| `271fff0` | ci(native): target Android OHOS iOS and macOS cloud builds |
+| `03ffbb7` | ci(apple): use the Intel hosted runner for native builds |
+| `972627b` | docs(native): record verified cloud artifacts [skip ci] |
+| `3991c40` | docs(native): record successful Apple build verification |
+
+### Testing
+
+- [OK] Android run 43940472797, OHOS run 43940473063 and Apple run 43942603480 all succeeded; seven artifact ZIPs independently verified.
+- [OK] macOS x86_64 passed all 30 debugger tests; ARM64 and iOS slices passed architecture/platform inspection.
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- Full Flutter integration, signing and installed-device acceptance remain separate tasks.

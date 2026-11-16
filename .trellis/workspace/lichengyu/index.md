@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 6
-- **Last Active**: 2026-10-15
+- **Total Sessions**: 7
+- **Last Active**: 2026-11-17
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~211 | Active |
+| `journal-1.md` | ~253 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 7 | 2026-11-17 | Native cloud builds and GPL-3.0 alignment | `e03c7ce`, `fafca72`, `c535f60`, `271fff0`, `03ffbb7`, `972627b`, `3991c40` | `ci/native-build-20261117` |
 | 6 | 2026-10-15 | Python release audit and device gate handoff | `77f46d5`, `7286cd9`, `189d589`, `0b5d833`, `d615a1c` | `release/python-storefront-20261015` |
 | 5 | 2026-10-01 | Native startup progress and first-frame handoff | `d022c8a` | `main` |
 | 4 | 2026-10-01 | Android tutorial and example import verification | `b400d70` | `main` |
