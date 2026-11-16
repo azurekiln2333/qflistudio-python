@@ -32,9 +32,13 @@ the evidence for that target. A library is uploaded only after its build and val
 steps pass. OHOS retains a successful ABI artifact if the other ABI fails; the overall
 job still reports failure in that case.
 Packages also carry the project's GPL-3.0 `LICENSE` and `LICENSE-MicroPython`.
+Apple packages include `*-platform.json` reports from the actual Mach-O load commands.
+These checks distinguish iOS device, iOS simulator and macOS binaries for each architecture.
 
-macOS runs real native checks on the hosted Mac architecture. Android, OHOS and
-iOS are cross-compiled and inspected. Those jobs do not establish device execution.
+macOS runs real native checks on the architecture selected by the workflow's hosted
+Mac runner. `BUILD_INFO.txt` records that architecture as `runner_arch`; the other
+macOS slice is compiled and inspected without execution. Android, OHOS and iOS are
+cross-compiled and inspected. Those jobs do not establish device execution.
 No APK, AAB, HAP, IPA or full application installer is produced here.
 Windows and Linux libraries are outside the selected publication targets.
 
@@ -74,12 +78,15 @@ The 2026-11-17 inventory measured logical file sizes, in decimal units:
 | --- | ---: | --- |
 | `build/` | 12.59 GB | App outputs and test data |
 | `build/content-import-avd/` (inside `build/`) | 8.68 GB | Test emulator disk and boot snapshot |
+| `build/app/` (inside `build/`) | about 3.39 GB | Flutter app outputs and intermediates |
 | `.dart_tool/` | about 567 MB | Dart/Flutter generated files |
 | `ohos/entry/build/` | about 257 MB | OHOS app outputs |
 | `native/build/` | 41.57 MB | Native libraries, objects, logs and evidence |
 
-Do not add the emulator row to the `build/` total: it is already included.
+Do not add the emulator or app rows to the `build/` total: both are already included.
 Logical sizes can differ from physical disk allocation for sparse emulator images.
+For the two largest emulator files, Windows reported equal logical and allocated
+sizes: 6.43 GB for the device disk and 2.15 GB for the boot snapshot.
 The emulator includes test-device state, and `build/` also holds prior acceptance evidence.
 Preserve any needed app packages, reports or emulator data before deleting generated files.
 No local files are removed by these workflows.

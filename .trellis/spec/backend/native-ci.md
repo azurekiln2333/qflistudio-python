@@ -34,6 +34,9 @@ python tool/python_native_provenance.py capture|finish|verify <existing argument
   desktop default behavior stays shared. Keep common source selection in one CMake target.
 - Use Xcode SDKs with explicit deployment minimums: iOS device13/simulator14,
   macOS ARM64 11/x86_64 10.15. Inspect the actual Mach-O platform per slice.
+- Select the hosted Mac architecture explicitly. Record `runner_arch` in build
+  metadata; runtime tests cover that architecture, while the other macOS slice is
+  compiled and inspected. The workflow currently uses `macos-15-intel` with Xcode 16.4.
 - The current origin remote has multiple push URLs. A GitHub-only request must push
   to the explicit GitHub repository URL, not all configured push destinations.
 

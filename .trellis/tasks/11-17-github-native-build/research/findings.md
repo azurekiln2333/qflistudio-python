@@ -1,5 +1,8 @@
 # Findings (2026-11-17)
 
+Final selected-target run and download evidence is recorded in
+[cloud-validation.md](./cloud-validation.md) and `verified-artifacts.json`.
+
 ## Repository
 
 Original HEAD: 6a859a7. Original branch: release/python-storefront-20261015.
@@ -24,6 +27,9 @@ Logical bytes from the read-only inventory:
 - build/content-import-avd/: 8,676,983,301 bytes, included in build/.
 - Its userdata-qemu.img.qcow2: 6,425,214,976 bytes.
 - Its snapshots/default_boot/ram.img: 2,147,549,184 bytes.
+- A later read-only Windows `GetCompressedFileSizeW` check confirmed those two
+  files' allocated byte counts equal their logical byte counts (8,572,764,160
+  allocated bytes combined). Their large sizes are not only sparse-file metadata.
 - native/build/: 41,570,490 bytes (39.65 MiB).
 - The AVD config identifies PyFlow Import Test, x86_64 Android37.2.
 - native/micropython_embed is tracked (~2.5 MB); upstream is a submodule (~40 MB tree).

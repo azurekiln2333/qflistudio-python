@@ -1,0 +1,209 @@
+[
+  {
+    "name": "native-android-x86_64",
+    "artifactId": 14261849484,
+    "runId": "43940472797",
+    "archiveBytes": 976074,
+    "libraryBytes": 2856592,
+    "libraries": [
+      {
+        "path": "libqfli_py.so",
+        "bytes": 2856592,
+        "sha256": "b96692307b4f32be5b99267e30b2731487e18fa18fb5ea6129020c7a0f3fbbb1"
+      }
+    ],
+    "expiresAt": "2026-11-30T19:33:44Z",
+    "files": [
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "BUILD_INFO.txt",
+      "SHA256SUMS",
+      "elf-report.txt",
+      "libqfli_py.so"
+    ],
+    "checked": [
+      "libqfli_py.so",
+      "BUILD_INFO.txt",
+      "elf-report.txt",
+      "LICENSE",
+      "LICENSE-MicroPython"
+    ],
+    "binary": {
+      "format": "ELF",
+      "bits": 64,
+      "machine": 62
+    },
+    "reports": {},
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940472797/artifacts/14261849484"
+  },
+  {
+    "name": "native-android-armeabi-v7a",
+    "artifactId": 14261763554,
+    "runId": "43940472797",
+    "archiveBytes": 874084,
+    "libraryBytes": 2166772,
+    "libraries": [
+      {
+        "path": "libqfli_py.so",
+        "bytes": 2166772,
+        "sha256": "44dcf7a9bf42a4227ea6155ddca821fe7fa586e553cc4c00404b4f2c63087d67"
+      }
+    ],
+    "expiresAt": "2026-11-30T19:33:26Z",
+    "files": [
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "SHA256SUMS",
+      "BUILD_INFO.txt",
+      "elf-report.txt",
+      "libqfli_py.so"
+    ],
+    "checked": [
+      "libqfli_py.so",
+      "BUILD_INFO.txt",
+      "elf-report.txt",
+      "LICENSE",
+      "LICENSE-MicroPython"
+    ],
+    "binary": {
+      "format": "ELF",
+      "bits": 32,
+      "machine": 40
+    },
+    "reports": {},
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940472797/artifacts/14261763554"
+  },
+  {
+    "name": "native-android-arm64-v8a",
+    "artifactId": 14261483561,
+    "runId": "43940472797",
+    "archiveBytes": 987180,
+    "libraryBytes": 3020872,
+    "libraries": [
+      {
+        "path": "libqfli_py.so",
+        "bytes": 3020872,
+        "sha256": "ed2062b8523f91957989c7eb888fa255a99a1b1a2b6dea01a755fdfe9b45f473"
+      }
+    ],
+    "expiresAt": "2026-11-30T19:33:32Z",
+    "files": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "SHA256SUMS",
+      "elf-report.txt",
+      "libqfli_py.so"
+    ],
+    "checked": [
+      "libqfli_py.so",
+      "BUILD_INFO.txt",
+      "elf-report.txt",
+      "LICENSE",
+      "LICENSE-MicroPython"
+    ],
+    "binary": {
+      "format": "ELF",
+      "bits": 64,
+      "machine": 183
+    },
+    "reports": {},
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940472797/artifacts/14261483561"
+  },
+  {
+    "name": "native-ohos-arm64-v8a",
+    "artifactId": 14262588921,
+    "runId": "43940473063",
+    "archiveBytes": 1265091,
+    "libraryBytes": 2551776,
+    "libraries": [
+      {
+        "path": "libqfli_py.so",
+        "bytes": 2551776,
+        "sha256": "d831cd5576dd75ebd3fb615baae8e4141cd3d34419a00d0ba9c5a4cb63070d47"
+      }
+    ],
+    "expiresAt": "2026-11-30T19:34:50Z",
+    "files": [
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "BUILD_INFO.txt",
+      "SHA256SUMS",
+      "dependencies.txt",
+      "libqfli_py.so",
+      "native-build-evidence.json",
+      "sdk-package.json"
+    ],
+    "checked": [
+      "libqfli_py.so",
+      "native-build-evidence.json",
+      "sdk-package.json",
+      "dependencies.txt",
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython"
+    ],
+    "binary": {
+      "format": "ELF",
+      "bits": 64,
+      "machine": 183
+    },
+    "reports": {
+      "provenance": {
+        "schemaVersion": 2,
+        "kind": "completed-python-native-build",
+        "abi": "arm64-v8a",
+        "compileCommandCount": 143
+      }
+    },
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940473063/artifacts/14262588921"
+  },
+  {
+    "name": "native-ohos-x86_64",
+    "artifactId": 14261694713,
+    "runId": "43940473063",
+    "archiveBytes": 1251591,
+    "libraryBytes": 2422312,
+    "libraries": [
+      {
+        "path": "libqfli_py.so",
+        "bytes": 2422312,
+        "sha256": "c3ee5511cd022ccad0351dc8c2ca9ef611d6c4e1b8f11c2344e1d66571615b5b"
+      }
+    ],
+    "expiresAt": "2026-11-30T19:35:04Z",
+    "files": [
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython",
+      "SHA256SUMS",
+      "dependencies.txt",
+      "libqfli_py.so",
+      "native-build-evidence.json",
+      "sdk-package.json"
+    ],
+    "checked": [
+      "libqfli_py.so",
+      "native-build-evidence.json",
+      "sdk-package.json",
+      "dependencies.txt",
+      "BUILD_INFO.txt",
+      "LICENSE",
+      "LICENSE-MicroPython"
+    ],
+    "binary": {
+      "format": "ELF",
+      "bits": 64,
+      "machine": 62
+    },
+    "reports": {
+      "provenance": {
+        "schemaVersion": 2,
+        "kind": "completed-python-native-build",
+        "abi": "x86_64",
+        "compileCommandCount": 143
+      }
+    },
+    "url": "https://github.com/azurekiln2333/qflistudio-python/actions/runs/43940473063/artifacts/14261694713"
+  }
+]

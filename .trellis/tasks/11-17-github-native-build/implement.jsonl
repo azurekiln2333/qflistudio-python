@@ -1,4 +1,5 @@
 {"file":".trellis/spec/backend/index.md","reason":"Native build scope and checks"}
+{"file":".trellis/spec/backend/native-ci.md","reason":"Hosted target, toolchain, artifact and validation contracts"}
 {"file":".trellis/spec/backend/native-python-runtime.md","reason":"Generated inputs and OHOS dependency/provenance contracts"}
 {"file":".trellis/spec/backend/python-ffi.md","reason":"Desktop packaging and real native checks"}
 {"file":".trellis/spec/backend/quality-guidelines.md","reason":"Evidence and review requirements"}
